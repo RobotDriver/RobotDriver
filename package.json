@@ -1,0 +1,25 @@
+{
+  "name": "robotdriver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "robotdriver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobotDriver/RobotDriver.git"
+  },
+  "author": "RyAndrew",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RobotDriver/RobotDriver/issues"
+  },
+  "homepage": "https://github.com/RobotDriver/RobotDriver#readme",
+  "dependencies": {
+    "i2c-bus": "^5.1.0",
+    "pca9685": "^4.0.3",
+    "pigpio": "^2.0.1",
+    "ws": "^7.2.1"
+  }
+}
