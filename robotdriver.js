@@ -811,6 +811,9 @@ function startVideoProcess(){
 
 
 	FfmpegVideoProcess = spawn('ffmpeg', [
+		'-hide_banner',
+		'-nostats',
+		'-loglevel','fatal',
 		//input video
 		'-f', 'v4l2', //video4linux2
 		//'-threads', '4',
@@ -835,10 +838,10 @@ function startVideoProcess(){
 	]);
 
 	FfmpegAudioProcess = spawn('ffmpeg', [
-		//input video
         '-hide_banner',
         '-nostats',
-        '-loglevel','quiet',
+        '-loglevel','fatal',
+		//input video
 		'-vn', //no video
 		'-f','alsa', //alsa audio
 		'-i','hw:1', //audio device
@@ -851,7 +854,8 @@ function startVideoProcess(){
 		'-bf','0',
 		'-muxdelay','0.001',
 		'http://127.0.0.1:'+config.httpPort+'/sendAudio/'
-	], {stdio: [process.stdin, process.stdout, process.stderr]});
+	]);
+	//, {stdio: [process.stdin, process.stdout, process.stderr]}
 	audioRunning = true;
 	
 	FfmpegAudioProcess.on('exit', (code) => {
@@ -868,7 +872,7 @@ function startVideoProcess(){
 	//   console.error(data.toString());
 	// });
 
-	// FfmpegAudioProcess.stdout.pipe(process.stdout);
+	 FfmpegAudioProcess.stdout.pipe(process.stdout);
 	FfmpegAudioProcess.stderr.pipe(process.stderr);
 
 	videoRunning = true;
