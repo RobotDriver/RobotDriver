@@ -31,12 +31,12 @@ var defaultConfigs = {
 		drive:{
 			type:'l298n',
 			pins:{
-				'aen':17,
-				'ain1':22,
-				'ain2':23,
-				'ben':27,
-				'bin3':24,
-				'bin4':25
+				'aen':13,
+				'ain1':19,
+				'ain2':26,
+				'ben':16,
+				'bin3':20,
+				'bin4':21
 			}
 		}
 	}
