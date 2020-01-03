@@ -1,0 +1,30 @@
+.debugOutputContainer {
+    border: 1px solid #ff8585;
+}
+
+.variable-box {
+    border: 1px solid #83c0ff;
+    margin: 0 0 0 10px;
+}
+
+.steering-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.video-parent div.x-innerhtml {
+    height:100%;
+    display: flex;
+    justify-content: center;
+/*
+    align-items: center;
+    overflow: hidden;
+*/
+}
+.video-parent .audio{
+    width:1px;
+    height:1px;
+}
+.video-parent .video{
+    height:90%;
+}
