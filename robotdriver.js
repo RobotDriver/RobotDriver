@@ -233,6 +233,10 @@ function motorSetPercentPca(motorNo, direction, throttlePercent){
 
 function readConfig(){
 	let configFileData;
+	if (!fs.existsSync(configFile)) {
+		log(`read configs from ${configFile} - File doesn't exist! Defaults loaded`);
+		return;
+	}
 	try{
 		configFileData = fs.readFileSync(configFile, 'utf8');//, function (err, data) {
 	}catch(e){
