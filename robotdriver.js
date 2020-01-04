@@ -24,7 +24,7 @@ function log(logLine){
 }
 
 var config = {};
-const configFile = 'config.json';
+const configFile = '/boot/robotdriverconfig.json';
 var defaultConfigs = {
 	httpPort:80, //https://stackoverflow.com/a/23281401
 	outputs:{
@@ -41,7 +41,24 @@ var defaultConfigs = {
 		}
 	}
 };
+/*{
+  "httpPort": 80,
+  "outputs": {
+    "drive": {
+      "type": "pca9685", //adafruit motor board
+      "pins": {
+        "aen": 13,	//M2 port
+        "ain1": 11,
+        "ain2": 12,
+        "ben": 8,	//M1 port
+        "bin3": 10,
+        "bin4": 9
+      }
+    }
+  }
+}*/
 var gpioPins = {};
+var pcapwm = {};
 
 function init(){
 	showBanner();
@@ -49,10 +66,9 @@ function init(){
 	initHttpServer();
 	initHardware();
 }
+function initgpio(){
+	console.log('initgpio');
 
-function initHardware(){
-	console.log('initHardware');
-	pigpio.terminate();
 	pigpio.initialize();
 	pigpio.configureClock(10, pigpio.CLOCK_PCM);
 
@@ -60,18 +76,46 @@ function initHardware(){
 		gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
 		console.log(`${pin} = ${config.outputs.drive.pins[pin]}`);
 	}
+}
+function initpca9685(){
+	console.log('initpca9685');
+	
+	if(pcapwm.dispose){
+		pcapwm.dispose();
+	}
+	// PCA9685 options
+	let options = {
+		i2c: i2cBus.openSync(1),
+		//address: 0x40, // generic PCA9685
+		address: 0x60, // Adafruit Motor Driver
+		frequency: 50
+		//debug: true
+	};
 
-	// var pwm = new pca9685.Pca9685Driver(options, function(err) {
-	// 	if (err) {
-	// 		console.error("Error initializing PCA9685");
-	// 		process.exit(-1);
-	// 		return;
-	// 	}
-	//
-	// 	console.log("PCA9685 Initialized");
-	// 	pwm.setPulseLength(pwmPanChannel, 1500);
-	// 	pwm.setPulseLength(pwmTiltChannel, 1500);
-	// });
+	pcapwm = new pca9685.Pca9685Driver(options, function(err) {
+		if (err) {
+			console.error("Error initializing PCA9685");
+			process.exit(-1);
+			return;
+		}
+
+		console.log("PCA9685 Initialized");
+		//pwm.setPulseLength(pwmPanChannel, 1500);
+		//pwm.setPulseLength(pwmTiltChannel, 1500);
+	});
+}
+function initHardware(){
+	console.log('initHardware');
+	pigpio.terminate();
+
+	switch(config.outputs.drive.type){
+		case 'l298n':
+			initgpio();
+			break
+		case 'pca9685':
+			initpca9685();
+	}
+
 }
 
 function motorMove(steeringValue, throttleValue){
@@ -125,9 +169,17 @@ function motorMove(steeringValue, throttleValue){
 		}
 	}
 }
-
-
 function motorSetPercent(motorNo, direction, throttlePercent){
+	switch(config.outputs.drive.type){
+		case 'l298n':
+			motorSetPercentGpio(motorNo, direction, throttlePercent);
+			break
+		case 'pca9685':
+			motorSetPercentPca(motorNo, direction, throttlePercent);
+	}
+}
+
+function motorSetPercentGpio(motorNo, direction, throttlePercent){
 	let pinPwm, pinin1, pinin2;
 
 	switch (motorNo) {
@@ -181,14 +233,14 @@ function motorSetPercentPca(motorNo, direction, throttlePercent){
 			console.log("invalid motor! "+ motorNo);
 			return;
 		case 1:
-			pinPwm = 2;
-			pinin1 = 4;
-			pinin2 = 3;
+			pinPwm = config.outputs.drive.pins.aen;
+			pinin1 = config.outputs.drive.pins.ain1;
+			pinin2 = config.outputs.drive.pins.ain2;
 			break;
 		case 2:
-			pinPwm = 7;
-			pinin1 = 6;
-			pinin2 = 5;
+			pinPwm = config.outputs.drive.pins.ben;
+			pinin1 = config.outputs.drive.pins.bin3;
+			pinin2 = config.outputs.drive.pins.bin4;
 			break;
 	}
 
@@ -196,46 +248,47 @@ function motorSetPercentPca(motorNo, direction, throttlePercent){
 	console.log("throttlePercent = "+(throttlePercent*100));
 	if (throttlePercent == 0) {
 
-		pwm.channelOff(pinin1);
-		pwm.channelOff(pinin2);
-		pwm.channelOff(pinPwm);
+		pcapwm.channelOff(pinin1);
+		pcapwm.channelOff(pinin2);
+		pcapwm.channelOff(pinPwm);
 	}else{
 
 		if (direction >= 1) {
-			pwm.channelOn(pinin2);
-			pwm.channelOff(pinin1);
+			pcapwm.channelOn(pinin2);
+			pcapwm.channelOff(pinin1);
 		} else {
-			pwm.channelOff(pinin2);
-			pwm.channelOn(pinin1);
+			pcapwm.channelOff(pinin2);
+			pcapwm.channelOn(pinin1);
 		}
 
-		throttlePercent = motorPercentMin + throttlePercent;
+		//throttlePercent = motorPercentMin + throttlePercent;
 		console.log("motor "+motorNo+" throttle % = " + throttlePercent);
-		pwm.setDutyCycle(pinPwm, throttlePercent);
+		pcapwm.setDutyCycle(pinPwm, throttlePercent);
 	}
 }
 
-// function shutdownPwm(){
-//
-// 	console.log("center all pwm channels");
-// 	pwm.setPulseLength(pwmPanChannel, 1500);
-// 	pwm.setPulseLength(pwmTiltChannel, 1500);
-//
-// 	console.log("stoppnig motors...");
-// 	// motorSetPercent(1, 0, 0);
-// 	// motorSetPercent(2, 0, 0);
-//
-// 	// pwm.channelOff(pwmPanChannel);
-// 	// pwm.channelOff(pwmTiltChannel);
-//
-// 	pwm.dispose();
-// }
+function shutdownPwm(){
+
+	console.log("center all pwm channels");
+	pwm.setPulseLength(pwmPanChannel, 1500);
+	pwm.setPulseLength(pwmTiltChannel, 1500);
+
+	console.log("stoppnig motors...");
+	motorSetPercent(1, 0, 0);
+	motorSetPercent(2, 0, 0);
+
+	if(pcapwm.dispose){
+		pcapwm.dispose();
+		//pcapwm.channelOff(pwmPanChannel);
+		//pcapwm.channelOff(pwmTiltChannel);
+	}
+}
 
 function readConfig(){
 	let configFileData;
 	if (!fs.existsSync(configFile)) {
 		config=defaultConfigs;
-		log(`read configs from ${configFile} - File doesn't exist! Defaults loaded`);
+		log(`configs file ${configFile} doesn't exist, defaults loaded`);
 		return;
 	}
 	try{
@@ -342,14 +395,7 @@ var internetControlUrlPath = '/control';
 var messageLocal = 1;
 var messageInternet = 2;
 
-// PCA9685 options
-var options = {
-	i2c: i2cBus.openSync(1),
-	//address: 0x40, // generic PCA9685
-	address: 0x60, // Adafruit Motor Driver
-	frequency: 50
-	//debug: true
-};
+
 
 //full range:
 //var ServoMax = 2400;
@@ -1035,7 +1081,6 @@ function showBanner(){
 	'██╔══██╗██║░░██║██╔══██╗██║░░██║░░░██║░░░',
 	'██║░░██║╚█████╔╝██████╦╝╚█████╔╝░░░██║░░░',
 	'╚═╝░░╚═╝░╚════╝░╚═════╝░░╚════╝░░░░╚═╝░░░',
-	'',
 	'██████╗░██████╗░██╗██╗░░░██╗███████╗██████╗░',
 	'██╔══██╗██╔══██╗██║██║░░░██║██╔════╝██╔══██╗',
 	'██║░░██║██████╔╝██║╚██╗░██╔╝█████╗░░██████╔╝',
