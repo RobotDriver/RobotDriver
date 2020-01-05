@@ -1905,11 +1905,11 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.appendDebugOutput("Gamepad connected at index "+e.gamepad.index+", id "+e.gamepad.id+". "+e.gamepad.buttons.length+" buttons, "+e.gamepad.axes.length+" axes");
 
 
-        if(e.gamepad.id.indexOf('Xbox') !== -1){
+        //if(e.gamepad.id.indexOf('Xbox') !== -1){
             this.gamepadBeginLoop(e.gamepad);
-        }else{
-            this.appendDebugOutput("Not an xbox controller. Skipping!");
-        }
+        //}else{
+        //    this.appendDebugOutput("Not an xbox controller. Skipping!");
+        //}
     },
 
     gamepadDisconnected: function(e) {
