@@ -1304,33 +1304,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                             listeners: {
                                 tap: 'onBtnStopTap'
                             }
-                        },
-                        {
-                            xtype: 'button',
-                            itemId: 'btnStartTargets',
-                            width: 120,
-                            text: 'Start Targets',
-                            listeners: {
-                                tap: 'onBtnStartTargetsTap'
-                            }
-                        },
-                        {
-                            xtype: 'button',
-                            itemId: 'btnStartTimer',
-                            width: 100,
-                            text: 'Start Timer',
-                            listeners: {
-                                tap: 'onBtnStartTimerTap'
-                            }
-                        },
-                        {
-                            xtype: 'button',
-                            itemId: 'btnStopTimer',
-                            width: 100,
-                            text: 'Stop Timer',
-                            listeners: {
-                                tap: 'onBtnStopTimerTap'
-                            }
                         }
                     ]
                 },
@@ -1520,12 +1493,43 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
 
         this.moveX = newValue;
+        this.sendMove();
 
-        this.websocketSend({
-            action:'move',
-            x:this.moveX,
-            y:this.moveY
-        });
+        // if(!this.lastThrottleChangeDefered){
+        //     this.lastThrottleChangeDefered = true;
+
+        //     if(this.lastSent != newValue){
+
+        //         this.moveX = newValue;
+        //         this.sendMove();
+
+        //         this.lastSent = newValue;
+        //     }
+        //     Ext.defer(function(){
+        //         this.lastThrottleChangeDefered = false;
+        //         var currentValue = field.getValue();
+
+        //         if(this.lastSent != currentValue){
+        //             this.lastSent = currentValue;
+
+        //             this.moveX = currentValue;
+        //             this.sendMove();
+        //         }
+        //     },2,this);
+        // }else{
+
+        //     Ext.defer(function(){
+        //         this.lastThrottleChangeDefered = false;
+        //         var currentValue = field.getValue();
+
+        //         if(this.lastSent != currentValue){
+        //             this.lastSent = currentValue;
+
+        //             this.moveX = currentValue;
+        //             this.sendMove();
+        //         }
+        //     },2,this);
+        // }
     },
 
     onSteeringSetPointTextChange: function(field, newValue, oldValue, eOpts) {
@@ -1533,23 +1537,40 @@ Ext.define('RobotDriver.view.MainPanel', {
             newValue = newValue[0];
         }
 
-        if(!this.lastSteeringChangeDefered){
-            this.lastSteeringChangeDefered = true;
+        this.moveY = newValue;
+        this.sendMove();
 
-            if(this.lastSent != newValue){
-                this.sendUpdateSteering(newValue);
-                this.lastSent = newValue;
-            }
-            Ext.defer(function(){
-                this.lastSteeringChangeDefered = false;
-                var currentValue = field.getValue();
+        // if(!this.lastSteeringChangeDefered){
+        //     this.lastSteeringChangeDefered = true;
 
-                if(this.lastSent != currentValue){
-                    this.lastSent = currentValue;
-                    this.sendUpdateSteering(currentValue);
-                }
-            },2,this);
-        }
+        //     if(this.lastSent != newValue){
+        //         this.moveY = newValue;
+        //         this.sendMove();
+        //         this.lastSent = newValue;
+        //     }
+        //     Ext.defer(function(){
+        //         this.lastSteeringChangeDefered = false;
+        //         var currentValue = field.getValue();
+
+        //         if(this.lastSent != currentValue){
+        //             this.lastSent = currentValue;
+        //             this.moveY = currentValue;
+        //             this.sendMove();
+        //         }
+        //     },2,this);
+        // }else{
+
+        //     Ext.defer(function(){
+        //         this.lastSteeringChangeDefered = false;
+        //         var currentValue = field.getValue();
+
+        //         if(this.lastSent != currentValue){
+        //             this.lastSent = currentValue;
+        //             this.moveY = currentValue;
+        //             this.sendMove();
+        //         }
+        //     },2,this);
+        // }
     },
 
     onShootTextChange: function(field, newValue, oldValue, eOpts) {
@@ -1617,18 +1638,6 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.websocketSendAction('stopVideo');
     },
 
-    onBtnStartTargetsTap: function(button, e, eOpts) {
-        this.websocketSendAction('startTargets');
-    },
-
-    onBtnStartTimerTap: function(button, e, eOpts) {
-        this.websocketSendAction('startTargetTimer');
-    },
-
-    onBtnStopTimerTap: function(button, e, eOpts) {
-        this.websocketSendAction('stopTargetTimer');
-    },
-
     onMytogglefieldChange: function(togglefield, newValue, oldValue, eOpts) {
 
         this.websocketSend({
@@ -1677,6 +1686,8 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.lastSteeringChangeDefered = false;
         this.moveX = 500;
         this.moveY = 500;
+
+        this.repeatMoveTimer = null;
 
         window.addEventListener("gamepadconnected", this.gamepadConnected.bind(this));
         window.addEventListener("gamepaddisconnected", this.gamepadDisconnected.bind(this));
@@ -1825,15 +1836,27 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.websocketSendAction('stopSteeringMovement');
     },
 
-    sendUpdateSteering: function(value) {
-        this.moveY = value;
+    sendMove: function(value) {
+        clearInterval(this.repeatMoveTimer);
 
         this.websocketSend({
-            //action:'setSteering',
             action:'move',
             y:this.moveY,
             x:this.moveX
         });
+
+        //if we are not stopped and nothings changed repeat the control message every 400ms.
+        if(this.moveY === 500 && this.moveX === 500){
+            clearInterval();
+        }else{
+            this.repeatMoveTimer = setInterval(() => {
+                this.websocketSend({
+                    action:'move',
+                    y:this.moveY,
+                    x:this.moveX
+                });
+            },400);
+        }
     },
 
     msgUpdateStatus: function(jsonData) {
