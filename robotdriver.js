@@ -147,8 +147,7 @@ function motorMove(steeringValue, throttleValue){
 	clearTimeout(movementKillTimer);
 	if(newSteeringValue!==500 && newThrottleValue!==500){
 		movementKillTimer = setTimeout(() => {
-			motorSetPercent(2, 1, 0);
-			motorSetPercent(1, 0, 0);
+			motorMove(500,500);
 		},500);
 	}
 }
