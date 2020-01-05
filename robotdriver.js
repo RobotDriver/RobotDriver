@@ -16,6 +16,7 @@ const querystring = require('querystring');
 const { spawn } = require('child_process');
 
 const httpVideoStreamKey = 'supersecret';
+var movementKillTimer = null;
 
 var logEntries = [];
 function log(logLine){
@@ -79,7 +80,7 @@ function initgpio(){
 }
 function initpca9685(){
 	console.log('initpca9685');
-	
+
 	if(pcapwm.dispose){
 		pcapwm.dispose();
 	}
@@ -118,22 +119,56 @@ function initHardware(){
 
 }
 
+var movingNow = false;
+var currentSteeringValue = 500, currentThrottleValue=500;
+var newSteeringValue=500, newThrottleValue=500;
+
+const motorMoveInterval = setInterval(() => {
+
+	//if nothings changed do nothing
+	if(newSteeringValue === currentSteeringValue && newThrottleValue === currentThrottleValue ){
+		return;
+	}
+
+	//var hrstart = process.hrtime();
+	motorMoveAction(newSteeringValue, newThrottleValue);
+	//var hrend = process.hrtime(hrstart);
+	//console.info('motorMoveAction: %ds %dms', hrend[0], hrend[1] / 1000000); //1.2 to 2.0ms on i2c @ 400kbps i2c
+
+	currentSteeringValue = newSteeringValue;
+	currentThrottleValue = newThrottleValue;
+}, 50);
+
 function motorMove(steeringValue, throttleValue){
+	newSteeringValue = steeringValue;
+	newThrottleValue = throttleValue;
+
+	//if we dont get any movement messages for 500ms from the last message, stop movement
+	clearTimeout(movementKillTimer);
+	if(newSteeringValue!==500 && newThrottleValue!==500){
+		movementKillTimer = setTimeout(() => {
+			motorSetPercent(2, 1, 0);
+			motorSetPercent(1, 0, 0);
+		},500);
+	}
+}
+function motorMoveAction(steeringValue, throttleValue){
 
 	//if steering hard then spin in place
 	if(steeringValue >= 800){
-		//hard right
 		steeringValue -= 800;
 		steeringValue /= 200;
+
+		console.log(`motors, turn right ${Math.round(steeringValue*100)}%`);
 		motorSetPercent(2, 1, steeringValue);
 		motorSetPercent(1, 0, steeringValue);
 		return;
 	}
 	if(steeringValue <= 200){
-		//hard left
 		steeringValue /= 200;
 		steeringValue = 1 - steeringValue;//invert
 
+		console.log(`motors, turn right ${Math.round(steeringValue*100)}%`);
 		motorSetPercent(2, 0, steeringValue);
 		motorSetPercent(1, 1, steeringValue);
 		return;
@@ -141,33 +176,30 @@ function motorMove(steeringValue, throttleValue){
 
 	if (throttleValue > throttleMidpoint-throttleThreshold && throttleValue < throttleMidpoint+throttleThreshold) {
 
-		console.log("control, setThrottle stop "+throttleValue);
+		console.log('motors, stop');
 		motorSetPercent(1, 0, 0);
 		motorSetPercent(2, 0, 0);
 
 	} else {
 
-		//calc steering offset
-
 		if (throttleValue >= 500) {
-			//forward
 			throttleValue = (throttleValue - 500) / 500;
 
-			console.log("control, setThrottle fwd throttleValue = "+throttleValue );
+			console.log(`motors, forward ${Math.round(throttleValue*100)}%`);
 
 			motorSetPercent(1, 1, throttleValue);
 			motorSetPercent(2, 1, throttleValue);
 
 		} else {
-			//reverse
 			throttleValue = (500 - throttleValue) / 500;
 
-			console.log("control, setThrottle rev throttleValue = "+throttleValue );
+			console.log(`motors, reverse ${Math.round(throttleValue*100)}%`);
 
 			motorSetPercent(1, -1, throttleValue);
 			motorSetPercent(2, -1, throttleValue);
 		}
 	}
+
 }
 function motorSetPercent(motorNo, direction, throttlePercent){
 	switch(config.outputs.drive.type){
@@ -200,7 +232,7 @@ function motorSetPercentGpio(motorNo, direction, throttlePercent){
 
 	//console.log("throttlePercent = "+(throttlePercent*100));
 	if (throttlePercent == 0) {
-		console.log(`motor ${motorNo} stop`);
+		//console.log(`motor ${motorNo} stop`);
 
 		pinin1.digitalWrite(false);
 		pinin2.digitalWrite(false);
@@ -208,19 +240,19 @@ function motorSetPercentGpio(motorNo, direction, throttlePercent){
 	}else{
 
 		if (direction >= 1) {
-			console.log(`motor ${motorNo} forward`);
+			//console.log(`motor ${motorNo} forward`);
 			pinin1.digitalWrite(false);
 			pinin2.digitalWrite(true);
 		} else {
-			console.log(`motor ${motorNo} backward`);
+			//console.log(`motor ${motorNo} backward`);
 			pinin1.digitalWrite(true);
 			pinin2.digitalWrite(false);
 		}
 
 		//throttlePercent = motorPercentMin + throttlePercent;
-		console.log(`motor ${motorNo} throttle ${Math.floor(throttlePercent*100)}%`);
+		//console.log(`motor ${motorNo} throttle ${Math.floor(throttlePercent*100)}%`);
 		let dutyCycle = Math.trunc(Math.min(255,throttlePercent*255));
-		console.log(`pwm duty cycle = ${dutyCycle}`);
+		//console.log(`pwm duty cycle = ${dutyCycle}`);
 		pinPwm.pwmWrite(dutyCycle);
 	}
 }
@@ -245,7 +277,7 @@ function motorSetPercentPca(motorNo, direction, throttlePercent){
 	}
 
 	var onValue = 4096;
-	console.log("throttlePercent = "+(throttlePercent*100));
+	//console.log("throttlePercent = "+(throttlePercent*100));
 	if (throttlePercent == 0) {
 
 		pcapwm.channelOff(pinin1);
@@ -262,7 +294,7 @@ function motorSetPercentPca(motorNo, direction, throttlePercent){
 		}
 
 		//throttlePercent = motorPercentMin + throttlePercent;
-		console.log("motor "+motorNo+" throttle % = " + throttlePercent);
+		//console.log("motor "+motorNo+" throttle % = " + throttlePercent);
 		pcapwm.setDutyCycle(pinPwm, throttlePercent);
 	}
 }
