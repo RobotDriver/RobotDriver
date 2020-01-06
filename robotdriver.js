@@ -24,6 +24,7 @@ function log(logLine){
 	console.log(logLine);
 }
 
+var motorConfigBad = false;
 var config = {};
 const configFile = '/boot/robotdriverconfig.json';
 var defaultConfigs = {
@@ -70,11 +71,22 @@ function init(){
 function initgpio(){
 	console.log('initgpio');
 
-	pigpio.initialize();
+	try{
+		pigpio.initialize();
+	}catch(e){
+		console.error("Fatal Error! Failed to initalize GPIO. Is something else using it?");
+		process.exit(1);
+	}
 	pigpio.configureClock(10, pigpio.CLOCK_PCM);
 
 	for(const pin in config.outputs.drive.pins){
-		gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
+		try{
+			gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
+		}catch(e){
+			console.error(`Serious Error! Failed to initalize GPIO pin ${config.outputs.drive.pins[pin]} for ${pin}. Invalid pin!`);
+			gpioPins[pin] = null;
+			motorConfigBad = true;
+		}
 		console.log(`${pin} = ${config.outputs.drive.pins[pin]}`);
 	}
 }
@@ -153,6 +165,10 @@ function motorMove(steeringValue, throttleValue){
 }
 function motorMoveAction(steeringValue, throttleValue){
 
+	if(motorConfigBad){
+		console.log('motor config bad. Please check your settings.');
+		return;
+	}
 	//if steering hard then spin in place
 	if(steeringValue >= 800){
 		steeringValue -= 800;
@@ -1098,7 +1114,11 @@ httpServer.on('upgrade', function upgrade(request, socket, head) {
 	}
 });
 function initHttpServer(){
-	httpServer.listen(config.httpPort);
+
+	httpServer.listen(config.httpPort).on('error',function(){
+		console.error(`Fatal Error! Failed to listen on port ${config.httpPort}. Is something else using it?`);
+		process.exit(1);
+	})
 }
 
 init();
