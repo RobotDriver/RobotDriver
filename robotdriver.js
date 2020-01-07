@@ -121,6 +121,7 @@ function initHardware(){
 	console.log('initHardware');
 	pigpio.terminate();
 
+	motorConfigBad = false;
 	switch(config.outputs.drive.type){
 		case 'l298n':
 			initgpio();
@@ -129,6 +130,23 @@ function initHardware(){
 			initpca9685();
 	}
 
+}
+function shutdownHardware(){
+	switch(config.outputs.drive.type){
+		case 'l298n':
+			shutdownGpio();
+			break
+	}
+}
+function shutdownGpio(){
+	console.log('shutdownGpio');
+	for(const pin in config.outputs.drive.pins){
+		try{
+			gpioPins[pin].digitalWrite(true);
+		}catch(e){
+			console.error(`Shutdown Error! Failed to reset GPIO pin ${config.outputs.drive.pins[pin]} for ${pin}`);
+		}
+	}
 }
 
 var movingNow = false;
@@ -1149,7 +1167,7 @@ function showBanner(){
 process.on("SIGINT", function () {
 	console.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
 
-	//shutdownPwm();
+	shutdownHardware();
 
 	process.exit(-1);
 });
