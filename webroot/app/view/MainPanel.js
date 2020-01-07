@@ -1970,7 +1970,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.button3lastValue = gamepad.buttons[3].value;
 
 
-        var leftStickX = gamepad.axes[0] - .08;
+        var leftStickX = gamepad.axes[0];
         this.fieldGamepadLeftX.setValue(leftStickX);
         var leftStickXslider = Math.round((leftStickX * 500) + 500);
         if(leftStickXslider !== this.wsLeftStickX ){
