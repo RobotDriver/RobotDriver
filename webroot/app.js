@@ -20,8 +20,19 @@ Ext.Loader.setConfig({
 
 
 Ext.application({
+    models: [
+        'HardwareModel'
+    ],
     views: [
-        'MainPanel'
+        'MainPanel',
+        'AddHardwareType',
+        'HardwareServo',
+        'HardwareMotorDriver',
+        'HardwareI2c',
+        'AddControlType',
+        'ControlSlider',
+        'ControlButton',
+        'ControlHardwareCombo'
     ],
     name: 'RobotDriver',
 

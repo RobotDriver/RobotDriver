@@ -1,0 +1,22 @@
+div.colorpickermenu .x-menu-body-el > .x-non-menuitem {
+    margin:0;
+}
+
+div.colorpickermenu .canvascontainer {
+    height: 195px;
+    width: 195px;
+    position: relative;
+    overflow: hidden;
+}
+div.colorpickermenu div canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+div.ux-color-picker-spectrum {
+    z-index: 1;
+}
+div.ux-color-picker-luminance {
+    z-index: 0;
+}

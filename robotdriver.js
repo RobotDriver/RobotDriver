@@ -29,8 +29,8 @@ var config = {};
 const configFile = '/boot/robotdriverconfig.json';
 var defaultConfigs = {
 	httpPort:80, //https://stackoverflow.com/a/23281401
-	outputs:{
-		drive:{
+	hardware:[{
+		motors:[{
 			type:'l298n',
 			pins:{
 				'aen':13,
@@ -40,8 +40,8 @@ var defaultConfigs = {
 				'bin3':20,
 				'bin4':21
 			}
-		}
-	}
+		}]
+	}]
 };
 /*{
   "httpPort": 80,
@@ -64,7 +64,7 @@ var pcapwm = {};
 
 function init(){
 	showBanner();
-	readConfig();
+	configRead();
 	initHttpServer();
 	initHardware();
 }
@@ -122,6 +122,9 @@ function initHardware(){
 	pigpio.terminate();
 
 	motorConfigBad = false;
+	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
+		return;
+	}
 	switch(config.outputs.drive.type){
 		case 'l298n':
 			initgpio();
@@ -132,6 +135,9 @@ function initHardware(){
 
 }
 function shutdownHardware(){
+	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
+		return;
+	}
 	switch(config.outputs.drive.type){
 		case 'l298n':
 			shutdownGpio();
@@ -235,6 +241,9 @@ function motorMoveAction(steeringValue, throttleValue){
 
 }
 function motorSetPercent(motorNo, direction, throttlePercent){
+	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
+		return;
+	}
 	switch(config.outputs.drive.type){
 		case 'l298n':
 			motorSetPercentGpio(motorNo, direction, throttlePercent);
@@ -348,8 +357,13 @@ function shutdownPwm(){
 		//pcapwm.channelOff(pwmTiltChannel);
 	}
 }
+function configDefaults(){
+	config = defaultConfigs;
+	initHardware();
+	writeConfig();
+}
 
-function readConfig(){
+function configRead(){
 	let configFileData;
 	if (!fs.existsSync(configFile)) {
 		config=defaultConfigs;
@@ -721,6 +735,10 @@ function handleIncomingControlMessage(wsp, message, source) {
 		return;
 	}
 	switch(messageJson.action){
+		default:
+			console.log("control, unknown action!", messageJson.action);
+			return;
+
 		case "internetVideo":
 			if(!messageJson.hasOwnProperty("enabled")){
 				console.log('control, internetVideo action, missing enabled');
@@ -799,7 +817,11 @@ function handleIncomingControlMessage(wsp, message, source) {
 		// 	steeringValue = parseInt(messageJson.value);
 		// 	break;
 		//case "setThrottle":
-		case "readConfig":
+		case "configRead":
+			ws.send(JSON.stringify({"cmd":"config","config":config}));
+			break;
+		case "configDefaults":
+			configDefaults();
 			ws.send(JSON.stringify({"cmd":"config","config":config}));
 			break;
 		case "move":
@@ -837,9 +859,6 @@ function handleIncomingControlMessage(wsp, message, source) {
 			console.log('control, setPan, pwm = '+servoValue);
 			//pwm.setPulseLength(pwmPanChannel, servoValue);
 			break;
-		default:
-			console.log("control, unknown action!");
-			return;
 	}
 }
 

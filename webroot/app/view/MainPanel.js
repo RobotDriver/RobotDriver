@@ -23,10 +23,11 @@ Ext.define('RobotDriver.view.MainPanel', {
         'Ext.Toolbar',
         'Ext.Button',
         'Ext.form.FieldSet',
-        'Ext.form.Panel',
         'Ext.field.ComboBox',
-        'Ext.field.Number',
+        'Ext.Spacer',
         'Ext.field.TextArea',
+        'Ext.Panel',
+        'Ext.field.Number',
         'Ext.chart.CartesianChart',
         'Ext.chart.axis.Numeric',
         'Ext.chart.series.Line',
@@ -36,19 +37,24 @@ Ext.define('RobotDriver.view.MainPanel', {
     viewModel: {
         type: 'mainpanel'
     },
-    activeItem: 1,
     fullscreen: true,
+    padding: '4 0 0 0',
     defaultListenerScope: true,
 
     items: [
         {
             xtype: 'tabpanel',
             title: 'Config',
+            iconCls: 'x-fa fa-cog',
+            itemId: 'tabConfig',
             items: [
                 {
                     xtype: 'container',
                     title: 'Hardware',
+                    iconCls: 'x-fa fa-microchip',
+                    itemId: 'hardwareConfigs',
                     padding: '0 0 0 10',
+                    scrollable: true,
                     items: [
                         {
                             xtype: 'toolbar',
@@ -57,528 +63,88 @@ Ext.define('RobotDriver.view.MainPanel', {
                             items: [
                                 {
                                     xtype: 'button',
+                                    iconCls: 'x-fa fa-save',
                                     text: 'Save Changes',
                                     listeners: {
                                         tap: 'onMybutton1Tap'
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    iconCls: 'x-fa fa-plus',
+                                    text: 'Add Hardware',
+                                    listeners: {
+                                        tap: 'onMybutton5Tap'
                                     }
                                 }
                             ]
                         },
                         {
-                            xtype: 'fieldset',
-                            title: 'Output 1 Drive',
-                            items: [
-                                {
-                                    xtype: 'formpanel',
-                                    itemId: 'outputDrive1Form',
-                                    items: [
-                                        {
-                                            xtype: 'combobox',
-                                            name: 'type',
-                                            width: 400,
-                                            margin: '10 0 0 10',
-                                            label: 'Motor Driver Type',
-                                            labelWidth: 120,
-                                            value: 'gpio',
-                                            displayField: 'display',
-                                            valueField: 'value',
-                                            bind: {
-                                                store: '{configPwmTypeStore}'
-                                            }
-                                        },
-                                        {
-                                            xtype: 'fieldset',
-                                            defaults: {
-                                                defaults: {
-                                                    clearable: false
-                                                }
-                                            },
-                                            title: 'L298N Pins',
-                                            items: [
-                                                {
-                                                    xtype: 'container',
-                                                    itemId: 'motora',
-                                                    layout: 'hbox',
-                                                    items: [
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'aen',
-                                                            width: 160,
-                                                            margin: '0 0 0 10',
-                                                            label: 'Left Motor - A EN',
-                                                            labelWidth: 120
-                                                        },
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'ain1',
-                                                            width: 75,
-                                                            margin: '0 0 0 10',
-                                                            label: 'IN1',
-                                                            labelWidth: 35
-                                                        },
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'ain2',
-                                                            width: 75,
-                                                            margin: '0 0 0 10',
-                                                            label: 'IN2',
-                                                            labelWidth: 35
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    xtype: 'container',
-                                                    itemId: 'motorb',
-                                                    margin: '5 0 0 0',
-                                                    layout: 'hbox',
-                                                    items: [
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'ben',
-                                                            width: 160,
-                                                            margin: '0 0 0 10',
-                                                            label: 'Right Motor - B EN',
-                                                            labelWidth: 120
-                                                        },
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'bin3',
-                                                            width: 75,
-                                                            margin: '0 0 0 10',
-                                                            label: 'IN3',
-                                                            labelWidth: 35
-                                                        },
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'bin4',
-                                                            width: 75,
-                                                            margin: '0 0 0 10',
-                                                            label: 'IN4',
-                                                            labelWidth: 35
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'fieldset',
-                                    title: 'Motor Configs',
-                                    items: [
-                                        {
-                                            xtype: 'formpanel',
-                                            itemId: 'motorConfigs',
-                                            defaults: {
-                                                defaults: {
-                                                    clearable: false
-                                                }
-                                            },
-                                            items: [
-                                                {
-                                                    xtype: 'container',
-                                                    itemId: 'left1',
-                                                    layout: 'hbox',
-                                                    items: [
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'leftmin',
-                                                            width: 175,
-                                                            margin: '0 0 0 10',
-                                                            label: 'Left Motor Min %',
-                                                            labelWidth: 120
-                                                        },
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'leftmax',
-                                                            width: 95,
-                                                            margin: '0 0 0 10',
-                                                            label: 'Max',
-                                                            labelWidth: 40
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    xtype: 'container',
-                                                    itemId: 'left2',
-                                                    margin: '10 0 0 0',
-                                                    layout: 'hbox',
-                                                    items: [
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'rightmin',
-                                                            width: 175,
-                                                            margin: '0 0 0 10',
-                                                            label: 'Right Motor Min %',
-                                                            labelWidth: 120
-                                                        },
-                                                        {
-                                                            xtype: 'numberfield',
-                                                            name: 'rightmax',
-                                                            width: 95,
-                                                            margin: '0 0 0 10',
-                                                            label: 'Max',
-                                                            labelWidth: 40
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
+                            xtype: 'container',
+                            itemId: 'noHardwareMsg',
+                            style: {
+                                'font-size': '20px',
+                                'font-weight': 'bold'
+                            },
+                            html: 'No Hardware Configured!<BR><BR>Click <B><U>Add Hardware</U></B>!',
+                            padding: 40
                         },
                         {
-                            xtype: 'fieldset',
-                            disabled: true,
-                            title: 'Left Drive',
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    itemId: 'left1',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Left 1 Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    itemId: 'left2',
-                                    margin: '10 0 0 0',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Left 2 Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'fieldset',
-                            disabled: true,
-                            title: 'Right Drive',
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    itemId: 'right1',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Right 1 Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    itemId: 'right2',
-                                    margin: '10 0 0 0',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Right 2 Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'fieldset',
-                            disabled: true,
-                            title: 'Camera',
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    itemId: 'pan',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Pan Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    itemId: 'tilt',
-                                    margin: '10 0 0 0',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Tilt Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'fieldset',
-                            disabled: true,
-                            title: 'Aux',
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    itemId: 'aux1',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Aux 1 Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    itemId: 'aux2',
-                                    margin: '10 0 0 0',
-                                    layout: 'hbox',
-                                    items: [
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1no',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Aux 2 Chan',
-                                            labelWidth: 85
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1min',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Min',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1mid',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Mid',
-                                            labelWidth: 50
-                                        },
-                                        {
-                                            xtype: 'numberfield',
-                                            name: 'leftch1max',
-                                            width: 150,
-                                            margin: '0 0 0 10',
-                                            label: 'Max',
-                                            labelWidth: 50
-                                        }
-                                    ]
-                                }
-                            ]
+                            xtype: 'container',
+                            itemId: 'hardwareItems',
+                            listeners: {
+                                remove: 'onHardwareItemsRemove'
+                            }
                         }
                     ]
                 },
                 {
                     xtype: 'container',
-                    title: 'Button Mapping',
+                    title: 'Control',
+                    iconCls: 'x-fa fa-gamepad',
                     padding: 10,
+                    scrollable: true,
                     items: [
+                        {
+                            xtype: 'toolbar',
+                            itemId: 'mytoolbar2',
+                            docked: 'top',
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    iconCls: 'x-fa fa-save',
+                                    text: 'Save Changes',
+                                    listeners: {
+                                        tap: 'onMybutton1Tap1'
+                                    }
+                                },
+                                {
+                                    xtype: 'button',
+                                    iconCls: 'x-fa fa-plus',
+                                    text: 'Add Control',
+                                    listeners: {
+                                        tap: 'onMybutton5Tap1'
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            xtype: 'container',
+                            itemId: 'noControlsMsg',
+                            style: {
+                                'font-size': '20px',
+                                'font-weight': 'bold'
+                            },
+                            html: 'No Controls Configured!<BR><BR>Click <B><U>Add Control</U></B>!',
+                            padding: 40
+                        },
+                        {
+                            xtype: 'container',
+                            itemId: 'controlItems',
+                            listeners: {
+                                remove: 'onHardwareItemsRemove1'
+                            }
+                        },
                         {
                             xtype: 'fieldset',
                             title: 'xbox controller',
@@ -718,16 +284,32 @@ Ext.define('RobotDriver.view.MainPanel', {
                 {
                     xtype: 'container',
                     title: 'Config Import/Export',
+                    iconCls: 'x-fa fa-exchange',
                     layout: 'fit',
                     items: [
                         {
                             xtype: 'toolbar',
-                            hidden: true,
+                            hidden: false,
                             docked: 'top',
                             items: [
                                 {
                                     xtype: 'button',
-                                    text: 'Save'
+                                    text: 'Load Defaults',
+                                    listeners: {
+                                        tap: 'onMybutton13Tap'
+                                    }
+                                },
+                                {
+                                    xtype: 'spacer',
+                                    width: 150
+                                },
+                                {
+                                    xtype: 'button',
+                                    disabled: true,
+                                    text: 'Save',
+                                    listeners: {
+                                        tap: 'onMybutton11Tap'
+                                    }
                                 }
                             ]
                         },
@@ -736,13 +318,15 @@ Ext.define('RobotDriver.view.MainPanel', {
                             itemId: 'fullConfig',
                             margin: 10,
                             label: 'Full Config',
-                            labelAlign: 'top'
+                            labelAlign: 'top',
+                            readOnly: true
                         }
                     ]
                 },
                 {
                     xtype: 'container',
                     title: 'Log',
+                    iconCls: 'x-fa fa-list',
                     layout: 'fit',
                     items: [
                         {
@@ -759,8 +343,13 @@ Ext.define('RobotDriver.view.MainPanel', {
             xtype: 'panel',
             itemId: 'tabControls',
             scrollable: true,
-            title: 'Controls',
+            iconCls: 'x-fa fa-gamepad',
+            title: 'Control',
             items: [
+                {
+                    xtype: 'container',
+                    itemId: 'controls'
+                },
                 {
                     xtype: 'container',
                     itemId: 'steering',
@@ -769,6 +358,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                             xtype: 'button',
                             itemId: 'mybutton8',
                             margin: '10 0 0 10',
+                            iconCls: 'x-fa fa-gamepad',
                             text: 'Virtual Controller',
                             listeners: {
                                 tap: 'onMybutton8Tap'
@@ -1269,6 +859,7 @@ Ext.define('RobotDriver.view.MainPanel', {
             xtype: 'panel',
             itemId: 'tabVideo',
             layout: 'vbox',
+            iconCls: 'x-fa fa-camera',
             title: 'Video',
             items: [
                 {
@@ -1291,6 +882,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                             xtype: 'button',
                             itemId: 'btnView',
                             width: 120,
+                            iconCls: 'x-fa fa-play',
                             text: 'Start Video',
                             listeners: {
                                 tap: 'onBtnViewTap'
@@ -1300,6 +892,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                             xtype: 'button',
                             itemId: 'btnStop',
                             width: 120,
+                            iconCls: 'x-fa fa-stop',
                             text: 'Stop Video',
                             listeners: {
                                 tap: 'onBtnStopTap'
@@ -1318,6 +911,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         {
             xtype: 'container',
             title: 'Data',
+            iconCls: 'x-fa fa-signal',
             items: [
                 {
                     xtype: 'cartesian',
@@ -1384,7 +978,9 @@ Ext.define('RobotDriver.view.MainPanel', {
         },
         {
             xtype: 'panel',
+            itemId: 'tabInternet',
             bodyPadding: 20,
+            iconCls: 'x-fa fa-globe',
             title: 'Internet',
             items: [
                 {
@@ -1426,30 +1022,46 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
     ],
     listeners: {
-        activeItemchange: 'onTabpanelActiveItemChange',
-        painted: 'onFormpanelPainted'
+        painted: 'onFormpanelPainted',
+        activeItemchange: 'onTabpanelActiveItemChange'
     },
 
     onMybutton1Tap: function(button, e, eOpts) {
-        let form = this.queryById('outputDrive1Form');
-        let formData = form.getValues();
+        this.saveHardware();
+    },
 
-        let newConfig = {
-            type:formData.type
-        };
-        delete formData.type;
-        newConfig.pins=formData;
+    onMybutton5Tap: function(button, e, eOpts) {
+        this.hardwareShowAdd();
+    },
 
-        let motorForm = this.queryById('motorConfigs');
-        let motorFormData = form.getValues();
+    onHardwareItemsRemove: function(container, item, index, eOpts) {
+        if(container.items.length < 1){
+            this.queryById('noHardwareMsg').show({type:'fade'});
+        }
+    },
 
-        console.log(newConfig);
+    onMybutton1Tap1: function(button, e, eOpts) {
+        this.saveControl();
+    },
 
+    onMybutton5Tap1: function(button, e, eOpts) {
+        this.controlShowAdd();
+    },
+
+    onHardwareItemsRemove1: function(container, item, index, eOpts) {
+        if(container.items.length < 1){
+            this.queryById('noControlsMsg').show({type:'fade'});
+        }
+    },
+
+    onMybutton13Tap: function(button, e, eOpts) {
         this.websocketSend({
-            action:'updateConfig',
-            key:'outputs.drive',
-            config:newConfig
+            action:'configDefaults'
         });
+    },
+
+    onMybutton11Tap: function(button, e, eOpts) {
+
     },
 
     onMybutton8Tap: function(button, e, eOpts) {
@@ -1657,6 +1269,21 @@ Ext.define('RobotDriver.view.MainPanel', {
         });
     },
 
+    onFormpanelPainted: function(sender, element, eOpts) {
+        this.webSocketCon = null;
+        this.messageQueue = [];
+        this.websocketInit();
+
+        this.hardwareConfigInit();
+        this.websocketSendAction("configRead",true);
+
+        this.controlsInit();
+
+        this.getViewModel().getStore('hardwareStore').on('datachanged',function(){
+            this.controlSyncHardwareStores();
+        }, this);
+    },
+
     onTabpanelActiveItemChange: function(sender, value, oldValue, eOpts) {
         //console.log('tab change!');
         //console.log(arguments);
@@ -1666,12 +1293,6 @@ Ext.define('RobotDriver.view.MainPanel', {
             case 'tabVideo':
                 this.startVideo();
         }
-    },
-
-    onFormpanelPainted: function(sender, element, eOpts) {
-        this.websocketInit();
-        this.websocketSendAction("readConfig",true);
-        this.controlsInit();
     },
 
     trexscream: function() {
@@ -1806,17 +1427,15 @@ Ext.define('RobotDriver.view.MainPanel', {
         var jsonData = JSON.parse(message.data);
 
         if(!jsonData.cmd){
-            console.log('Missing cmd!');
-            console.log(jsonData);
+            console.log('websocketReceive Missing cmd!', jsonData);
             return false;
         }
         switch(jsonData.cmd){
             default:
-                console.log('Invalid cmd!');
-                console.log(jsonData);
+                console.log('websocketReceive Invalid cmd!', jsonData);
                 break;
             case 'config':
-                this.showConfig(jsonData.config);
+                this.configLoad(jsonData.config);
                 break;
             case 'status':
                 this.msgUpdateStatus(jsonData);
@@ -1830,6 +1449,305 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
 
 
+    },
+
+    configLoad: function(config) {
+        this.showConfig(config);
+
+        if(config.hardware){
+            this.hardwareLoadConfig(config.hardware);
+        }
+        if(config.controls){
+            this.controlsLoadConfig(config.controls);
+        }
+    },
+
+    controlShowAdd: function() {
+        if(!this.addControlTypeWin){
+
+            this.addControlTypeWin = Ext.create({
+                xtype:'addcontroltype',
+                floated:true,
+                modal:true,
+                listeners:{
+                    scope:this,
+                    typeselected:function(type){
+                        this.controlAdd(type);
+                    }
+                }
+            });
+
+        }
+
+        this.addControlTypeWin.show();
+    },
+
+    controlAdd: function(type, vals) {
+        let values = vals || false;
+
+        console.log(`Adding control ${type}`, values);
+
+        let panel;
+        let controlNum;
+
+        switch(type){
+            default:
+                return false;
+            case 'slider':
+                panel = Ext.create({
+                    xtype:'controlslider',
+                    hidden:true,
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'button':
+                panel = Ext.create({
+                    xtype:'controlbutton',
+                    hidden:true,
+                    hardwareButtonId:this.hardwareButtonId++,
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'motorslider':
+                panel = Ext.create({
+                    xtype:'controlslider',
+                    hidden:true,
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+
+        }
+
+        this.queryById('noControlsMsg').hide();
+
+        this.queryById('controlItems').add(panel);
+        //panel.hardwareStore = this.getViewModel().getStore('hardwareStore');
+
+        panel.show({type:'slide', direction:'right'});
+        console.log('add control values');
+        console.log(values);
+
+        panel.queryById('hardware').syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
+
+        if(values){
+            console.log('add control set values');
+            panel.setValues(values);
+            panel.queryById('hardware').setHardwareId(values.hardware.hardwareId);
+            if(type==='button'){
+                panel.initialColor = values.color;
+                panel.updateButtonStyles(values.color);
+            }
+        }
+    },
+
+    hardwareShowAdd: function() {
+        if(!this.addHardwareTypeWin){
+
+            this.addHardwareTypeWin = Ext.create({
+                xtype:'addhardwaretype',
+                floated:true,
+                modal:true,
+                listeners:{
+                    scope:this,
+                    typeselected:function(type){
+                        this.hardwareAdd(type);
+                    }
+                }
+            });
+
+        }
+
+        this.addHardwareTypeWin.show();
+    },
+
+    generateHardwareId: function(type) {
+        let id = type + (+new Date()).toString(36);
+        return id;
+    },
+
+    hardwareConfigInit: function() {
+        this.hardwareButtonId = 1;
+
+        this.hardwareCounters = {
+            'motordriver':0,
+            'motor':0,
+            'servo':0,
+            'i2c':0
+        };
+
+    },
+
+    hardwareAdd: function(type, vals) {
+        let values = vals || false;
+
+        console.log(`Adding hardware ${type}`);
+
+        let panel;
+        //let devNum;
+
+        switch(type){
+            default:
+                return false;
+            case 'motordriver':
+                //devNum = ++this.hardwareCounters.motor;
+                panel = Ext.create({
+                    xtype:'hardwaremotordriver',
+                    hidden:true,
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'i2c':
+                //devNum = ++this.hardwareCounters.i2c;
+                panel = Ext.create({
+                    xtype:'hardwarei2c',
+                    hidden:true,
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'servo':
+                //devNum = ++this.hardwareCounters.servo;
+                panel = Ext.create({
+                    xtype:'hardwareservo',
+                    hidden:true,
+                    listeners:{
+                        scope:this,
+                        deletehardware:function(hardware){
+                            this.deleteHardware(hardware);
+                        }
+                    }
+                });
+                break;
+
+        }
+
+        this.queryById('noHardwareMsg').hide();
+
+        this.queryById('hardwareItems').add(panel);
+        panel.show({type:'slide', direction:'right'});
+
+        let hardwareStore = this.getViewModel().getStore('hardwareStore');
+
+        let model = hardwareStore.getModel();
+
+        if(values){
+            panel.hardwareStoreRec = model.create(values);
+            //panel.hardwareStoreRec.set('display',type+' #'+values.devNum);
+            panel.setValues(values);
+            //if(this.hardwareCounters.servo < values.devNum){
+            //    this.hardwareCounters.servo = values.devNum;
+            //}
+        }else{
+            let hardwareId = this.generateHardwareId(type);
+            panel.hardwareStoreRec = model.create({
+                name:'',
+                type:type,
+                config:{},
+                hardwareId:hardwareId,
+                //typeid:devNum,
+                //devNum: devNum,
+                //display:type+' #'+devNum
+            });
+            panel.hardwareConfig = {
+                //devNum:devNum,
+                hardwareId: hardwareId
+            };
+            panel.setValues({
+                //devNum:devNum,
+                hardwareId: hardwareId
+            });
+        }
+        this.getViewModel().getStore('hardwareStore').add(panel.hardwareStoreRec);
+    },
+
+    deleteHardware: function(hardware) {
+        Ext.destroy(hardware);
+        this.getViewModel().getStore('hardwareStore').remove(hardware.hardwareStoreRec);
+
+        hardware.hardwareStoreRec.destroy();
+        delete hardware.hardwareStoreRec;
+
+        //this.syncControlStores();
+    },
+
+    saveHardware: function() {
+        let hardwareItems = this.queryById('hardwareItems');
+
+        let items = [];
+        console.log(hardwareItems);
+        console.log(hardwareItems.items);
+
+        Ext.each(hardwareItems.items.items, function(item){
+            console.log(item);
+            items.push(item.getHardwareConfig());
+        });
+        console.log(items);
+
+
+        this.websocketSend({
+            action:'updateConfig',
+            key:'hardware',
+            config:items
+        });
+    },
+
+    saveControl: function() {
+        let controlItems = this.queryById('controlItems');
+
+        let items = [];
+        console.log(controlItems);
+        console.log(controlItems.items);
+
+        Ext.each(controlItems.items.items, function(item){
+            console.log(item);
+            items.push(item.getConfigValues());
+        });
+        console.log(items);
+
+
+        this.websocketSend({
+            action:'updateConfig',
+            key:'controls',
+            config:items
+        });
+    },
+
+    controlSyncHardwareStores: function() {
+        let hardwareStore = this.getViewModel().getStore('hardwareStore');
+
+        Ext.each(this.queryById('controlItems').items.items, function(item){
+            let hardware = item.queryById('hardware');
+            if(hardware.syncHardwareStore){
+                hardware.syncHardwareStore(hardwareStore);
+            }else{
+                console.log('missing syncHardwareStore func on component', item);
+            }
+        });
+    },
+
+    hardwareLoadConfig: function(hardware) {
+        console.log('loadHardware');
+        Ext.each(hardware,function(item){
+            console.log(item);
+            this.hardwareAdd(item.type, item);
+        },this);
+    },
+
+    controlsLoadConfig: function(controls) {
+        console.log('loadControls');
+        Ext.each(controls,function(controlItem){
+            console.log(controlItem);
+            this.controlAdd(controlItem.type, controlItem);
+        },this);
     },
 
     stopSteeringMovement: function() {
@@ -2043,14 +1961,17 @@ Ext.define('RobotDriver.view.MainPanel', {
             this.virtualController = Ext.create({
                 xtype:'panel',
                 title:'Virtual Controller',
+                iconCls:'x-fa fa-gamepad',
                 floated:true,
                 userCls:'controller-window',
                 width:500,
                 height:300,
-                x:150,
-                y:100,
+                //x:150,
+                //y:100,
                 closable:true,
+                centered:true,
                 closeAction:'hide',
+                showAnimation:{type:'fade'},
                 draggable:true,
                 html:'<div class="button-container"><div class="left-buttons">'+
         		'<div class="stick" id="virctrlstickLeft"></div>'+
@@ -2104,19 +2025,19 @@ Ext.define('RobotDriver.view.MainPanel', {
             });
 
         }
-        console.log(this.virtualController);
-        this.virtualController.show({type:'slide', direction:'right'});
+        //console.log(this.virtualController);
+        this.virtualController.show();
         let drag = this.virtualController.getDraggable();
         drag.on({
-        //     dragstart:function(drag, event){
-        //         console.log('drag start');
-        //         console.log(event);
-        //         if(event.eventTarget.className==="joystick"){
-        //             console.log('drag start CANCEL!');
-        //             //event.stopEvent();
-        //             return false;
-        //         }
-        //     },
+             dragstart:function(drag, event){
+                 console.log('drag start');
+                 console.log(event);
+                 if(event.eventTarget.className==="joystick"){
+                     console.log('drag start CANCEL!');
+                     //event.stopEvent();
+                     return false;
+                 }
+             },
             beforedragstart:function(drag, event){
                 if(event.eventTarget.className==="joystick"){
                     //event.stopEvent();
@@ -2153,12 +2074,8 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         this.config = config;
 
-        let form = this.queryById('outputDrive1Form');
-
-        form.setValues(config.outputs.drive.pins);
-        form.setValues({type:config.outputs.drive.type});
-
         this.queryById('fullConfig').setValue(JSON.stringify(config,null,2));
+
     },
 
     startVideo: function() {
