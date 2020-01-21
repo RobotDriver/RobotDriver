@@ -38,11 +38,15 @@
 }
 .control-button:hover {
   color: #ffffff;
-  box-shadow: 0 6px #bf6516;
-  top: 2px;
+  box-shadow: 0 7px #bf6516;
+  top: 1px;
 }
-.control-button.pressed { /*.btn-fire:active, */
-  box-shadow: 0 0px #bf6516;
+.control-button.toggledown {
+  box-shadow: 0 1px #bf6516;
+  top: 7px;
+}
+.control-button.pressed {
+  box-shadow: 0 0px;
   top: 8px;
 }
 .control-button:focus {
