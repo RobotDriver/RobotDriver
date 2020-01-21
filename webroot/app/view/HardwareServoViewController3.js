@@ -15,5 +15,5 @@
 
 Ext.define('RobotDriver.view.HardwareServoViewController3', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.controlslider'
+    alias: 'controller.controlsliderconfig'
 });

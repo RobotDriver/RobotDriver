@@ -43,15 +43,17 @@ Ext.define('RobotDriver.view.HardwareI2c', {
                 {
                     xtype: 'container',
                     itemId: 'title',
+                    width: 118,
                     html: 'I2C Device #',
                     margin: '10 0 0 20'
                 },
                 {
                     xtype: 'textfield',
                     name: 'name',
+                    label: 'Name',
+                    labelWidth: 50,
                     autoComplete: false,
-                    clearable: false,
-                    placeholder: 'Name'
+                    clearable: false
                 },
                 {
                     xtype: 'displayfield',

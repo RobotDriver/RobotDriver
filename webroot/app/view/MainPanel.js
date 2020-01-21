@@ -348,7 +348,11 @@ Ext.define('RobotDriver.view.MainPanel', {
             items: [
                 {
                     xtype: 'container',
-                    itemId: 'controls'
+                    itemId: 'liveControlsButtons'
+                },
+                {
+                    xtype: 'container',
+                    itemId: 'liveControls'
                 },
                 {
                     xtype: 'container',
@@ -1270,6 +1274,12 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     onFormpanelPainted: function(sender, element, eOpts) {
+        if(this.init){
+           return;
+        }else{
+           this.init = true;
+        }
+
         this.webSocketCon = null;
         this.messageQueue = [];
         this.websocketInit();
@@ -1459,6 +1469,64 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
         if(config.controls){
             this.controlsLoadConfig(config.controls);
+            this.liveControlsLoadConfig(config.controls);
+        }
+    },
+
+    liveControlsLoadConfig: function(controls) {
+        Ext.each(controls,function(controlItem){
+            this.liveControlAdd(controlItem.type, controlItem);
+        },this);
+    },
+
+    liveControlAdd: function(type, vals) {
+        let values = vals || false;
+
+        console.log(`Adding live control ${type}`, values);
+
+        let panel;
+        let controlNum;
+
+        switch(type){
+            default:
+                return false;
+            case 'slider':
+                panel = Ext.create({
+                    xtype:'sliderfield',
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'button':
+                panel = Ext.create({
+                    xtype:'controlbutton',
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'motorslider':
+                panel = Ext.create({
+                    xtype:'controlmotorslider',
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+
+        }
+
+        this.queryById('noControlsMsg').hide();
+
+        if(type==='button'){
+            this.queryById('liveControlsButtons').add(panel);
+        }else{
+            this.queryById('liveControls').add(panel);
+        }
+
+        if(values && panel.setConfigValues){
+            panel.setConfigValues(values);
         }
     },
 
@@ -1485,8 +1553,6 @@ Ext.define('RobotDriver.view.MainPanel', {
     controlAdd: function(type, vals) {
         let values = vals || false;
 
-        console.log(`Adding control ${type}`, values);
-
         let panel;
         let controlNum;
 
@@ -1495,7 +1561,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                 return false;
             case 'slider':
                 panel = Ext.create({
-                    xtype:'controlslider',
+                    xtype:'controlsliderconfig',
                     hidden:true,
                     listeners:{
                         scope:this
@@ -1504,9 +1570,8 @@ Ext.define('RobotDriver.view.MainPanel', {
                 break;
             case 'button':
                 panel = Ext.create({
-                    xtype:'controlbutton',
+                    xtype:'controlbuttonconfig',
                     hidden:true,
-                    hardwareButtonId:this.hardwareButtonId++,
                     listeners:{
                         scope:this
                     }
@@ -1514,7 +1579,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                 break;
             case 'motorslider':
                 panel = Ext.create({
-                    xtype:'controlslider',
+                    xtype:'controlsliderconfig',
                     hidden:true,
                     listeners:{
                         scope:this
@@ -1527,23 +1592,20 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.queryById('noControlsMsg').hide();
 
         this.queryById('controlItems').add(panel);
-        //panel.hardwareStore = this.getViewModel().getStore('hardwareStore');
 
         panel.show({type:'slide', direction:'right'});
-        console.log('add control values');
-        console.log(values);
 
         panel.queryById('hardware').syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
 
-        if(values){
-            console.log('add control set values');
-            panel.setValues(values);
-            panel.queryById('hardware').setHardwareId(values.hardware.hardwareId);
-            if(type==='button'){
-                panel.initialColor = values.color;
-                panel.updateButtonStyles(values.color);
-            }
+        if(values && panel.setConfigValues){
+            panel.setConfigValues(values);
         }
+    },
+
+    controlsLoadConfig: function(controls) {
+        Ext.each(controls,function(controlItem){
+            this.controlAdd(controlItem.type, controlItem);
+        },this);
     },
 
     hardwareShowAdd: function() {
@@ -1572,8 +1634,6 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     hardwareConfigInit: function() {
-        this.hardwareButtonId = 1;
-
         this.hardwareCounters = {
             'motordriver':0,
             'motor':0,
@@ -1586,16 +1646,12 @@ Ext.define('RobotDriver.view.MainPanel', {
     hardwareAdd: function(type, vals) {
         let values = vals || false;
 
-        console.log(`Adding hardware ${type}`);
-
         let panel;
-        //let devNum;
 
         switch(type){
             default:
                 return false;
             case 'motordriver':
-                //devNum = ++this.hardwareCounters.motor;
                 panel = Ext.create({
                     xtype:'hardwaremotordriver',
                     hidden:true,
@@ -1605,7 +1661,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                 });
                 break;
             case 'i2c':
-                //devNum = ++this.hardwareCounters.i2c;
                 panel = Ext.create({
                     xtype:'hardwarei2c',
                     hidden:true,
@@ -1615,7 +1670,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                 });
                 break;
             case 'servo':
-                //devNum = ++this.hardwareCounters.servo;
                 panel = Ext.create({
                     xtype:'hardwareservo',
                     hidden:true,
@@ -1641,11 +1695,7 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         if(values){
             panel.hardwareStoreRec = model.create(values);
-            //panel.hardwareStoreRec.set('display',type+' #'+values.devNum);
             panel.setValues(values);
-            //if(this.hardwareCounters.servo < values.devNum){
-            //    this.hardwareCounters.servo = values.devNum;
-            //}
         }else{
             let hardwareId = this.generateHardwareId(type);
             panel.hardwareStoreRec = model.create({
@@ -1653,16 +1703,11 @@ Ext.define('RobotDriver.view.MainPanel', {
                 type:type,
                 config:{},
                 hardwareId:hardwareId,
-                //typeid:devNum,
-                //devNum: devNum,
-                //display:type+' #'+devNum
             });
             panel.hardwareConfig = {
-                //devNum:devNum,
                 hardwareId: hardwareId
             };
             panel.setValues({
-                //devNum:devNum,
                 hardwareId: hardwareId
             });
         }
@@ -1735,18 +1780,8 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     hardwareLoadConfig: function(hardware) {
-        console.log('loadHardware');
         Ext.each(hardware,function(item){
-            console.log(item);
             this.hardwareAdd(item.type, item);
-        },this);
-    },
-
-    controlsLoadConfig: function(controls) {
-        console.log('loadControls');
-        Ext.each(controls,function(controlItem){
-            console.log(controlItem);
-            this.controlAdd(controlItem.type, controlItem);
         },this);
     },
 

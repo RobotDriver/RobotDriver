@@ -34,9 +34,8 @@ Ext.define('RobotDriver.view.ControlHardwareCombo', {
         {
             xtype: 'combobox',
             itemId: 'hardwareCombo',
-            width: 295,
             label: 'Hardware',
-            labelWidth: 80,
+            labelWidth: 70,
             matchFieldWidth: false,
             displayField: 'display',
             itemTpl: [
@@ -52,8 +51,7 @@ Ext.define('RobotDriver.view.ControlHardwareCombo', {
                 store: '{hardwareComboStore}'
             },
             listeners: {
-                select: 'onHardwareSelect',
-                change: 'onHardwareComboChange'
+                select: 'onHardwareSelect'
             }
         },
         {
@@ -62,13 +60,7 @@ Ext.define('RobotDriver.view.ControlHardwareCombo', {
     ],
 
     onHardwareSelect: function(combobox, newValue, oldValue, eOpts) {
-        console.log('select!', newValue);
         this.fireEvent('select',newValue);
-    },
-
-    onHardwareComboChange: function(combobox, newValue, oldValue, eOpts) {
-        console.log('hardware combo change!');
-        console.log(combobox, newValue);
     },
 
     syncHardwareStore: function(store) {
@@ -87,20 +79,25 @@ Ext.define('RobotDriver.view.ControlHardwareCombo', {
         console.log('control hardware get value');
         let sel = this.queryById('hardwareCombo').getSelection();
 
-        let value = null;
+        //let value = null;
 
-        if(sel !== null){
-            //value = sel.data;
-            value = {
-                type: sel.data.type,
-                //devNum: sel.data.devNum,
-                name: sel.data.name,
-                display: sel.data.display,
-                hardwareId: sel.data.hardwareId
-            };
+        if(sel === null){
+            return null;
         }
 
-        return value;
+        return sel.data.hardwareId;
+            //value = sel.data;
+        //     value = {
+        //         type: sel.data.type,
+        //         //devNum: sel.data.devNum,
+        //         //name: sel.data.name,
+        //         display: sel.data.display,
+        //         hardwareId: sel.data.hardwareId
+        //     };
+        //     value = sel.data.hardwareId;
+        // }
+
+        // return value;
     },
 
     setHardwareId: function(hardwareId) {

@@ -14,309 +14,163 @@
  */
 
 Ext.define('RobotDriver.view.ControlButton', {
-    extend: 'Ext.form.Panel',
+    extend: 'Ext.Container',
     alias: 'widget.controlbutton',
 
     requires: [
-        'RobotDriver.view.HardwareServoViewModel4',
-        'RobotDriver.view.ControlHardwareCombo',
-        'Ext.Spacer',
-        'Ext.Button',
-        'Ext.field.ComboBox',
-        'Ext.XTemplate',
-        'Ext.Panel'
+        'RobotDriver.view.ControlButtonViewModel',
+        'Ext.Container'
     ],
 
     viewModel: {
         type: 'controlbutton'
     },
-    border: true,
     defaultListenerScope: true,
 
     items: [
         {
             xtype: 'container',
-            layout: {
-                type: 'hbox',
-                align: 'start'
-            },
-            items: [
-                {
-                    xtype: 'controlhardwarecombo',
-                    itemId: 'hardware',
-                    listeners: {
-                        select: {
-                            fn: 'onHardwareSelect1',
-                            delay: 1
-                        }
-                    }
-                },
-                {
-                    xtype: 'textfield',
-                    enableKeyEvents: true,
-                    itemId: 'name',
-                    name: 'name',
-                    margin: 10,
-                    label: 'Name',
-                    labelWidth: 50,
-                    autoComplete: false,
-                    clearable: false,
-                    placeholder: 'Name',
-                    listeners: {
-                        change: 'onMytextfield3Change'
-                    }
-                },
-                {
-                    xtype: 'spacer'
-                },
-                {
-                    xtype: 'button',
-                    margin: '10 10 0 0',
-                    iconCls: 'x-fa fa-trash',
-                    text: 'Delete',
-                    listeners: {
-                        tap: 'onMybutton9Tap1'
-                    }
-                }
-            ]
-        },
-        {
-            xtype: 'container',
-            padding: 10,
-            layout: 'hbox',
-            items: [
-                {
-                    xtype: 'container',
-                    itemId: 'senchacolorpicker',
-                    width: 152
-                },
-                {
-                    xtype: 'combobox',
-                    name: 'icon',
-                    margin: '0 0 0 10',
-                    label: 'icon',
-                    labelWidth: 40,
-                    matchFieldWidth: false,
-                    displayField: 'name',
-                    itemTpl: [
-                        '<span class="x-fa fa-{name}"></span>&nbsp;&nbsp;&nbsp;&nbsp;{name}'
-                    ],
-                    valueField: 'name',
-                    anyMatch: true,
-                    queryMode: 'local',
-                    typeAhead: true,
-                    bind: {
-                        store: '{iconStore}'
-                    },
-                    listeners: {
-                        select: 'onMycombobox7Select'
-                    }
-                },
-                {
-                    xtype: 'spacer'
-                }
-            ]
-        },
-        {
-            xtype: 'container',
             itemId: 'buttonStyles'
         },
         {
-            xtype: 'panel',
-            layout: 'vbox',
-            title: 'Preview',
-            items: [
-                {
-                    xtype: 'container',
-                    itemId: 'virctrlbuttonFire',
-                    style: {
-                        'font-size': '40px'
-                    },
-                    html: '<button class="control-button"><span class="control-button-icon"></span></button>'
-                },
-                {
-                    xtype: 'container',
-                    height: 35,
-                    itemId: 'previewName',
-                    style: {
-                        'text-align': 'center'
-                    },
-                    width: 70,
-                    margin: '0 0 0 10',
-                    maxWidth: 150
-                }
-            ]
+            xtype: 'container',
+            itemId: 'virctrlbuttonFire',
+            style: {
+                'font-size': '40px'
+            },
+            html: '<button class="control-button"><span class="control-button-icon"></span></button>'
+        },
+        {
+            xtype: 'container',
+            height: 35,
+            itemId: 'previewName',
+            style: {
+                'text-align': 'center'
+            },
+            width: 70,
+            margin: '0 0 0 10',
+            maxWidth: 150
         }
     ],
     listeners: {
-        painted: 'onFormpanelPainted'
+        painted: 'onContainerPainted'
     },
 
-    onHardwareSelect1: function(selection) {
-        if(selection !== null && this.queryById('name').getValue() === ''){
-            this.queryById('name').setValue(selection.data.name);
+    onContainerPainted: function(sender, element, eOpts) {
+        if(this.init){
+           return;
+        }else{
+           this.init = true;
         }
-    },
 
-    onMytextfield3Change: function(field, newValue, oldValue, eOpts) {
-        this.queryById('previewName').setHtml(newValue);
-    },
+        //this.buttonActionType = 'momentary';
+        //this.buttonToggled = false;
 
-    onMybutton9Tap1: function(button, e, eOpts) {
-        console.log('delete button');
-        console.log(this);
+        this.button = this.el.dom.querySelector('.control-button');
+        if(this.buttonId){
+            this.button.id = this.buttonId;
+        }else{
+            this.buttonId = 'control-button-'+Ext.id();
+            this.button.id = this.buttonId;
+        }
 
-        //this.hide({type:'fade'});
-        //Ext.defer(function(){
-            Ext.destroy(this);
-        //},400,this);
-    },
+        createFireButton(this.button, function(state){
 
-    onMycombobox7Select: function(combobox, newValue, oldValue, eOpts) {
-        console.log('select!');
-        console.log(newValue);
-
-        console.log(this.el);
-        iconel = this.el.dom.querySelector(".control-button-icon");
-        console.log(iconel);
-        iconel.className = 'control-button-icon x-fa fa-'+newValue.data.name;
-    },
-
-    onFormpanelPainted: function(sender, element, eOpts) {
-        console.log('hardwareButtonId', this.hardwareButtonId);
-
-        if(!this.colorPicker){
-
-             this.colorPicker = Ext.create("RobotDriver.ColorPicker",
-            {
-                 labelWidth: 55,
-                 width:150,
-                 name:'color',
-                 label:'Color',
-                 value: this.initialColor ? this.initialColor : '#E67E22', // initial color
-                 renderTo: this.queryById('senchacolorpicker'),
-                 listeners: {
-                     scope:this,
-                     change: function(field, newVal) {
-                         console.log('color change',newVal);
-
-                         this.updateButtonStyles(newVal);
-                     }
-                 }
-             });
-         }
-
-        //console.log(this);
-        if(!this.buttonsInit){
-            this.buttonsInit = true;
-            console.log(this.el.dom);
-            console.log(this.el.dom.querySelector('.control-button'));
-            this.virtualControllerbuttonFire = this.el.dom.querySelector('.control-button');
-            this.virtualControllerbuttonFire.id = 'control-button-'+this.hardwareButtonId;
-            createFireButton(this.virtualControllerbuttonFire, function(state){
-                console.log('fire button!', state);
-                if(state==='down'){
-                    //this.fieldShootText.setValue(1);
-                }else if(state==='up'){
-                    //this.fieldShootText.setValue(0);
+            if(state==='down'){
+                if(this.buttonActionType==='toggle'){
+                    this.button.classList.add("toggledown");
+                    if(this.buttonToggled === true){
+                        this.buttonToggled = false;
+                    }else{
+                        this.fireEvent('toggledown');
+                        this.buttonToggled = true;
+                    }
+                }else{
+                    this.fireEvent('down');
                 }
 
-            }.bind(this));
-        }
+            }else if(state==='up'){
+                if(this.buttonActionType==='toggle'){
+                    if(this.buttonToggled === false){
+                        this.fireEvent('toggleup');
+                        this.button.classList.remove("toggledown");
+                    }
+                }else{
+                    this.fireEvent('up');
+                }
+
+            }
+
+        }.bind(this));
     },
 
-    getConfigValues: function() {
-        console.log('button - getConfigValues');
-
-        let values = this.getValues();
-        values.type='button';
-
-        values.hardware = this.queryById('hardware').getHardwareId();
-        values.color = this.colorPicker.getValue();
-
-        console.log(values);
-
-        return values;
-    },
-
-    pSBC: function(p, c0, c1, l) {
-        //const pSBC=(p,c0,c1,l)=>{
-        	let r,g,b,P,f,t,h,i=parseInt,m=Math.round,a=typeof(c1)=="string";
-        	if(typeof(p)!="number"||p<-1||p>1||typeof(c0)!="string"||(c0[0]!='r'&&c0[0]!='#')||(c1&&!a))return null;
-        	if(!this.pSBCr)this.pSBCr=(d)=>{
-        		let n=d.length,x={};
-        		if(n>9){
-        			[r,g,b,a]=d=d.split(","),n=d.length;
-        			if(n<3||n>4)return null;
-        			x.r=i(r[3]=="a"?r.slice(5):r.slice(4)),x.g=i(g),x.b=i(b),x.a=a?parseFloat(a):-1
-        		}else{
-        			if(n==8||n==6||n<4)return null;
-        			if(n<6)d="#"+d[1]+d[1]+d[2]+d[2]+d[3]+d[3]+(n>4?d[4]+d[4]:"");
-        			d=i(d.slice(1),16);
-        			if(n==9||n==5)x.r=d>>24&255,x.g=d>>16&255,x.b=d>>8&255,x.a=m((d&255)/0.255)/1000;
-        			else x.r=d>>16,x.g=d>>8&255,x.b=d&255,x.a=-1
-        		}return x};
-        	h=c0.length>9,h=a?c1.length>9?true:c1=="c"?!h:false:h,f=this.pSBCr(c0),P=p<0,t=c1&&c1!="c"?this.pSBCr(c1):P?{r:0,g:0,b:0,a:-1}:{r:255,g:255,b:255,a:-1},p=P?p*-1:p,P=1-p;
-        	if(!f||!t)return null;
-        	if(l)r=m(P*f.r+p*t.r),g=m(P*f.g+p*t.g),b=m(P*f.b+p*t.b);
-        	else r=m((P*f.r**2+p*t.r**2)**0.5),g=m((P*f.g**2+p*t.g**2)**0.5),b=m((P*f.b**2+p*t.b**2)**0.5);
-        	a=f.a,t=t.a,f=a>=0||t>=0,a=f?a<0?t:t<0?a:a*P+t*p:0;
-        	if(h)return"rgb"+(f?"a(":"(")+r+","+g+","+b+(f?","+m(a*1000)/1000:"")+")";
-        	else return"#"+(4294967296+r*16777216+g*65536+b*256+(f?m(a*255):0)).toString(16).slice(1,f?undefined:-2)
-        //};
-    },
-
-    contrastColor: function(hex) {
-        // https://stackoverflow.com/a/35970186
-
-        if (hex.indexOf('#') === 0) {
-            hex = hex.slice(1);
-        }
-        // convert 3-digit hex to 6-digits.
-        if (hex.length === 3) {
-            hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-        }
-        if (hex.length !== 6) {
-            throw new Error('Invalid HEX color.');
-        }
-        var r = parseInt(hex.slice(0, 2), 16),
-            g = parseInt(hex.slice(2, 4), 16),
-            b = parseInt(hex.slice(4, 6), 16);
-
-        // http://stackoverflow.com/a/3943023/112731
-        return (r * 0.299 + g * 0.587 + b * 0.114) > 186
-            ? '#000000'
-        : '#FFFFFF';
-    },
-
-    updateButtonStyles: function(color) {
-        let darkColor = this.pSBC( -0.4, color, false, true );
-
-        console.log(this.pSBC( -0.4, color, false, true ));
-
+    updateButtonStyles: function(color, colorShadow, contrastColor) {
         let styleContainer = this.queryById('buttonStyles').bodyElement.dom;
-        styleContainer.innerHtml = '';
 
-        let contrastColor = this.contrastColor(color);
+        styleContainer.innerHTML = '';
+
+        if(!this.buttonId){
+            this.buttonId = 'control-button-'+Ext.id();
+        }
 
         let styles = document.createElement("style");
         let stylesText = document.createTextNode(
-            `#control-button-${this.hardwareButtonId} .control-button-icon:before { `+
-            `  color: ${contrastColor}; `+
-            `}`+
-            `#control-button-${this.hardwareButtonId} { `+
-            `  background-color: ${color}; `+
-            `  box-shadow: 0 8px ${darkColor}; `+
-            `}`+
-            `#control-button-${this.hardwareButtonId}:hover { `+
-            `  box-shadow: 0 6px ${darkColor}; `+
-            `}`+
-            `#control-button-${this.hardwareButtonId}.pressed { `+
-            `  box-shadow: 0 0 ${darkColor}; `+
-            `}`);
+            `button#${this.buttonId} .control-button-icon:before {\r\n`+
+            `  color: ${contrastColor}; \r\n`+
+            `}\r\n`+
+            `button#${this.buttonId} { \r\n`+
+            `  background-color: ${color}; \r\n`+
+            `  box-shadow: 0 8px ${colorShadow}; \r\n`+
+            `}\r\n`+
+            `button#${this.buttonId}:hover { \r\n`+
+            `  box-shadow: 0 7px ${colorShadow}; \r\n`+
+            `}\r\n`+
+            `button#${this.buttonId}.pressed {\r\n `+
+            `  box-shadow: 0 0 ${colorShadow}; \r\n`+
+            `}\r\n`+
+            `button#${this.buttonId}.toggledown { \r\n`+
+            `  box-shadow: 0 1px ${colorShadow}; \r\n`+
+            `  top: 7px; \r\n`+
+            `}\r\n`
+        );
         styles.appendChild(stylesText);
 
         styleContainer.appendChild(styles);
+    },
+
+    setButtonActionType: function(type) {
+        this.buttonActionType = type;
+
+        if(type !== 'toggle'){
+            if(this.button && this.button.classList){
+                this.button.classList.remove("toggledown");
+            }
+            this.buttonToggled = false;
+        }
+    },
+
+    setButtonIcon: function(icon) {
+        iconel = this.el.dom.querySelector(".control-button-icon");
+        iconel.className = 'control-button-icon x-fa fa-'+icon;
+    },
+
+    setLabel: function(label) {
+        this.queryById('previewName').setHtml(label);
+    },
+
+    setConfigValues: function(config) {
+        console.log('button config!');
+        console.log(config);
+
+        this.setLabel(config.label);
+        this.setButtonIcon(config.icon);
+        this.setButtonActionType(config.actionType);
+
+        this.configColor = config.color;
+        this.configColorShadow = config.colorShadow;
+        this.configContrastColor = config.iconColor;
+
+        this.updateButtonStyles(config.color, this.configColorShadow, this.configContrastColor);
     }
 
 });

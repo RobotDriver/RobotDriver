@@ -43,16 +43,18 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
                 {
                     xtype: 'container',
                     itemId: 'title',
-                    html: 'Motor Driver #',
+                    width: 117,
+                    html: 'Motor Driver',
                     margin: '10 0 0 20'
                 },
                 {
                     xtype: 'textfield',
                     enableKeyEvents: true,
                     name: 'name',
+                    label: 'Name',
+                    labelWidth: 50,
                     autoComplete: false,
                     clearable: false,
-                    placeholder: 'Name',
                     listeners: {
                         change: 'onMytextfield3Change'
                     }

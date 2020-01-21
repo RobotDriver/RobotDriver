@@ -30,9 +30,10 @@ Ext.application({
         'HardwareMotorDriver',
         'HardwareI2c',
         'AddControlType',
-        'ControlSlider',
-        'ControlButton',
-        'ControlHardwareCombo'
+        'ControlSliderConfig',
+        'ControlButtonConfig',
+        'ControlHardwareCombo',
+        'ControlButton'
     ],
     name: 'RobotDriver',
 

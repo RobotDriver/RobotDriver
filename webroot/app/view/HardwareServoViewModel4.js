@@ -15,7 +15,7 @@
 
 Ext.define('RobotDriver.view.HardwareServoViewModel4', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.controlbutton',
+    alias: 'viewmodel.controlbuttonconfig',
 
     requires: [
         'Ext.data.Store',
@@ -635,6 +635,26 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
             sorters: {
                 property: 'name'
             }
+        },
+        actionTypeStore: {
+            data: [
+                [
+                    'Momentary / Hold for On',
+                    'momentary'
+                ],
+                [
+                    'Toggle / Switch On & Off',
+                    'toggle'
+                ]
+            ],
+            fields: [
+                {
+                    name: 'display'
+                },
+                {
+                    name: 'value'
+                }
+            ]
         }
     }
 

@@ -54,7 +54,6 @@ Ext.define('RobotDriver.view.HardwareServo', {
                     labelWidth: 50,
                     autoComplete: false,
                     clearable: false,
-                    placeholder: 'Name',
                     listeners: {
                         change: {
                             enableKeyEvents: true,
