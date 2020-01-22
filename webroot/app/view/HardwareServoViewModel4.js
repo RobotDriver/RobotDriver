@@ -51,10 +51,6 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                     'f005'
                 ],
                 [
-                    'star',
-                    'f006'
-                ],
-                [
                     'user',
                     'f007'
                 ],
@@ -375,14 +371,6 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                     'f05b'
                 ],
                 [
-                    'times-circle',
-                    'f05c'
-                ],
-                [
-                    'check-circle',
-                    'f05d'
-                ],
-                [
                     'ban',
                     'f05e'
                 ],
@@ -547,10 +535,6 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                     'f089'
                 ],
                 [
-                    'heart',
-                    'f08a'
-                ],
-                [
                     'sign-out',
                     'f08b'
                 ],
@@ -591,10 +575,6 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                     'f096'
                 ],
                 [
-                    'bookmark',
-                    'f097'
-                ],
-                [
                     'phone-square',
                     'f098'
                 ],
@@ -617,12 +597,7 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                 [
                     'feed',
                     'f09e'
-                ],
-                [
-                    'hdd',
-                    'f0a0'
-                ],
-                
+                ]
             ],
             fields: [
                 {

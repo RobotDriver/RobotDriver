@@ -133,22 +133,23 @@ Ext.define('RobotDriver.view.HardwareServo', {
     },
 
     onMybutton9Tap: function(button, e, eOpts) {
-        console.log('delete servo');
-        console.log(this);
-        this.fireEvent('deletehardware', this);
-
-        //this.hide({type:'fade'});
-        //Ext.defer(function(){
-        //},400,this);
+        this.fireEvent('hardwaredelete', this);
     },
 
-    getHardwareConfig: function() {
+    getConfigValues: function() {
         let values = this.getValues();
 
         //values.devNum = this.hardwareConfig.devNum;
-        values.hardwareId = this.hardwareConfig.hardwareId;
+        values.hardwareId = this.hardwareId;
 
         return values;
+    },
+
+    setConfigValues: function(config) {
+        this.setValues(config);
+
+        this.hardwareId = config.hardwareId;
+
     }
 
 });

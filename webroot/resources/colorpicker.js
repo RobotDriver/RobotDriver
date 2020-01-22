@@ -57,9 +57,6 @@ Ext.define("RobotDriver.ColorPicker", {
 //             this.showPicker();
 //         },
         select: function () {
-            console.log('select!');
-            console.log(this);
-            console.log(this.el);
             this.setBackgroundColor(this.getValue());
         }
     },
@@ -67,7 +64,6 @@ Ext.define("RobotDriver.ColorPicker", {
         var a = this.inputElement.dom;
         if (this.setOnChange == "background") {
             a.style.backgroundColor = color;
-            console.log('contrast color ',this.contrastColor(color));
             a.style.color = this.contrastColor(color);
         } else {
             if (this.setOnChange == "color") {
@@ -127,7 +123,6 @@ Ext.define("RobotDriver.ColorPicker", {
         });
     },
     drawSpectrum: function () {
-        console.log('drawSpectrum!');
         var a = this;
         !a.isValid() && a.setValue("#FFFFFF");
         a.spectrum = this.drawSpace.appendChild(document.createElement("canvas"));
@@ -143,9 +138,8 @@ Ext.define("RobotDriver.ColorPicker", {
         a.drawLuminance();
         
         var extel = Ext.get(a.drawSpace);
-        console.log(extel);
+        
         extel.on("tap", function (h, d) {
-            console.log('tap');
             function i(l, k, e) {
                 var j = "0123456789ABCDEF";
                 return "#" + (j[parseInt(l / 16)] + j[parseInt(l % 16)] + j[parseInt(k / 16)] + j[parseInt(k % 16)] + j[parseInt(e / 16)] + j[parseInt(e % 16)])

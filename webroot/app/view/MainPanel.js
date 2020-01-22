@@ -91,10 +91,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                         },
                         {
                             xtype: 'container',
-                            itemId: 'hardwareItems',
-                            listeners: {
-                                remove: 'onHardwareItemsRemove'
-                            }
+                            itemId: 'hardwareItems'
                         }
                     ]
                 },
@@ -102,7 +99,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                     xtype: 'container',
                     title: 'Control',
                     iconCls: 'x-fa fa-gamepad',
-                    padding: 10,
+                    padding: '0 0 0 10',
                     scrollable: true,
                     items: [
                         {
@@ -140,10 +137,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                         },
                         {
                             xtype: 'container',
-                            itemId: 'controlItems',
-                            listeners: {
-                                remove: 'onHardwareItemsRemove1'
-                            }
+                            itemId: 'controlItems'
                         },
                         {
                             xtype: 'fieldset',
@@ -348,7 +342,8 @@ Ext.define('RobotDriver.view.MainPanel', {
             items: [
                 {
                     xtype: 'container',
-                    itemId: 'liveControlsButtons'
+                    itemId: 'liveControlsButtons',
+                    layout: 'hbox'
                 },
                 {
                     xtype: 'container',
@@ -1031,31 +1026,19 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     onMybutton1Tap: function(button, e, eOpts) {
-        this.saveHardware();
+        this.hardwareSave();
     },
 
     onMybutton5Tap: function(button, e, eOpts) {
         this.hardwareShowAdd();
     },
 
-    onHardwareItemsRemove: function(container, item, index, eOpts) {
-        if(container.items.length < 1){
-            this.queryById('noHardwareMsg').show({type:'fade'});
-        }
-    },
-
     onMybutton1Tap1: function(button, e, eOpts) {
-        this.saveControl();
+        this.controlSave();
     },
 
     onMybutton5Tap1: function(button, e, eOpts) {
         this.controlShowAdd();
-    },
-
-    onHardwareItemsRemove1: function(container, item, index, eOpts) {
-        if(container.items.length < 1){
-            this.queryById('noControlsMsg').show({type:'fade'});
-        }
     },
 
     onMybutton13Tap: function(button, e, eOpts) {
@@ -1284,7 +1267,6 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.messageQueue = [];
         this.websocketInit();
 
-        this.hardwareConfigInit();
         this.websocketSendAction("configRead",true);
 
         this.controlsInit();
@@ -1474,59 +1456,75 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     liveControlsLoadConfig: function(controls) {
+        this.queryById('liveControlsButtons').removeAll();
+        this.queryById('liveControls').removeAll();
+
         Ext.each(controls,function(controlItem){
             this.liveControlAdd(controlItem.type, controlItem);
         },this);
     },
 
-    liveControlAdd: function(type, vals) {
-        let values = vals || false;
+    liveControlAdd: function(type, config) {
+        config = config || false;
 
-        console.log(`Adding live control ${type}`, values);
+        if(!config || !config.hardwareId){
+            return;
+        }
 
         let panel;
-        let controlNum;
+        let panelConfig = {};
 
         switch(type){
             default:
                 return false;
             case 'slider':
-                panel = Ext.create({
-                    xtype:'sliderfield',
+
+                Ext.apply(panelConfig,{
+                    liveUpdate: true,
+                    maxValue:1000,
+                    margin: 15,
+                    xtype: 'sliderfield',
                     listeners:{
-                        scope:this
+                        scope:this,
+                        change:function(field, value){
+                            if(value.constructor === Array){
+                                value = value[0];//live update sends arrays for some reason
+                            }
+                            this.websocketSend({
+                                action:'control',
+                                hardwareId:config.hardwareId,
+                                value:value
+                            });
+                        }
                     }
                 });
+                if(config.label){
+                    panelConfig.label = config.label;
+                }
                 break;
             case 'button':
-                panel = Ext.create({
-                    xtype:'controlbutton',
-                    listeners:{
-                        scope:this
-                    }
-                });
+                panelConfig.xtype = 'controlbutton';
                 break;
             case 'motorslider':
-                panel = Ext.create({
-                    xtype:'controlmotorslider',
-                    listeners:{
-                        scope:this
-                    }
-                });
+                panelConfig.xtype = 'controlmotorslider';
+                break;
+        }
+
+        panel = Ext.create(panelConfig);
+
+        switch(type){
+            case 'button':
+                this.queryById('liveControlsButtons').add(panel);
+                break;
+            case 'motorslider':
+            case 'slider':
+                this.queryById('liveControls').add(panel);
                 break;
 
         }
 
-        this.queryById('noControlsMsg').hide();
-
-        if(type==='button'){
-            this.queryById('liveControlsButtons').add(panel);
-        }else{
-            this.queryById('liveControls').add(panel);
-        }
-
-        if(values && panel.setConfigValues){
-            panel.setConfigValues(values);
+        if(config && panel.setConfigValues){
+            panel.setConfigValues(config);
         }
     },
 
@@ -1550,39 +1548,32 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.addControlTypeWin.show();
     },
 
-    controlAdd: function(type, vals) {
-        let values = vals || false;
+    controlAdd: function(type, config) {
+        config = config || false;
 
-        let panel;
-        let controlNum;
+        var panel;
 
         switch(type){
             default:
                 return false;
+            case 'motorslider':
+            case 'button':
             case 'slider':
                 panel = Ext.create({
-                    xtype:'controlsliderconfig',
+                    xtype:'control'+type+'config',
                     hidden:true,
+                    margin:'3 0 0 0',
                     listeners:{
-                        scope:this
-                    }
-                });
-                break;
-            case 'button':
-                panel = Ext.create({
-                    xtype:'controlbuttonconfig',
-                    hidden:true,
-                    listeners:{
-                        scope:this
-                    }
-                });
-                break;
-            case 'motorslider':
-                panel = Ext.create({
-                    xtype:'controlsliderconfig',
-                    hidden:true,
-                    listeners:{
-                        scope:this
+                        scope:this,
+                        controlmoveup:function(){
+                            this.controlMove(panel,'up');
+                        },
+                        controlmovedown:function(){
+                            this.controlMove(panel,'down');
+                        },
+                        controldelete:function(){
+                            this.controlDelete(panel);
+                        }
                     }
                 });
                 break;
@@ -1597,15 +1588,146 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         panel.queryById('hardware').syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
 
-        if(values && panel.setConfigValues){
-            panel.setConfigValues(values);
+        if(config && panel.setConfigValues){
+            panel.setConfigValues(config);
         }
     },
 
+    controlSave: function() {
+        let controlItems = this.queryById('controlItems');
+
+        let controlConfig = [];
+        Ext.each(controlItems.items.items, function(item){
+            controlConfig.push(item.getConfigValues());
+        });
+
+        this.websocketSend({
+            action:'updateConfig',
+            key:'controls',
+            config:controlConfig
+        });
+
+        this.controlsLoadConfig(controlConfig);
+        this.liveControlsLoadConfig(controlConfig);
+    },
+
     controlsLoadConfig: function(controls) {
+        this.queryById('controlItems').removeAll();
+
         Ext.each(controls,function(controlItem){
             this.controlAdd(controlItem.type, controlItem);
         },this);
+    },
+
+    controlDelete: function(panel) {
+        Ext.destroy(panel);
+
+        if(this.queryById('controlItems').getItems().length < 1){
+            this.queryById('noControlsMsg').show({type:'fade'});
+        }
+    },
+
+    controlMove: function(control, direction) {
+        let parent = this.queryById('controlItems');
+
+        let currentIndex = parent.items.items.indexOf(control);
+
+        if(direction === 'up'){
+            currentIndex--;
+        }else{
+            currentIndex++;
+        }
+
+        parent.remove(control, false);
+        parent.insert(currentIndex, control);
+
+    },
+
+    controlSyncHardwareStores: function() {
+        let hardwareStore = this.getViewModel().getStore('hardwareStore');
+
+        Ext.each(this.queryById('controlItems').items.items, function(item){
+            let hardware = item.queryById('hardware');
+            if(hardware.syncHardwareStore){
+                hardware.syncHardwareStore(hardwareStore);
+            }else{
+                console.log('missing syncHardwareStore func on component', item);
+            }
+        });
+    },
+
+    hardwareLoadConfig: function(hardware) {
+        Ext.each(hardware,function(item){
+            this.hardwareAdd(item.type, item);
+        },this);
+    },
+
+    hardwareAdd: function(type, config) {
+        config = config || false;
+
+        let panel;
+
+        switch(type){
+            default:
+                return false;
+            case 'motordriver':
+                panel = Ext.create({
+                    xtype:'hardwaremotordriver',
+                    hidden:true,
+                    margin:'3 0 0 0',
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'i2c':
+                panel = Ext.create({
+                    xtype:'hardwarei2c',
+                    hidden:true,
+                    margin:'3 0 0 0',
+                    listeners:{
+                        scope:this
+                    }
+                });
+                break;
+            case 'servo':
+                panel = Ext.create({
+                    xtype:'hardwareservo',
+                    hidden:true,
+                    margin:'3 0 0 0',
+                    listeners:{
+                        scope:this,
+                        hardwaredelete:function(hardware){
+                            this.hardwareDelete(hardware);
+                        }
+                    }
+                });
+                break;
+
+        }
+
+        this.queryById('noHardwareMsg').hide();
+
+        this.queryById('hardwareItems').add(panel);
+        panel.show({type:'slide', direction:'right'});
+
+        let hardwareStore = this.getViewModel().getStore('hardwareStore');
+
+        let model = hardwareStore.getModel();
+
+        if(!config){
+            config = {
+                name:'',
+                type:type,
+                config:{},
+                hardwareId:this.hardwareGenerateId()
+            };
+
+        }
+        panel.hardwareStoreRec = model.create(config);
+        panel.setConfigValues(config);
+
+        this.getViewModel().getStore('hardwareStore').add(panel.hardwareStoreRec);
     },
 
     hardwareShowAdd: function() {
@@ -1628,94 +1750,13 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.addHardwareTypeWin.show();
     },
 
-    generateHardwareId: function(type) {
-        let id = type + (+new Date()).toString(36);
-        return id;
-    },
-
-    hardwareConfigInit: function() {
-        this.hardwareCounters = {
-            'motordriver':0,
-            'motor':0,
-            'servo':0,
-            'i2c':0
-        };
-
-    },
-
-    hardwareAdd: function(type, vals) {
-        let values = vals || false;
-
-        let panel;
-
-        switch(type){
-            default:
-                return false;
-            case 'motordriver':
-                panel = Ext.create({
-                    xtype:'hardwaremotordriver',
-                    hidden:true,
-                    listeners:{
-                        scope:this
-                    }
-                });
-                break;
-            case 'i2c':
-                panel = Ext.create({
-                    xtype:'hardwarei2c',
-                    hidden:true,
-                    listeners:{
-                        scope:this
-                    }
-                });
-                break;
-            case 'servo':
-                panel = Ext.create({
-                    xtype:'hardwareservo',
-                    hidden:true,
-                    listeners:{
-                        scope:this,
-                        deletehardware:function(hardware){
-                            this.deleteHardware(hardware);
-                        }
-                    }
-                });
-                break;
-
-        }
-
-        this.queryById('noHardwareMsg').hide();
-
-        this.queryById('hardwareItems').add(panel);
-        panel.show({type:'slide', direction:'right'});
-
-        let hardwareStore = this.getViewModel().getStore('hardwareStore');
-
-        let model = hardwareStore.getModel();
-
-        if(values){
-            panel.hardwareStoreRec = model.create(values);
-            panel.setValues(values);
-        }else{
-            let hardwareId = this.generateHardwareId(type);
-            panel.hardwareStoreRec = model.create({
-                name:'',
-                type:type,
-                config:{},
-                hardwareId:hardwareId,
-            });
-            panel.hardwareConfig = {
-                hardwareId: hardwareId
-            };
-            panel.setValues({
-                hardwareId: hardwareId
-            });
-        }
-        this.getViewModel().getStore('hardwareStore').add(panel.hardwareStoreRec);
-    },
-
-    deleteHardware: function(hardware) {
+    hardwareDelete: function(hardware) {
         Ext.destroy(hardware);
+
+        if(this.queryById('hardwareItems').getItems().length < 1){
+            this.queryById('noHardwareMsg').show({type:'fade'});
+        }
+
         this.getViewModel().getStore('hardwareStore').remove(hardware.hardwareStoreRec);
 
         hardware.hardwareStoreRec.destroy();
@@ -1724,65 +1765,25 @@ Ext.define('RobotDriver.view.MainPanel', {
         //this.syncControlStores();
     },
 
-    saveHardware: function() {
+    hardwareGenerateId: function() {
+        let id = (+new Date()).toString(36);
+        return id;
+    },
+
+    hardwareSave: function() {
         let hardwareItems = this.queryById('hardwareItems');
 
         let items = [];
-        console.log(hardwareItems);
-        console.log(hardwareItems.items);
 
         Ext.each(hardwareItems.items.items, function(item){
-            console.log(item);
-            items.push(item.getHardwareConfig());
+            items.push(item.getConfigValues());
         });
-        console.log(items);
-
 
         this.websocketSend({
             action:'updateConfig',
             key:'hardware',
             config:items
         });
-    },
-
-    saveControl: function() {
-        let controlItems = this.queryById('controlItems');
-
-        let items = [];
-        console.log(controlItems);
-        console.log(controlItems.items);
-
-        Ext.each(controlItems.items.items, function(item){
-            console.log(item);
-            items.push(item.getConfigValues());
-        });
-        console.log(items);
-
-
-        this.websocketSend({
-            action:'updateConfig',
-            key:'controls',
-            config:items
-        });
-    },
-
-    controlSyncHardwareStores: function() {
-        let hardwareStore = this.getViewModel().getStore('hardwareStore');
-
-        Ext.each(this.queryById('controlItems').items.items, function(item){
-            let hardware = item.queryById('hardware');
-            if(hardware.syncHardwareStore){
-                hardware.syncHardwareStore(hardwareStore);
-            }else{
-                console.log('missing syncHardwareStore func on component', item);
-            }
-        });
-    },
-
-    hardwareLoadConfig: function(hardware) {
-        Ext.each(hardware,function(item){
-            this.hardwareAdd(item.type, item);
-        },this);
     },
 
     stopSteeringMovement: function() {

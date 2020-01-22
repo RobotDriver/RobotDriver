@@ -58,13 +58,10 @@ Ext.define('RobotDriver.view.ControlButton', {
 
     onContainerPainted: function(sender, element, eOpts) {
         if(this.init){
-           return;
+            return;
         }else{
-           this.init = true;
+            this.init = true;
         }
-
-        //this.buttonActionType = 'momentary';
-        //this.buttonToggled = false;
 
         this.button = this.el.dom.querySelector('.control-button');
         if(this.buttonId){
@@ -159,9 +156,6 @@ Ext.define('RobotDriver.view.ControlButton', {
     },
 
     setConfigValues: function(config) {
-        console.log('button config!');
-        console.log(config);
-
         this.setLabel(config.label);
         this.setButtonIcon(config.icon);
         this.setButtonActionType(config.actionType);

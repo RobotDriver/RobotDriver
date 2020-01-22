@@ -20,9 +20,9 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
     requires: [
         'RobotDriver.view.HardwareServoViewModel3',
         'RobotDriver.view.ControlHardwareCombo',
+        'RobotDriver.view.ControlManagementButtons',
         'Ext.field.Text',
         'Ext.Spacer',
-        'Ext.Button',
         'Ext.Panel',
         'Ext.field.Slider'
     ],
@@ -66,13 +66,12 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
                     xtype: 'spacer'
                 },
                 {
-                    xtype: 'button',
-                    margin: '10 10 0 0',
-                    iconCls: 'x-fa fa-trash',
-                    text: 'Delete',
-                    listeners: {
-                        tap: 'onMybutton9Tap'
-                    }
+                    xtype: 'controlmanagementbuttons',
+                    bubbleEvents: [
+                        'controldelete',
+                        'controlmoveup',
+                        'controlmovedown'
+                    ]
                 }
             ]
         },
@@ -86,7 +85,6 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
                     xtype: 'sliderfield',
                     itemId: 'sliderPreview',
                     label: 'Name',
-                    labelWidth: 150,
                     readOnly: true
                 }
             ]
@@ -101,16 +99,6 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
 
     onMytextfield3Change: function(field, newValue, oldValue, eOpts) {
         this.queryById('sliderPreview').setLabel(newValue);
-    },
-
-    onMybutton9Tap: function(button, e, eOpts) {
-        console.log('delete servo');
-        console.log(this);
-
-        //this.hide({type:'fade'});
-        //Ext.defer(function(){
-            Ext.destroy(this);
-        //},400,this);
     },
 
     getConfigValues: function() {

@@ -21,11 +21,11 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
         'RobotDriver.view.HardwareServoViewModel4',
         'RobotDriver.view.ControlHardwareCombo',
         'RobotDriver.view.ControlButton',
+        'RobotDriver.view.ControlManagementButtons',
         'Ext.field.ComboBox',
         'Ext.XTemplate',
         'Ext.Spacer',
-        'Ext.Panel',
-        'Ext.Button'
+        'Ext.Panel'
     ],
 
     viewModel: {
@@ -179,13 +179,13 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
                             flex: 1
                         },
                         {
-                            xtype: 'button',
-                            margin: '10 10 0 0',
-                            iconCls: 'x-fa fa-trash',
-                            text: 'Delete',
-                            listeners: {
-                                tap: 'onMybutton9Tap1'
-                            }
+                            xtype: 'controlmanagementbuttons',
+                            bubbleEvents: [
+                                'controldelete',
+                                'controlmoveup',
+                                'controlmovedown'
+                            ],
+                            itemId: 'controlmanagementbuttons1'
                         }
                     ]
                 }
@@ -211,20 +211,9 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
     },
 
     onActionTypeSelect: function(combobox, newValue, oldValue, eOpts) {
-        console.log('control button action type select');
         if(newValue !== null){
             this.queryById('controlbutton').setButtonActionType(newValue.data.value);
         }
-    },
-
-    onMybutton9Tap1: function(button, e, eOpts) {
-        console.log('delete button');
-        console.log(this);
-
-        //this.hide({type:'fade'});
-        //Ext.defer(function(){
-            Ext.destroy(this);
-        //},400,this);
     },
 
     onFormpanelPainted: function(sender, element, eOpts) {

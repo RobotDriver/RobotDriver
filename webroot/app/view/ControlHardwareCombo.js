@@ -76,36 +76,16 @@ Ext.define('RobotDriver.view.ControlHardwareCombo', {
     },
 
     getHardwareId: function() {
-        console.log('control hardware get value');
         let sel = this.queryById('hardwareCombo').getSelection();
-
-        //let value = null;
 
         if(sel === null){
             return null;
         }
 
         return sel.data.hardwareId;
-            //value = sel.data;
-        //     value = {
-        //         type: sel.data.type,
-        //         //devNum: sel.data.devNum,
-        //         //name: sel.data.name,
-        //         display: sel.data.display,
-        //         hardwareId: sel.data.hardwareId
-        //     };
-        //     value = sel.data.hardwareId;
-        // }
-
-        // return value;
     },
 
     setHardwareId: function(hardwareId) {
-        console.log('control setHardwareId');
-        console.log(hardwareId);
-        console.log(this.getViewModel().getStore('hardwareComboStore'));
-        console.log(hardwareId);
-
         this.queryById('hardwareCombo').setValue(hardwareId);
     }
 

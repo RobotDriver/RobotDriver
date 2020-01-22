@@ -1,5 +1,7 @@
 "use strict";
 
+showBanner();
+
 const i2cBus = require("i2c-bus");
 const pca9685 = require("pca9685");
 
@@ -43,6 +45,7 @@ var defaultConfigs = {
 		}]
 	}]
 };
+var hardware = {};
 /*{
   "httpPort": 80,
   "outputs": {
@@ -63,13 +66,14 @@ var gpioPins = {};
 var pcapwm = {};
 
 function init(){
-	showBanner();
 	configRead();
 	initHttpServer();
 	initHardware();
 }
 function initgpio(){
 	console.log('initgpio');
+
+	pigpio.terminate();
 
 	try{
 		pigpio.initialize();
@@ -79,15 +83,36 @@ function initgpio(){
 	}
 	pigpio.configureClock(10, pigpio.CLOCK_PCM);
 
-	for(const pin in config.outputs.drive.pins){
-		try{
-			gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
-		}catch(e){
-			console.error(`Serious Error! Failed to initalize GPIO pin ${config.outputs.drive.pins[pin]} for ${pin}. Invalid pin!`);
-			gpioPins[pin] = null;
-			motorConfigBad = true;
+	for(let i in config.hardware){
+		let hw = config.hardware[i];
+		switch(hw.type){
+			default:
+				console.error(`Serious Error! Initializing failed for device with unknown type ${hw.type}`);
+				continue;
+			case 'servo':
+				try{
+					hardware[hw.hardwareId] = hw;
+					hardware[hw.hardwareId].gpio = new gpio(hw.pin, {mode: gpio.OUTPUT});
+				}catch(e){
+					console.error(`Serious Error! Failed to initalize GPIO pin ${hw.pin} for ${hw.type} ${hw.name} ${hw.hardwareId}. Invalid pin!`);
+					console.error(e);
+					continue;
+				}
+				break;
 		}
-		console.log(`${pin} = ${config.outputs.drive.pins[pin]}`);
+	}
+
+	if(config.outputs && config.outputs.drive && config.outputs.drive.type){
+		for(const pin in config.outputs.drive.pins){
+			try{
+				gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
+			}catch(e){
+				console.error(`Serious Error! Failed to initalize GPIO pin ${config.outputs.drive.pins[pin]} for ${pin}. Invalid pin!`);
+				gpioPins[pin] = null;
+				motorConfigBad = true;
+			}
+			console.log(`${pin} = ${config.outputs.drive.pins[pin]}`);
+		}
 	}
 }
 function initpca9685(){
@@ -119,7 +144,8 @@ function initpca9685(){
 }
 function initHardware(){
 	console.log('initHardware');
-	pigpio.terminate();
+
+	initgpio();
 
 	motorConfigBad = false;
 	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
@@ -154,7 +180,25 @@ function shutdownGpio(){
 		}
 	}
 }
+function controlHardware(message){
+	if(!hardware[message.hardwareId]){
+		console.error(`Control Error! Invalid hardware id ${message.hardwareId}. Please verify or rebuild your config.`);
+		return;
+	}
+	let hw = hardware[message.hardwareId];
+	switch(hw.type){
+		default:
+			console.error(`Control Error! Invalid hardware type ${hw.type}. Please verify or rebuild your config.`);
+			return;
+		case 'servo':
+			let ms = Math.trunc(hw.rangeMin + ((message.value * (hw.rangeMax - hw.rangeMin))/1000));
+			//console.log(`value = ${message.value}`);
+			//console.log(`pwm ms = ${ms}`);
+			hw.gpio.servoWrite(ms);
+			break;
+	}
 
+}
 var movingNow = false;
 var currentSteeringValue = 500, currentThrottleValue=500;
 var newSteeringValue=500, newThrottleValue=500;
@@ -823,6 +867,17 @@ function handleIncomingControlMessage(wsp, message, source) {
 		case "configDefaults":
 			configDefaults();
 			ws.send(JSON.stringify({"cmd":"config","config":config}));
+			break;
+		case "control":
+			if(!messageJson.hasOwnProperty('hardwareId') ){
+				console.log('control, missing hardwareId');
+				return;
+			}
+			if(!messageJson.hasOwnProperty('value') ){
+				console.log('control, missing value');
+				return;
+			}
+			controlHardware(messageJson);
 			break;
 		case "move":
 			if(!messageJson.hasOwnProperty('y') || !messageJson.hasOwnProperty('x')){

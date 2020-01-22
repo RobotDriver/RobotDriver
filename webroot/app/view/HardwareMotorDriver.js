@@ -275,13 +275,7 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
     },
 
     onMybutton9Tap: function(button, e, eOpts) {
-        console.log('delete motor');
-        console.log(this);
-
-        //this.hide({type:'fade'});
-        //Ext.defer(function(){
-            Ext.destroy(this);
-        //},400,this);
+        this.fireEvent('hardwaredelete', this);
     },
 
     getHardwareConfig: function() {
