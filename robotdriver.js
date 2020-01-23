@@ -437,7 +437,7 @@ function configRead(){
 		console.log(`--------\r\nBad Config:${configFileData}\r\n--------`);
 	}else{
 		log(`read configs from ${configFile}`);
-		console.log(configFileData);
+		//console.log(configFileData);
 	}
 	//});
 }
@@ -1106,7 +1106,7 @@ const mimeType = {
 };
 
 const httpServer = http.createServer(function (req, res) {
-	console.log(`${req.method} ${req.url}`);
+	//console.log(`${req.method} ${req.url}`);
 
 	const parsedUrl = url.parse(req.url);
 	//console.log(`parsedUrl.pathname = ${parsedUrl.pathname}`);

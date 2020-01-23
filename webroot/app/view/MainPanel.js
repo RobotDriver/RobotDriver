@@ -20,12 +20,12 @@ Ext.define('RobotDriver.view.MainPanel', {
     requires: [
         'RobotDriver.view.MainPanelViewModel',
         'Ext.tab.Panel',
-        'Ext.Toolbar',
         'Ext.Button',
         'Ext.form.FieldSet',
         'Ext.field.ComboBox',
         'Ext.Spacer',
         'Ext.field.TextArea',
+        'Ext.tab.Bar',
         'Ext.Panel',
         'Ext.field.Number',
         'Ext.chart.CartesianChart',
@@ -91,7 +91,8 @@ Ext.define('RobotDriver.view.MainPanel', {
                         },
                         {
                             xtype: 'container',
-                            itemId: 'hardwareItems'
+                            itemId: 'hardwareItems',
+                            padding: 10
                         }
                     ]
                 },
@@ -137,7 +138,8 @@ Ext.define('RobotDriver.view.MainPanel', {
                         },
                         {
                             xtype: 'container',
-                            itemId: 'controlItems'
+                            itemId: 'controlItems',
+                            padding: 10
                         },
                         {
                             xtype: 'fieldset',
@@ -331,7 +333,11 @@ Ext.define('RobotDriver.view.MainPanel', {
                         }
                     ]
                 }
-            ]
+            ],
+            tabBar: {
+                docked: 'top',
+                padding: '10 0 0 50'
+            }
         },
         {
             xtype: 'panel',
@@ -1258,9 +1264,9 @@ Ext.define('RobotDriver.view.MainPanel', {
 
     onFormpanelPainted: function(sender, element, eOpts) {
         if(this.init){
-           return;
+            return;
         }else{
-           this.init = true;
+            this.init = true;
         }
 
         this.webSocketCon = null;
@@ -1687,6 +1693,19 @@ Ext.define('RobotDriver.view.MainPanel', {
                     margin:'3 0 0 0',
                     listeners:{
                         scope:this
+                    }
+                });
+                break;
+            case 'gpio':
+                panel = Ext.create({
+                    xtype:'hardwaregpio',
+                    hidden:true,
+                    margin:'3 0 0 0',
+                    listeners:{
+                        scope:this,
+                        hardwaredelete:function(hardware){
+                            this.hardwareDelete(hardware);
+                        }
                     }
                 });
                 break;

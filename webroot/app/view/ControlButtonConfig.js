@@ -105,6 +105,7 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
                                     ],
                                     valueField: 'name',
                                     anyMatch: true,
+                                    minChars: 1,
                                     queryMode: 'local',
                                     typeAhead: true,
                                     bind: {

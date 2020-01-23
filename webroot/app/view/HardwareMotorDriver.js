@@ -43,9 +43,13 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
                 {
                     xtype: 'container',
                     itemId: 'title',
+                    style: {
+                        margin: '5px 5px 0 12px',
+                        'font-weight': 'bold',
+                        'font-size': '16px'
+                    },
                     width: 117,
-                    html: 'Motor Driver',
-                    margin: '10 0 0 20'
+                    html: 'Motor Driver'
                 },
                 {
                     xtype: 'textfield',
@@ -90,6 +94,7 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
                     items: [
                         {
                             xtype: 'combobox',
+                            itemId: 'motorDriverType',
                             name: 'motorDriverType',
                             width: 340,
                             margin: '10 0 0 10',
@@ -98,8 +103,14 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
                             value: 'l298n',
                             displayField: 'display',
                             valueField: 'value',
+                            minChars: 1,
+                            queryMode: 'local',
+                            typeAhead: true,
                             bind: {
-                                store: '{configPwmTypeStore}'
+                                store: '{motorDriverType}'
+                            },
+                            listeners: {
+                                select: 'onMycombobox1Select'
                             }
                         }
                     ]
@@ -107,7 +118,7 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
                 {
                     xtype: 'panel',
                     border: true,
-                    itemId: 'l298pins',
+                    itemId: 'l298npins',
                     margin: 10,
                     padding: 10,
                     defaults: {
@@ -190,7 +201,111 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
                 {
                     xtype: 'panel',
                     border: true,
-                    itemId: 'motorConfigs',
+                    itemId: 'pwmescpins',
+                    margin: 10,
+                    padding: 10,
+                    defaults: {
+                        defaults: {
+                            clearable: false
+                        }
+                    },
+                    items: [
+                        {
+                            xtype: 'container',
+                            itemId: 'header',
+                            html: '<b>GPIO Pin</b>',
+                            padding: '0 0 5 5'
+                        },
+                        {
+                            xtype: 'container',
+                            itemId: 'motora',
+                            layout: 'hbox',
+                            items: [
+                                {
+                                    xtype: 'numberfield',
+                                    name: 'rcescpin',
+                                    width: 120,
+                                    margin: '0 0 0 10',
+                                    label: 'Pin',
+                                    labelWidth: 60
+                                },
+                                {
+                                    xtype: 'numberfield',
+                                    name: 'rcescpinRangeMin',
+                                    width: 150,
+                                    margin: '0 0 0 10',
+                                    label: '&#181;S Min',
+                                    labelWidth: 55,
+                                    value: 1000
+                                },
+                                {
+                                    xtype: 'numberfield',
+                                    name: 'rcescpinRangeMax',
+                                    width: 150,
+                                    margin: '0 0 0 10',
+                                    label: '&#181;S Max',
+                                    labelWidth: 55,
+                                    value: 2000
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    border: true,
+                    hidden: true,
+                    itemId: 'motorConfigs1',
+                    margin: 10,
+                    padding: 10,
+                    defaults: {
+                        defaults: {
+                            clearable: false
+                        }
+                    },
+                    items: [
+                        {
+                            xtype: 'container',
+                            itemId: 'header',
+                            html: '<b>Motor Speed</b>',
+                            padding: '0 0 5 5'
+                        },
+                        {
+                            xtype: 'container',
+                            itemId: 'left2',
+                            margin: '10 0 0 0',
+                            layout: 'hbox',
+                            items: [
+                                {
+                                    xtype: 'numberfield',
+                                    name: 'bmin',
+                                    width: 175,
+                                    margin: '0 0 0 10',
+                                    label: 'Motor - Min %',
+                                    labelWidth: 120,
+                                    value: 0,
+                                    maxValue: 100,
+                                    minValue: 0
+                                },
+                                {
+                                    xtype: 'numberfield',
+                                    name: 'bmax',
+                                    width: 95,
+                                    margin: '0 0 0 10',
+                                    label: 'Max',
+                                    labelWidth: 40,
+                                    value: 100,
+                                    maxValue: 100,
+                                    minValue: 0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    border: true,
+                    itemId: 'motorConfigs2',
                     margin: 10,
                     padding: 10,
                     defaults: {
@@ -278,11 +393,48 @@ Ext.define('RobotDriver.view.HardwareMotorDriver', {
         this.fireEvent('hardwaredelete', this);
     },
 
-    getHardwareConfig: function() {
+    onMycombobox1Select: function(combobox, newValue, oldValue, eOpts) {
+        console.log(newValue);
+
+        if(newValue===null){
+            return;
+        }
+        console.log(newValue.data.value);
+        switch(newValue.data.value){
+            case 'pca9685':
+                console.log('pca');
+                this.queryById('l298npins').hide();
+                this.queryById('pwmescpins').hide();
+                this.queryById('motorConfigs1').hide();
+                this.queryById('motorConfigs2').hide();
+                break;
+            case 'l298n':
+                console.log('l298');
+                this.queryById('l298npins').show();
+                this.queryById('pwmescpins').hide();
+                this.queryById('motorConfigs1').hide();
+                this.queryById('motorConfigs2').show();
+                break;
+            case 'pwmesc':
+                console.log('esc');
+                this.queryById('l298npins').hide();
+                this.queryById('pwmescpins').show();
+                this.queryById('motorConfigs1').show();
+                this.queryById('motorConfigs2').hide();
+                break;
+        }
+    },
+
+    setConfigValues: function(config) {
+        this.setValues(config);
+
+        this.hardwareId = config.hardwareId;
+    },
+
+    getConfigValues: function() {
         let values = this.getValues();
 
-        //values.devNum = this.hardwareConfig.devNum;
-        values.hardwareId = this.hardwareConfig.hardwareId;
+        values.hardwareId = this.hardwareId;
 
         return values;
     }

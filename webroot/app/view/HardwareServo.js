@@ -42,9 +42,13 @@ Ext.define('RobotDriver.view.HardwareServo', {
                 {
                     xtype: 'container',
                     itemId: 'title',
+                    style: {
+                        margin: '5px 5px 0 12px',
+                        'font-weight': 'bold',
+                        'font-size': '16px'
+                    },
                     width: 63,
-                    html: 'Servo',
-                    margin: '10 0 0 20'
+                    html: 'Servo'
                 },
                 {
                     xtype: 'textfield',
@@ -102,7 +106,7 @@ Ext.define('RobotDriver.view.HardwareServo', {
                     style: {
                         margin: '5px 5px 0 12px',
                         'font-weight': 'bold',
-                        'font-size': '16px'
+                        'font-size': '15px'
                     },
                     html: 'Range:'
                 },
@@ -139,7 +143,6 @@ Ext.define('RobotDriver.view.HardwareServo', {
     getConfigValues: function() {
         let values = this.getValues();
 
-        //values.devNum = this.hardwareConfig.devNum;
         values.hardwareId = this.hardwareId;
 
         return values;
@@ -149,7 +152,6 @@ Ext.define('RobotDriver.view.HardwareServo', {
         this.setValues(config);
 
         this.hardwareId = config.hardwareId;
-
     }
 
 });
