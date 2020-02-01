@@ -29,7 +29,6 @@ Ext.define('RobotDriver.view.HardwareGpio', {
     viewModel: {
         type: 'hardwaregpio'
     },
-    border: true,
     defaultListenerScope: true,
 
     items: [
@@ -57,13 +56,7 @@ Ext.define('RobotDriver.view.HardwareGpio', {
                     label: 'Name',
                     labelWidth: 50,
                     autoComplete: false,
-                    clearable: false,
-                    listeners: {
-                        change: {
-                            enableKeyEvents: true,
-                            fn: 'onMytextfield3Change'
-                        }
-                    }
+                    clearable: false
                 },
                 {
                     xtype: 'displayfield',
@@ -93,10 +86,6 @@ Ext.define('RobotDriver.view.HardwareGpio', {
             ]
         }
     ],
-
-    onMytextfield3Change: function(field, newValue, oldValue, eOpts) {
-        this.hardwareStoreRec.set('name',newValue);
-    },
 
     onMybutton9Tap: function(button, e, eOpts) {
         this.fireEvent('hardwaredelete', this);

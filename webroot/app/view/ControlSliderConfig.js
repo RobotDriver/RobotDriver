@@ -44,6 +44,7 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
                 {
                     xtype: 'controlhardwarecombo',
                     itemId: 'hardware',
+                    width: 350,
                     listeners: {
                         select: 'onHardwareSelect'
                     }

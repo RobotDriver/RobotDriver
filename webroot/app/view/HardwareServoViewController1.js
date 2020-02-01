@@ -15,5 +15,5 @@
 
 Ext.define('RobotDriver.view.HardwareServoViewController1', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.hardwaremotordriver'
+    alias: 'controller.hardwaremotor'
 });

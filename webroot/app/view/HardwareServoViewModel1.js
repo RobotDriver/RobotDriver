@@ -15,7 +15,7 @@
 
 Ext.define('RobotDriver.view.HardwareServoViewModel1', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.hardwaremotordriver',
+    alias: 'viewmodel.hardwaremotor',
 
     requires: [
         'Ext.data.Store',

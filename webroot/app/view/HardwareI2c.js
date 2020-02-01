@@ -30,7 +30,6 @@ Ext.define('RobotDriver.view.HardwareI2c', {
     viewModel: {
         type: 'hardwarei2c'
     },
-    border: true,
     defaultListenerScope: true,
 
     items: [

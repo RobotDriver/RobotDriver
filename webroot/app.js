@@ -27,7 +27,7 @@ Ext.application({
         'MainPanel',
         'AddHardwareType',
         'HardwareServo',
-        'HardwareMotorDriver',
+        'HardwareMotor',
         'HardwareI2c',
         'AddControlType',
         'ControlSliderConfig',

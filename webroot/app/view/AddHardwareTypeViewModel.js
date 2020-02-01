@@ -30,8 +30,8 @@ Ext.define('RobotDriver.view.AddHardwareTypeViewModel', {
                     'Servo'
                 ],
                 [
-                    'motordriver',
-                    'Motor Driver'
+                    'motor',
+                    'Motor'
                 ],
                 [
                     'gpio',
