@@ -33,9 +33,6 @@ Ext.define('RobotDriver.model.HardwareModel', {
             name: 'name'
         },
         {
-            name: 'typeId'
-        },
-        {
             name: 'config'
         },
         {

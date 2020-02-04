@@ -88,11 +88,14 @@ Ext.define('RobotDriver.view.HardwareServo', {
             items: [
                 {
                     xtype: 'numberfield',
+                    itemId: 'pin',
                     name: 'pin',
                     width: 100,
                     margin: '0 0 0 10',
                     label: 'Pin',
-                    labelWidth: 35
+                    labelWidth: 35,
+                    maxValue: 27,
+                    minValue: 2
                 },
                 {
                     xtype: 'container',
@@ -102,6 +105,15 @@ Ext.define('RobotDriver.view.HardwareServo', {
                         'font-size': '15px'
                     },
                     html: 'Range:'
+                },
+                {
+                    xtype: 'numberfield',
+                    name: 'startingPosition',
+                    width: 170,
+                    margin: '0 0 0 10',
+                    label: 'Starting Position',
+                    labelWidth: 110,
+                    value: 1500
                 },
                 {
                     xtype: 'numberfield',

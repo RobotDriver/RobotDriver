@@ -95,6 +95,7 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
     onHardwareSelect: function(selection) {
         if(selection !== null && this.queryById('label').getValue() == null){
             this.queryById('label').setValue(selection.data.name);
+            //this.queryById('sliderPreview').setValue((selection.data.startingPosition / selection.data.maxPosition) * 1000);
         }
     },
 

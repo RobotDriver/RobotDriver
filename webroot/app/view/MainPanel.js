@@ -1817,14 +1817,111 @@ Ext.define('RobotDriver.view.MainPanel', {
         //hardwareStore.removeAll();
         //let model = hardwareStore.getModel();
         //let hardwareRecords = [];
+        let usedPins = [];
+        let pinErrors = [];
+        let pinError = 'Invalid Pin';
 
+        let configValid = true;
         Ext.each(hardwareItems.items.items, function(hardwareItem){
+            if(!hardwareItem.validate()){
+                pinErrors.push("Invalid Pin Numbers! Please only use pin # 2 to 27.");
+                configValid = false;
+            }
+
             let hardwareItemValues = hardwareItem.getConfigValues();
+
+            switch(hardwareItemValues.type){
+                case 'motor':
+                    switch(hardwareItemValues.motorDriverType){
+                        case 'pca9685':
+                            break;
+                        case 'l298n':
+                            if(hardwareItemValues.aen != '' && usedPins.includes(hardwareItemValues.aen)){
+                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.aen+' for A EN is used in more than once!');
+                                hardwareItem.queryById('aen').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.aen);
+
+                            if(hardwareItemValues.ain1 != '' && usedPins.includes(hardwareItemValues.ain1)){
+                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ain1+' for A IN1 is used in more than once!');
+                                hardwareItem.queryById('ain1').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.ain1);
+
+                            if(hardwareItemValues.ain2 != '' && usedPins.includes(hardwareItemValues.ain2)){
+                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ain2+' for A IN2 is used in more than once!');
+                                hardwareItem.queryById('ain2').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.ain2);
+
+                            if(hardwareItemValues.ben != '' && usedPins.includes(hardwareItemValues.ben)){
+                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ben+' for B EN is used in more than once!');
+                                hardwareItem.queryById('ben').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.ben);
+
+                            if(hardwareItemValues.bin3 != '' && usedPins.includes(hardwareItemValues.bin3)){
+                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.bin3+' for B IN3 is used in more than once!');
+                                hardwareItem.queryById('bin3').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.bin3);
+
+                            if(hardwareItemValues.bin4 != '' && usedPins.includes(hardwareItemValues.bin4)){
+                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.bin4+' for B IN4 is used in more than once!');
+                                hardwareItem.queryById('bin4').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.bin4);
+                            break;
+
+                        case 'pwmesc':
+                            if(hardwareItemValues.pin == null ){
+                                pinErrors.push('RC ESC Motor Pin is required');
+                                hardwareItem.queryById('pin').setError(pinError);
+                                configValid = false;
+                                break;
+                            }
+                            if(usedPins.includes(hardwareItemValues.pin)){
+                                pinErrors.push('RC ESC Motor Pin # '+hardwareItemValues.pin+' is used in more than once!');
+                                hardwareItem.queryById('pin').setError(pinError);
+                                configValid = false;
+                            }
+                            usedPins.push(hardwareItemValues.pin);
+                            break;
+                    }
+                    break;
+                case 'i2c':
+                case 'gpio':
+                case 'servo':
+                    if(hardwareItemValues.pin == null ){
+                        pinErrors.push('Servo Pin is required');
+                        hardwareItem.queryById('pin').setError(pinError);
+                        configValid = false;
+                        break;
+                    }
+                    if(usedPins.includes(hardwareItemValues.pin)){
+                        pinErrors.push('Servo Pin '+hardwareItemValues.pin+' is used in more than once!');
+                        hardwareItem.queryById('pin').setError(pinError);
+                        configValid = false;
+                    }
+                    usedPins.push(hardwareItemValues.pin);
+                    break;
+
+            }
 
             hardwareConfig.push(hardwareItemValues);
 
             //hardwareRecords.push(model.create(vals));
         });
+        if(configValid !== true){
+            Ext.Msg.alert('Errors Found!',pinErrors.join('<BR><BR>'));
+            return;
+        }
 
         //panel.hardwareStoreRec = model.create(config);
         //this.getViewModel().getStore('hardwareStore').add(panel.hardwareStoreRec);

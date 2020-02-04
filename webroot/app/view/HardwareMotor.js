@@ -29,6 +29,7 @@ Ext.define('RobotDriver.view.HardwareMotor', {
     viewModel: {
         type: 'hardwaremotor'
     },
+    padding: '0 0 10 0',
     defaultListenerScope: true,
 
     items: [
@@ -83,7 +84,7 @@ Ext.define('RobotDriver.view.HardwareMotor', {
             ]
         },
         {
-            xtype: 'formpanel',
+            xtype: 'panel',
             itemId: 'outputDrive1Form',
             items: [
                 {
@@ -94,82 +95,248 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                 },
                 {
                     xtype: 'formpanel',
-                    border: true,
                     itemId: 'l298npins',
-                    margin: 10,
-                    padding: 10,
                     defaults: {
                         defaults: {
-                            clearable: false
+                            clearable: false,
+                            validationMessage: 'Invalid Pin Number',
+                            defaults: {
+                                clearable: false,
+                                validationMessage: 'Invalid Pin Number',
+                                defaults: {
+                                    clearable: false,
+                                    validationMessage: 'Invalid Pin Number'
+                                }
+                            }
                         }
                     },
                     items: [
                         {
-                            xtype: 'container',
-                            itemId: 'header',
-                            html: '<b>L298 Pins</b>',
-                            padding: '0 0 5 5'
-                        },
-                        {
-                            xtype: 'container',
-                            itemId: 'motora',
-                            layout: 'hbox',
+                            xtype: 'panel',
+                            border: true,
+                            margin: '0 4 0 20',
+                            padding: 6,
                             items: [
                                 {
-                                    xtype: 'numberfield',
-                                    name: 'aen',
-                                    width: 160,
-                                    margin: '0 0 0 10',
-                                    label: 'Motor 1 - A EN',
-                                    labelWidth: 120
+                                    xtype: 'container',
+                                    itemId: 'motora',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            html: '<b>Motor A</b>',
+                                            padding: '8 10 0 0'
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            enableKeyEvents: true,
+                                            itemId: 'name1',
+                                            name: 'name1',
+                                            width: 200,
+                                            label: 'Name',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 80,
+                                            autoComplete: false,
+                                            clearable: false,
+                                            maxLength: 30
+                                        }
+                                    ]
                                 },
                                 {
-                                    xtype: 'numberfield',
-                                    name: 'ain1',
-                                    width: 75,
-                                    margin: '0 0 0 10',
-                                    label: 'IN1',
-                                    labelWidth: 35
+                                    xtype: 'container',
+                                    margin: '5 0 0 0',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            html: 'Pins:',
+                                            padding: '8 10 0 0'
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            itemId: 'aen',
+                                            name: 'aen',
+                                            width: 95,
+                                            margin: '0 0 0 15',
+                                            label: 'A EN',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 45,
+                                            maxValue: 27,
+                                            minValue: 2
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            itemId: 'ain1',
+                                            name: 'ain1',
+                                            width: 75,
+                                            margin: '0 0 0 10',
+                                            label: 'IN1',
+                                            labelWidth: 35,
+                                            maxValue: 27,
+                                            minValue: 2
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            itemId: 'ain2',
+                                            name: 'ain2',
+                                            width: 75,
+                                            margin: '0 0 0 10',
+                                            label: 'IN2',
+                                            labelWidth: 35,
+                                            maxValue: 27,
+                                            minValue: 2
+                                        }
+                                    ]
                                 },
                                 {
-                                    xtype: 'numberfield',
-                                    name: 'ain2',
-                                    width: 75,
-                                    margin: '0 0 0 10',
-                                    label: 'IN2',
-                                    labelWidth: 35
+                                    xtype: 'container',
+                                    margin: '5 0 0 0',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            html: 'Power:',
+                                            padding: '8 10 0 0'
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            name: 'amin',
+                                            width: 100,
+                                            margin: '0 0 0 10',
+                                            label: 'Min %',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 50,
+                                            value: 0,
+                                            maxValue: 100,
+                                            minValue: 0
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            name: 'amax',
+                                            width: 100,
+                                            margin: '0 0 0 10',
+                                            label: 'Max %',
+                                            labelWidth: 50,
+                                            value: 100,
+                                            maxValue: 100,
+                                            minValue: 0
+                                        }
+                                    ]
                                 }
                             ]
                         },
                         {
-                            xtype: 'container',
-                            itemId: 'motorb',
-                            margin: '5 0 0 0',
-                            layout: 'hbox',
+                            xtype: 'panel',
+                            border: true,
+                            margin: '6 4 0 20',
+                            padding: 6,
+                            layout: 'vbox',
                             items: [
                                 {
-                                    xtype: 'numberfield',
-                                    name: 'ben',
-                                    width: 160,
-                                    margin: '0 0 0 10',
-                                    label: 'Motor 2 - B EN',
-                                    labelWidth: 120
+                                    xtype: 'container',
+                                    itemId: 'motorb',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            html: '<b>Motor B</b>',
+                                            padding: '6 10 0 0'
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            enableKeyEvents: true,
+                                            itemId: 'name2',
+                                            name: 'name2',
+                                            width: 200,
+                                            label: 'Name',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 80,
+                                            autoComplete: false,
+                                            clearable: false,
+                                            maxLength: 30
+                                        }
+                                    ]
                                 },
                                 {
-                                    xtype: 'numberfield',
-                                    name: 'bin3',
-                                    width: 75,
-                                    margin: '0 0 0 10',
-                                    label: 'IN3',
-                                    labelWidth: 35
+                                    xtype: 'container',
+                                    margin: '5 0 0 0',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            html: 'Pins:',
+                                            padding: '8 10 0 0'
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            itemId: 'ben',
+                                            name: 'ben',
+                                            width: 95,
+                                            margin: '0 0 0 15',
+                                            label: 'B EN',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 45,
+                                            maxValue: 27,
+                                            minValue: 2
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            itemId: 'bin3',
+                                            name: 'bin3',
+                                            width: 75,
+                                            margin: '0 0 0 10',
+                                            label: 'IN3',
+                                            labelWidth: 35,
+                                            maxValue: 27,
+                                            minValue: 2
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            itemId: 'bin4',
+                                            name: 'bin4',
+                                            width: 75,
+                                            margin: '0 0 0 10',
+                                            label: 'IN4',
+                                            labelWidth: 35,
+                                            maxValue: 27,
+                                            minValue: 2
+                                        }
+                                    ]
                                 },
                                 {
-                                    xtype: 'numberfield',
-                                    name: 'bin4',
-                                    width: 75,
-                                    margin: '0 0 0 10',
-                                    label: 'IN4',
-                                    labelWidth: 35
+                                    xtype: 'container',
+                                    margin: '5 0 0 0',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'container',
+                                            html: 'Power:',
+                                            padding: '8 10 0 0'
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            name: 'bmin',
+                                            width: 100,
+                                            margin: '0 0 0 10',
+                                            label: 'Min %',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 50,
+                                            value: 0,
+                                            maxValue: 100,
+                                            minValue: 0
+                                        },
+                                        {
+                                            xtype: 'numberfield',
+                                            name: 'bmax',
+                                            width: 100,
+                                            margin: '0 0 0 10',
+                                            label: 'Max %',
+                                            labelWidth: 50,
+                                            value: 100,
+                                            maxValue: 100,
+                                            minValue: 0
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -177,125 +344,8 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                 },
                 {
                     xtype: 'formpanel',
-                    border: true,
-                    itemId: 'motorConfigs2',
-                    margin: 10,
-                    padding: 10,
-                    defaults: {
-                        defaults: {
-                            clearable: false
-                        }
-                    },
-                    items: [
-                        {
-                            xtype: 'container',
-                            itemId: 'header',
-                            html: '<b>Motor Speed</b>',
-                            padding: '0 0 5 5'
-                        },
-                        {
-                            xtype: 'container',
-                            itemId: 'left1',
-                            layout: 'hbox',
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    itemId: 'motor1',
-                                    width: 80,
-                                    html: '<B>Motor 1</B>',
-                                    margin: '8 0 0 0'
-                                },
-                                {
-                                    xtype: 'textfield',
-                                    enableKeyEvents: true,
-                                    itemId: 'name1',
-                                    name: 'name1',
-                                    width: 180,
-                                    label: 'Name',
-                                    labelWidth: 50,
-                                    autoComplete: false,
-                                    clearable: false
-                                },
-                                {
-                                    xtype: 'numberfield',
-                                    name: 'amin',
-                                    width: 100,
-                                    margin: '0 0 0 10',
-                                    label: 'Min %',
-                                    labelWidth: 50,
-                                    value: 0,
-                                    maxValue: 100,
-                                    minValue: 0
-                                },
-                                {
-                                    xtype: 'numberfield',
-                                    name: 'amax',
-                                    width: 95,
-                                    margin: '0 0 0 10',
-                                    label: 'Max',
-                                    labelWidth: 40,
-                                    value: 100,
-                                    maxValue: 100,
-                                    minValue: 0
-                                }
-                            ]
-                        },
-                        {
-                            xtype: 'container',
-                            itemId: 'left2',
-                            margin: '10 0 0 0',
-                            layout: 'hbox',
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    itemId: 'motor2',
-                                    width: 80,
-                                    html: '<B>Motor 2</B>',
-                                    margin: '8 0 0 0'
-                                },
-                                {
-                                    xtype: 'textfield',
-                                    enableKeyEvents: true,
-                                    itemId: 'name2',
-                                    name: 'name2',
-                                    width: 180,
-                                    label: 'Name',
-                                    labelWidth: 50,
-                                    autoComplete: false,
-                                    clearable: false
-                                },
-                                {
-                                    xtype: 'numberfield',
-                                    name: 'bmin',
-                                    width: 100,
-                                    margin: '0 0 0 10',
-                                    label: 'Min %',
-                                    labelWidth: 50,
-                                    value: 0,
-                                    maxValue: 100,
-                                    minValue: 0
-                                },
-                                {
-                                    xtype: 'numberfield',
-                                    name: 'bmax',
-                                    width: 95,
-                                    margin: '0 0 0 10',
-                                    label: 'Max',
-                                    labelWidth: 40,
-                                    value: 100,
-                                    maxValue: 100,
-                                    minValue: 0
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    xtype: 'formpanel',
-                    border: true,
                     itemId: 'pwmescpins',
-                    margin: 10,
-                    padding: 10,
+                    margin: '4 0 0 10',
                     defaults: {
                         defaults: {
                             clearable: false
@@ -303,10 +353,16 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                     },
                     items: [
                         {
-                            xtype: 'container',
-                            itemId: 'header',
-                            html: '<b>GPIO Pin</b>',
-                            padding: '0 0 5 5'
+                            xtype: 'textfield',
+                            enableKeyEvents: true,
+                            itemId: 'name1',
+                            name: 'name1',
+                            width: 200,
+                            label: 'Name',
+                            labelWidth: 45,
+                            autoComplete: false,
+                            clearable: false,
+                            maxLength: 30
                         },
                         {
                             xtype: 'container',
@@ -315,16 +371,21 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                             items: [
                                 {
                                     xtype: 'numberfield',
-                                    name: 'rcescpin',
-                                    width: 120,
+                                    allowBlank: false,
+                                    itemId: 'pin',
+                                    name: 'pin',
+                                    width: 100,
                                     margin: '0 0 0 10',
                                     label: 'Pin',
-                                    labelWidth: 60
+                                    labelWidth: 40,
+                                    validationMessage: 'Invalid Pin Number',
+                                    maxValue: 27,
+                                    minValue: 2
                                 },
                                 {
                                     xtype: 'numberfield',
-                                    name: 'rcescpinRangeMin',
-                                    width: 150,
+                                    name: 'rangeMin',
+                                    width: 120,
                                     margin: '0 0 0 10',
                                     label: '&#181;S Min',
                                     labelWidth: 55,
@@ -332,66 +393,32 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                                 },
                                 {
                                     xtype: 'numberfield',
-                                    name: 'rcescpinRangeMax',
-                                    width: 150,
+                                    name: 'rangeMax',
+                                    width: 120,
                                     margin: '0 0 0 10',
                                     label: '&#181;S Max',
                                     labelWidth: 55,
                                     value: 2000
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    xtype: 'formpanel',
-                    border: true,
-                    hidden: false,
-                    itemId: 'motorConfigs1',
-                    margin: 10,
-                    padding: 10,
-                    defaults: {
-                        defaults: {
-                            clearable: false
-                        }
-                    },
-                    items: [
-                        {
-                            xtype: 'container',
-                            itemId: 'header',
-                            html: '<b>Motor Speed</b>',
-                            padding: '0 0 5 5'
                         },
                         {
                             xtype: 'container',
-                            itemId: 'left2',
-                            margin: '10 0 0 0',
+                            margin: '5 0 0 0',
                             layout: 'hbox',
                             items: [
                                 {
                                     xtype: 'container',
-                                    itemId: 'motor2',
-                                    width: 80,
-                                    html: '<B>Motor 1</B>',
-                                    margin: '8 0 0 0'
-                                },
-                                {
-                                    xtype: 'textfield',
-                                    enableKeyEvents: true,
-                                    itemId: 'name1',
-                                    name: 'name1',
-                                    width: 180,
-                                    label: 'Name',
-                                    labelWidth: 50,
-                                    autoComplete: false,
-                                    clearable: false
+                                    html: 'Power:',
+                                    padding: '8 10 0 0'
                                 },
                                 {
                                     xtype: 'numberfield',
-                                    name: 'bmin',
+                                    name: 'min',
                                     width: 100,
                                     margin: '0 0 0 10',
                                     label: 'Min %',
+                                    labelTextAlign: 'right',
                                     labelWidth: 50,
                                     value: 0,
                                     maxValue: 100,
@@ -399,11 +426,11 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                                 },
                                 {
                                     xtype: 'numberfield',
-                                    name: 'bmax',
-                                    width: 95,
+                                    name: 'max',
+                                    width: 100,
                                     margin: '0 0 0 10',
-                                    label: 'Max',
-                                    labelWidth: 40,
+                                    label: 'Max %',
+                                    labelWidth: 50,
                                     value: 100,
                                     maxValue: 100,
                                     minValue: 0
@@ -424,20 +451,14 @@ Ext.define('RobotDriver.view.HardwareMotor', {
             case 'pca9685':
                 this.queryById('l298npins').hide();
                 this.queryById('pwmescpins').hide();
-                this.queryById('motorConfigs1').hide();
-                this.queryById('motorConfigs2').hide();
                 break;
             case 'l298n':
                 this.queryById('l298npins').show();
                 this.queryById('pwmescpins').hide();
-                this.queryById('motorConfigs1').hide();
-                this.queryById('motorConfigs2').show();
                 break;
             case 'pwmesc':
                 this.queryById('l298npins').hide();
                 this.queryById('pwmescpins').show();
-                this.queryById('motorConfigs1').show();
-                this.queryById('motorConfigs2').hide();
                 break;
         }
     },
@@ -455,12 +476,13 @@ Ext.define('RobotDriver.view.HardwareMotor', {
             case 'l298n':
                 //this.queryById('namedual1').setValue(config.name1);
                 //this.queryById('namedual2').setValue(config.name2);
-                this.queryById('motorConfigs2').setValues(config);
+                //this.queryById('motorConfigs2').setValues(config);
                 this.queryById('l298npins').setValues(config);
                 break;
             case 'pwmesc':
                 //this.queryById('namesingle').setValue(config.name1);
-                this.queryById('motorConfigs1').setValues(config);
+                //this.queryById('motorConfigs1').setValues(config);
+                this.queryById('pwmescpins').setValues(config);
                 break;
         }
 
@@ -478,11 +500,12 @@ Ext.define('RobotDriver.view.HardwareMotor', {
             case 'pca9685':
                 break;
             case 'l298n':
-                Ext.apply(values, this.queryById('motorConfigs2').getValues());
+                //Ext.apply(values, this.queryById('motorConfigs2').getValues());
                 Ext.apply(values, this.queryById('l298npins').getValues());
                 break;
             case 'pwmesc':
-                Ext.apply(values, this.queryById('motorConfigs1').getValues());
+                Ext.apply(values, this.queryById('pwmescpins').getValues());
+                //Ext.apply(values, this.queryById('motorConfigs1').getValues());
                 break;
         }
 
