@@ -71,10 +71,8 @@ function init(){
 	initHardware();
 }
 function initgpio(){
-	console.log('initgpio');
-
+ 	console.log('initgpio');
 	pigpio.terminate();
-
 	try{
 		pigpio.initialize();
 	}catch(e){
@@ -82,39 +80,52 @@ function initgpio(){
 		process.exit(1);
 	}
 	pigpio.configureClock(10, pigpio.CLOCK_PCM);
-
-	for(let i in config.hardware){
-		let hw = config.hardware[i];
-		switch(hw.type){
-			default:
-				console.error(`Serious Error! Initializing failed for device with unknown type ${hw.type}`);
-				continue;
-			case 'servo':
-				try{
-					hardware[hw.hardwareId] = hw;
-					hardware[hw.hardwareId].gpio = new gpio(hw.pin, {mode: gpio.OUTPUT});
-				}catch(e){
-					console.error(`Serious Error! Failed to initalize GPIO pin ${hw.pin} for ${hw.type} ${hw.name} ${hw.hardwareId}. Invalid pin!`);
-					console.error(e);
-					continue;
-				}
-				break;
-		}
-	}
-
-	if(config.outputs && config.outputs.drive && config.outputs.drive.type){
-		for(const pin in config.outputs.drive.pins){
-			try{
-				gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
-			}catch(e){
-				console.error(`Serious Error! Failed to initalize GPIO pin ${config.outputs.drive.pins[pin]} for ${pin}. Invalid pin!`);
-				gpioPins[pin] = null;
-				motorConfigBad = true;
-			}
-			console.log(`${pin} = ${config.outputs.drive.pins[pin]}`);
-		}
-	}
 }
+// function initgpio(){
+// 	console.log('initgpio');
+//
+// 	pigpio.terminate();
+//
+// 	try{
+// 		pigpio.initialize();
+// 	}catch(e){
+// 		console.error("Fatal Error! Failed to initalize GPIO. Is something else using it?");
+// 		process.exit(1);
+// 	}
+// 	pigpio.configureClock(10, pigpio.CLOCK_PCM);
+//
+// 	for(let i in config.hardware){
+// 		let hw = config.hardware[i];
+// 		switch(hw.type){
+// 			default:
+// 				console.error(`Serious Error! Initializing failed for device with unknown type ${hw.type}`);
+// 				continue;
+// 			case 'servo':
+// 				try{
+// 					hardware[hw.hardwareId] = hw;
+// 					hardware[hw.hardwareId].gpio = new gpio(hw.pin, {mode: gpio.OUTPUT});
+// 				}catch(e){
+// 					console.error(`Serious Error! Failed to initalize GPIO pin ${hw.pin} for ${hw.type} ${hw.name} ${hw.hardwareId}. Invalid pin!`);
+// 					console.error(e);
+// 					continue;
+// 				}
+// 				break;
+// 		}
+// 	}
+//
+// 	if(config.outputs && config.outputs.drive && config.outputs.drive.type){
+// 		for(const pin in config.outputs.drive.pins){
+// 			try{
+// 				gpioPins[pin] = new gpio(config.outputs.drive.pins[pin], {mode: gpio.OUTPUT});
+// 			}catch(e){
+// 				console.error(`Serious Error! Failed to initalize GPIO pin ${config.outputs.drive.pins[pin]} for ${pin}. Invalid pin!`);
+// 				gpioPins[pin] = null;
+// 				motorConfigBad = true;
+// 			}
+// 			console.log(`${pin} = ${config.outputs.drive.pins[pin]}`);
+// 		}
+// 	}
+// }
 function initpca9685(){
 	console.log('initpca9685');
 
@@ -145,21 +156,39 @@ function initpca9685(){
 function initHardware(){
 	console.log('initHardware');
 
-	initgpio();
+	hardware = {};
 
 	motorConfigBad = false;
-	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
+	if(!config.hardware || !config.hardware.length){
 		return;
 	}
-	switch(config.outputs.drive.type){
-		case 'l298n':
-			initgpio();
-			break
-		case 'pca9685':
-			initpca9685();
-	}
+	initgpio();
 
+	let i = config.hardware.length;
+	while(i--){
+		switch(config.hardware[i].type){
+			case 'servo':
+				initServo(config.hardware[i]);
+			case 'l298n':
+				//initgpio();
+				break
+			case 'pca9685':
+				initpca9685();
+		}
+	}
 }
+
+
+function initServo(hardwareItem){
+	try{
+		hardware[hardwareItem.hardwareId] = hardwareItem;
+		hardware[hardwareItem.hardwareId].gpio = new gpio(hardwareItem.pin, {mode: gpio.OUTPUT});
+	}catch(e){
+		console.error(`Serious Error! Failed to initalize GPIO pin ${hw.pin} for ${hw.type} ${hw.name} ${hw.hardwareId}. Invalid pin!`);
+		console.error(e);
+	}
+}
+
 function shutdownHardware(){
 	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
 		return;
