@@ -30,7 +30,7 @@ Ext.define('RobotDriver.view.HardwareServoViewModel1', {
                     'L298N on GPIO'
                 ],
                 [
-                    'pwmesc',
+                    'esc',
                     'RC ESC / GPIO PWM'
                 ],
                 [

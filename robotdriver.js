@@ -169,7 +169,16 @@ function initHardware(){
 		switch(config.hardware[i].type){
 			case 'servo':
 				initServo(config.hardware[i]);
-			case 'l298n':
+			case 'motor':
+				switch(config.hardware[i].motorDriverType){
+					case 'l298n':
+						initL298n(config.hardware[i]);
+						break;
+					case 'esc':
+						initEsc(config.hardware[i]);
+						break;
+				}
+
 				//initgpio();
 				break
 			case 'pca9685':
@@ -178,13 +187,55 @@ function initHardware(){
 	}
 }
 
+function initEsc(hardwareItem){
+	try{
+		hardware[hardwareItem.hardwareId] = Object.assign({}, hardwareItem);;
+		hardware[hardwareItem.hardwareId].pin = new gpio(hardwareItem.pin, {mode: gpio.OUTPUT});
+	}catch(e){
+		console.error(`Serious Error! Failed to initalize GPIO pin ${hardwareItem.pin} for ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
+		console.error(e);
+	}
+}
+function initL298n(hardwareItem){
+	if(hardwareItem.aen) {
+		let m1 = Object.assign({}, hardwareItem);
+		try{
+			m1.en = new gpio(hardwareItem.aen, {mode: gpio.OUTPUT});
+			m1.in1 = new gpio(hardwareItem.ain1, {mode: gpio.OUTPUT});
+			m1.in2 = new gpio(hardwareItem.ain2, {mode: gpio.OUTPUT});
 
+			m1.hardwareId = hardwareItem.hardwareId+':1';
+			m1.mainHardwareId = hardwareItem.hardwareId;
+			hardware[m1.hardwareId] = m1;
+			setupNewMotorInterval(m1);
+		}catch(e){
+			console.error(`Serious Error! Failed to initalize GPIO pins for motor 1 aen, ain1, ain2 - ${hardwareItem.aen}, ${hardwareItem.ain1}, ${hardwareItem.ain2} for  ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
+			console.error(e);
+		}
+	}
+	if(hardwareItem.ben) {
+		let m2 = Object.assign({}, hardwareItem);
+		try {
+			m2.en = new gpio(hardwareItem.ben, {mode: gpio.OUTPUT});
+			m2.in1 = new gpio(hardwareItem.bin3, {mode: gpio.OUTPUT});
+			m2.in2 = new gpio(hardwareItem.bin4, {mode: gpio.OUTPUT});
+
+			m2.hardwareId = hardwareItem.hardwareId+':2';
+			m2.mainHardwareId = hardwareItem.hardwareId;
+			hardware[m2.hardwareId] = m2;
+			setupNewMotorInterval(m2);
+		} catch (e){
+			console.error(`Serious Error! Failed to initalize GPIO pins for motor 2 ben, bin3, bin4 - ${hardwareItem.ben}, ${hardwareItem.bin3}, ${hardwareItem.bin4} for  ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
+			console.error(e);
+		}
+	}
+}
 function initServo(hardwareItem){
 	try{
-		hardware[hardwareItem.hardwareId] = hardwareItem;
-		hardware[hardwareItem.hardwareId].gpio = new gpio(hardwareItem.pin, {mode: gpio.OUTPUT});
+		hardware[hardwareItem.hardwareId] = Object.assign({}, hardwareItem);
+		hardware[hardwareItem.hardwareId].pin = new gpio(hardwareItem.pin, {mode: gpio.OUTPUT});
 	}catch(e){
-		console.error(`Serious Error! Failed to initalize GPIO pin ${hw.pin} for ${hw.type} ${hw.name} ${hw.hardwareId}. Invalid pin!`);
+		console.error(`Serious Error! Failed to initalize GPIO pin ${hardwareItem.pin} for ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
 		console.error(e);
 	}
 }
@@ -215,15 +266,22 @@ function controlHardware(message){
 		return;
 	}
 	let hw = hardware[message.hardwareId];
+	if(!hw){
+		console.error(`Control Error! Invalid hardwareId ${message.hardwareId}. Hardware not initialized. Please check your config`);
+		return;
+	}
 	switch(hw.type){
 		default:
 			console.error(`Control Error! Invalid hardware type ${hw.type}. Please verify or rebuild your config.`);
 			return;
+		case 'motor':
+			hw.newState = message.value;
+			break;
 		case 'servo':
 			let ms = Math.trunc(hw.rangeMin + ((message.value * (hw.rangeMax - hw.rangeMin))/1000));
 			//console.log(`value = ${message.value}`);
 			//console.log(`pwm ms = ${ms}`);
-			hw.gpio.servoWrite(ms);
+			hw.pin.servoWrite(ms);
 			break;
 	}
 
@@ -231,35 +289,101 @@ function controlHardware(message){
 var movingNow = false;
 var currentSteeringValue = 500, currentThrottleValue=500;
 var newSteeringValue=500, newThrottleValue=500;
+var activeMotors = {};
+
+function setupNewMotorInterval(hardware){
+	activeMotors[hardware.hardwareId] = hardware;
+	hardware.currentState = 500;
+	hardware.newState = 500;
+	hardware.stopped = false;
+	hardware.lastChange = 0;
+}
 
 const motorMoveInterval = setInterval(() => {
 
-	//if nothings changed do nothing
-	if(newSteeringValue === currentSteeringValue && newThrottleValue === currentThrottleValue ){
-		return;
+	for(var m in activeMotors){
+		let hw = activeMotors[m];
+		if(!hw.stopped && (new Date() - hw.lastChange > 500)){
+			motorSetState(hw, 500);
+			hw.currentState = hw.newState = 500;
+			continue;
+		}
+		if(hw.currentState === hw.newState){
+			continue;
+		}
+		motorSetState(hw, hw.newState);
+		hw.currentState = hw.newState;
+		hw.lastChange = new Date();
 	}
-
-	//var hrstart = process.hrtime();
-	motorMoveAction(newSteeringValue, newThrottleValue);
-	//var hrend = process.hrtime(hrstart);
-	//console.info('motorMoveAction: %ds %dms', hrend[0], hrend[1] / 1000000); //1.2 to 2.0ms on i2c @ 400kbps i2c
-
-	currentSteeringValue = newSteeringValue;
-	currentThrottleValue = newThrottleValue;
 }, 50);
 
-function motorMove(steeringValue, throttleValue){
-	newSteeringValue = steeringValue;
-	newThrottleValue = throttleValue;
+// function motorMove(steeringValue, throttleValue){
+// 	newSteeringValue = steeringValue;
+// 	newThrottleValue = throttleValue;
+//
+// 	//if we dont get any movement messages for 500ms from the last message, stop movement
+// 	clearTimeout(movementKillTimer);
+// 	if(newSteeringValue!==500 && newThrottleValue!==500){
+// 		movementKillTimer = setTimeout(() => {
+// 			motorMove(500,500);
+// 		},500);
+// 	}
+// }
 
-	//if we dont get any movement messages for 500ms from the last message, stop movement
-	clearTimeout(movementKillTimer);
-	if(newSteeringValue!==500 && newThrottleValue!==500){
-		movementKillTimer = setTimeout(() => {
-			motorMove(500,500);
-		},500);
+function motorSetState(hardware, newState){
+	switch(hardware.motorDriverType){
+		default:
+			console.error("invalid motor drive type. Shouldn't be possible this deep");
+			break;
+		case 'l298n':
+			motorSetThrottleL298n(hardware, newState);
+			break;
 	}
 }
+
+function motorSetThrottleL298n(hardware, throttle){
+
+	if (throttle > throttleMidpoint-throttleThreshold && throttle < throttleMidpoint+throttleThreshold) {
+		console.log('motors, stop');
+		motorSetDutyCycleGpio(hardware, 0, 0);
+		hardware.stopped = true;
+		return;
+	}
+	hardware.stopped = false;
+	let throttlePercent, dutyCycle;
+	if (throttle >= 500) {
+		throttlePercent = (throttle - 500) / 500;
+		console.log(`motors, forward ${Math.round(throttlePercent*100)}%`);
+
+		dutyCycle = Math.trunc(Math.min(255,throttlePercent*255));
+		motorSetDutyCycleGpio(hardware, 1, dutyCycle);
+	} else {
+		throttlePercent = (500 - throttle) / 500;
+		console.log(`motors, reverse ${Math.round(throttlePercent*100)}%`);
+
+		dutyCycle = Math.trunc(Math.min(255,throttlePercent*255));
+		motorSetDutyCycleGpio(hardware, -1, dutyCycle);
+	}
+}
+
+function motorSetDutyCycleGpio(hardware, direction, dutyCycle){
+
+	if (dutyCycle === 0) {
+		hardware.in1.digitalWrite(false);
+		hardware.in2.digitalWrite(false);
+		hardware.en.digitalWrite(false);
+	}else{
+		if (direction > 0) {
+			hardware.in1.digitalWrite(false);
+			hardware.in2.digitalWrite(true);
+		} else {
+			hardware.in1.digitalWrite(true);
+			hardware.in2.digitalWrite(false);
+		}
+		hardware.en.pwmWrite(dutyCycle);
+	}
+}
+
 function motorMoveAction(steeringValue, throttleValue){
 
 	if(motorConfigBad){
@@ -313,64 +437,18 @@ function motorMoveAction(steeringValue, throttleValue){
 	}
 
 }
-function motorSetPercent(motorNo, direction, throttlePercent){
-	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
-		return;
-	}
-	switch(config.outputs.drive.type){
-		case 'l298n':
-			motorSetPercentGpio(motorNo, direction, throttlePercent);
-			break
-		case 'pca9685':
-			motorSetPercentPca(motorNo, direction, throttlePercent);
-	}
-}
-
-function motorSetPercentGpio(motorNo, direction, throttlePercent){
-	let pinPwm, pinin1, pinin2;
-
-	switch (motorNo) {
-		default:
-			console.log("invalid motor! "+ motorNo);
-			return;
-		case 1:
-			pinPwm = gpioPins.aen;
-			pinin1 = gpioPins.ain1;
-			pinin2 = gpioPins.ain2;
-			break;
-		case 2:
-			pinPwm = gpioPins.ben;
-			pinin1 = gpioPins.bin3;
-			pinin2 = gpioPins.bin4;
-			break;
-	}
-
-	//console.log("throttlePercent = "+(throttlePercent*100));
-	if (throttlePercent == 0) {
-		//console.log(`motor ${motorNo} stop`);
-
-		pinin1.digitalWrite(false);
-		pinin2.digitalWrite(false);
-		pinPwm.digitalWrite(false);
-	}else{
-
-		if (direction >= 1) {
-			//console.log(`motor ${motorNo} forward`);
-			pinin1.digitalWrite(false);
-			pinin2.digitalWrite(true);
-		} else {
-			//console.log(`motor ${motorNo} backward`);
-			pinin1.digitalWrite(true);
-			pinin2.digitalWrite(false);
-		}
-
-		//throttlePercent = motorPercentMin + throttlePercent;
-		//console.log(`motor ${motorNo} throttle ${Math.floor(throttlePercent*100)}%`);
-		let dutyCycle = Math.trunc(Math.min(255,throttlePercent*255));
-		//console.log(`pwm duty cycle = ${dutyCycle}`);
-		pinPwm.pwmWrite(dutyCycle);
-	}
-}
+// function motorSetPercent(motorNo, direction, throttlePercent){
+// 	if(!config.outputs || !config.outputs.drive || !config.outputs.drive.type){
+// 		return;
+// 	}
+// 	switch(config.outputs.drive.type){
+// 		case 'l298n':
+// 			motorSetPercentGpio(motorNo, direction, throttlePercent);
+// 			break
+// 		case 'pca9685':
+// 			motorSetPercentPca(motorNo, direction, throttlePercent);
+// 	}
+// }
 
 function motorSetPercentPca(motorNo, direction, throttlePercent){
 	let pinPwm, pinin1, pinin2;
@@ -503,7 +581,7 @@ function updateConfigFromClient(updateMessage){
 		config = updateMessage.config;
 	}
 
-	if(updateMessage.key === 'outputs.drive'){
+	if(updateMessage.key === 'hardware'){
 		initHardware();
 	}
 	console.log(JSON.stringify(config,null,2));
@@ -908,17 +986,17 @@ function handleIncomingControlMessage(wsp, message, source) {
 			}
 			controlHardware(messageJson);
 			break;
-		case "move":
-			if(!messageJson.hasOwnProperty('y') || !messageJson.hasOwnProperty('x')){
-				console.log('control, move, missing value');
-				return;
-			}
-
-			//move X is throttle
-			//move Y is steering
-			motorMove(messageJson.y, messageJson.x);
-
-			break;
+		// case "move":
+		// 	if(!messageJson.hasOwnProperty('y') || !messageJson.hasOwnProperty('x')){
+		// 		console.log('control, move, missing value');
+		// 		return;
+		// 	}
+		//
+		// 	//move X is throttle
+		// 	//move Y is steering
+		// 	motorMove(messageJson.y, messageJson.x);
+		//
+		// 	break;
 		case "setTilt":
 			if(!messageJson.hasOwnProperty('value')){
 				console.log('control, setTilt, missing value');

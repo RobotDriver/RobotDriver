@@ -1009,7 +1009,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                     name: 'internetKey',
                     label: 'Key',
                     labelWidth: 65,
-                    value: 'api key goes here'
+                    value: 'API key goes here'
                 },
                 {
                     xtype: 'togglefield',
@@ -1284,6 +1284,7 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         this.controlsInit();
 
+        this.hardware = {};
         this.getViewModel().getStore('hardwareStore').on('datachanged',function(){
             this.controlSyncHardwareStores();
         }, this);
@@ -1493,10 +1494,11 @@ Ext.define('RobotDriver.view.MainPanel', {
             case 'slider':
 
                 Ext.apply(panelConfig,{
-                    liveUpdate: true,
-                    maxValue:1000,
-                    margin: 15,
-                    xtype: 'sliderfield',
+                    xtype: 'basecontrolslider',
+                    margin:5,
+                    label: config.label || false,
+                    hardwareId: config.hardwareId,
+                    hardware: this.hardware[config.hardwareId],
                     listeners:{
                         scope:this,
                         change:function(field, value){
@@ -1511,9 +1513,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                         }
                     }
                 });
-                if(config.label){
-                    panelConfig.label = config.label;
-                }
                 break;
             case 'button':
                 panelConfig.xtype = 'controlbutton';
@@ -1670,6 +1669,16 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     hardwareLoadConfig: function(hardware, animate) {
+        this.hardware = {};
+        for(var i in hardware){
+            let hi = hardware[i];
+            this.hardware[hi.hardwareId] = hi;
+            if(hi.type==='motor' && hi.motorDriverType==='l298n'){
+                this.hardware[hi.hardwareId+':1'] = hi;
+                this.hardware[hi.hardwareId+':2'] = hi;
+            }
+        }
+
         let hardwareStore = this.getViewModel().getStore('hardwareStore');
 
         let model = hardwareStore.getModel();
@@ -1836,42 +1845,48 @@ Ext.define('RobotDriver.view.MainPanel', {
                         case 'pca9685':
                             break;
                         case 'l298n':
-                            if(hardwareItemValues.aen != '' && usedPins.includes(hardwareItemValues.aen)){
+                            if(hardwareItemValues.aen == '' ) break;
+                            if( usedPins.includes(hardwareItemValues.aen)){
                                 pinErrors.push('L298 Motor Pin # '+hardwareItemValues.aen+' for A EN is used in more than once!');
                                 hardwareItem.queryById('aen').setError(pinError);
                                 configValid = false;
                             }
                             usedPins.push(hardwareItemValues.aen);
 
-                            if(hardwareItemValues.ain1 != '' && usedPins.includes(hardwareItemValues.ain1)){
-                                pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ain1+' for A IN1 is used in more than once!');
-                                hardwareItem.queryById('ain1').setError(pinError);
-                                configValid = false;
-                            }
-                            usedPins.push(hardwareItemValues.ain1);
+                            if(hardwareItemValues.ain1 != '' ) break;
+                                if(usedPins.includes(hardwareItemValues.ain1)){
+                                    pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ain1+' for A IN1 is used in more than once!');
+                                    hardwareItem.queryById('ain1').setError(pinError);
+                                    configValid = false;
+                                }
+                                usedPins.push(hardwareItemValues.ain1);
 
-                            if(hardwareItemValues.ain2 != '' && usedPins.includes(hardwareItemValues.ain2)){
+                            if(hardwareItemValues.ain2 != '' ) break;
+                            if(usedPins.includes(hardwareItemValues.ain2)){
                                 pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ain2+' for A IN2 is used in more than once!');
                                 hardwareItem.queryById('ain2').setError(pinError);
                                 configValid = false;
                             }
                             usedPins.push(hardwareItemValues.ain2);
 
-                            if(hardwareItemValues.ben != '' && usedPins.includes(hardwareItemValues.ben)){
+                            if(hardwareItemValues.ben != '' ) break;
+                            if(usedPins.includes(hardwareItemValues.ben)){
                                 pinErrors.push('L298 Motor Pin # '+hardwareItemValues.ben+' for B EN is used in more than once!');
                                 hardwareItem.queryById('ben').setError(pinError);
                                 configValid = false;
                             }
                             usedPins.push(hardwareItemValues.ben);
 
-                            if(hardwareItemValues.bin3 != '' && usedPins.includes(hardwareItemValues.bin3)){
+                            if(hardwareItemValues.bin3 != '' ) break;
+                            if( usedPins.includes(hardwareItemValues.bin3)){
                                 pinErrors.push('L298 Motor Pin # '+hardwareItemValues.bin3+' for B IN3 is used in more than once!');
                                 hardwareItem.queryById('bin3').setError(pinError);
                                 configValid = false;
                             }
                             usedPins.push(hardwareItemValues.bin3);
 
-                            if(hardwareItemValues.bin4 != '' && usedPins.includes(hardwareItemValues.bin4)){
+                            if(hardwareItemValues.bin4 != '' ) break;
+                            if( usedPins.includes(hardwareItemValues.bin4)){
                                 pinErrors.push('L298 Motor Pin # '+hardwareItemValues.bin4+' for B IN4 is used in more than once!');
                                 hardwareItem.queryById('bin4').setError(pinError);
                                 configValid = false;
@@ -1879,7 +1894,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                             usedPins.push(hardwareItemValues.bin4);
                             break;
 
-                        case 'pwmesc':
+                        case 'esc':
                             if(hardwareItemValues.pin == null ){
                                 pinErrors.push('RC ESC Motor Pin is required');
                                 hardwareItem.queryById('pin').setError(pinError);
@@ -1896,16 +1911,17 @@ Ext.define('RobotDriver.view.MainPanel', {
                     }
                     break;
                 case 'i2c':
+                    break;
                 case 'gpio':
                 case 'servo':
                     if(hardwareItemValues.pin == null ){
-                        pinErrors.push('Servo Pin is required');
+                        pinErrors.push('Pin is required');
                         hardwareItem.queryById('pin').setError(pinError);
                         configValid = false;
                         break;
                     }
                     if(usedPins.includes(hardwareItemValues.pin)){
-                        pinErrors.push('Servo Pin '+hardwareItemValues.pin+' is used in more than once!');
+                        pinErrors.push('Pin '+hardwareItemValues.pin+' is used in more than once!');
                         hardwareItem.queryById('pin').setError(pinError);
                         configValid = false;
                     }
@@ -2262,7 +2278,6 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.config = config;
 
         this.queryById('fullConfig').setValue(JSON.stringify(config,null,2));
-
     },
 
     startVideo: function() {

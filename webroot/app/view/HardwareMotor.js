@@ -344,7 +344,7 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                 },
                 {
                     xtype: 'formpanel',
-                    itemId: 'pwmescpins',
+                    itemId: 'escpins',
                     margin: '4 0 0 10',
                     defaults: {
                         defaults: {
@@ -450,15 +450,15 @@ Ext.define('RobotDriver.view.HardwareMotor', {
         switch(newValue.data.value){
             case 'pca9685':
                 this.queryById('l298npins').hide();
-                this.queryById('pwmescpins').hide();
+                this.queryById('escpins').hide();
                 break;
             case 'l298n':
                 this.queryById('l298npins').show();
-                this.queryById('pwmescpins').hide();
+                this.queryById('escpins').hide();
                 break;
-            case 'pwmesc':
+            case 'esc':
                 this.queryById('l298npins').hide();
-                this.queryById('pwmescpins').show();
+                this.queryById('escpins').show();
                 break;
         }
     },
@@ -479,10 +479,10 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                 //this.queryById('motorConfigs2').setValues(config);
                 this.queryById('l298npins').setValues(config);
                 break;
-            case 'pwmesc':
+            case 'esc':
                 //this.queryById('namesingle').setValue(config.name1);
                 //this.queryById('motorConfigs1').setValues(config);
-                this.queryById('pwmescpins').setValues(config);
+                this.queryById('escpins').setValues(config);
                 break;
         }
 
@@ -503,13 +503,12 @@ Ext.define('RobotDriver.view.HardwareMotor', {
                 //Ext.apply(values, this.queryById('motorConfigs2').getValues());
                 Ext.apply(values, this.queryById('l298npins').getValues());
                 break;
-            case 'pwmesc':
-                Ext.apply(values, this.queryById('pwmescpins').getValues());
+            case 'esc':
+                Ext.apply(values, this.queryById('escpins').getValues());
                 //Ext.apply(values, this.queryById('motorConfigs1').getValues());
                 break;
         }
 
-        console.log(values);
         return values;
     }
 

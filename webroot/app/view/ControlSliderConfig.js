@@ -21,10 +21,10 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
         'RobotDriver.view.HardwareServoViewModel3',
         'RobotDriver.view.ControlHardwareCombo',
         'RobotDriver.view.ControlManagementButtons',
+        'RobotDriver.view.BaseControlSlider',
         'Ext.field.Text',
         'Ext.Spacer',
-        'Ext.Panel',
-        'Ext.field.Slider'
+        'Ext.Panel'
     ],
 
     viewModel: {
@@ -83,18 +83,26 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
             title: 'Preview',
             items: [
                 {
-                    xtype: 'sliderfield',
-                    itemId: 'sliderPreview',
-                    label: 'Name',
-                    readOnly: true
+                    xtype: 'basecontrolslider',
+                    itemId: 'sliderPreview'
                 }
             ]
         }
     ],
 
     onHardwareSelect: function(selection) {
-        if(selection !== null && this.queryById('label').getValue() == null){
-            this.queryById('label').setValue(selection.data.name);
+        if(selection !== null ){
+            console.log(selection.data);
+
+            if(this.queryById('label').getValue() == null || this.queryById('label').getValue() == ''){
+                this.queryById('label').setValue(selection.data.name);
+            }
+
+            if(selection.data.type==='motor'){
+                this.queryById('sliderPreview').showMotorLabels();
+            }else{
+                this.queryById('sliderPreview').hideMotorLabels();
+            }
             //this.queryById('sliderPreview').setValue((selection.data.startingPosition / selection.data.maxPosition) * 1000);
         }
     },
@@ -114,6 +122,12 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
 
     setConfigValues: function(config) {
         this.setValues(config);
+
+        if(config.type==='motor'){
+            this.queryById('sliderPreview').showMotorLabels();
+        }else{
+            this.queryById('sliderPreview').hideMotorLabels();
+        }
 
         this.queryById('hardware').setHardwareId(config.hardwareId);
     }

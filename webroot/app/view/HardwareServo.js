@@ -141,18 +141,18 @@ Ext.define('RobotDriver.view.HardwareServo', {
         this.fireEvent('hardwaredelete', this);
     },
 
+    setConfigValues: function(config) {
+        this.setValues(config);
+
+        this.hardwareId = config.hardwareId;
+    },
+
     getConfigValues: function() {
         let values = this.getValues();
 
         values.hardwareId = this.hardwareId;
 
         return values;
-    },
-
-    setConfigValues: function(config) {
-        this.setValues(config);
-
-        this.hardwareId = config.hardwareId;
     }
 
 });

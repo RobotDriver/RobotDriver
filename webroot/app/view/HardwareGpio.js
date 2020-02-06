@@ -66,11 +66,13 @@ Ext.define('RobotDriver.view.HardwareGpio', {
                 },
                 {
                     xtype: 'numberfield',
+                    itemId: 'pin',
                     name: 'pin',
                     width: 100,
                     margin: '0 0 0 10',
                     label: 'Pin',
-                    labelWidth: 35
+                    labelWidth: 35,
+                    clearable: false
                 },
                 {
                     xtype: 'spacer'
@@ -91,18 +93,20 @@ Ext.define('RobotDriver.view.HardwareGpio', {
         this.fireEvent('hardwaredelete', this);
     },
 
-    getConfigValues: function() {
-        let values = this.getValues();
-
-        values.hardwareId = this.hardwareId;
-
-        return values;
-    },
-
     setConfigValues: function(config) {
         this.setValues(config);
 
         this.hardwareId = config.hardwareId;
+    },
+
+    getConfigValues: function() {
+        let values = {
+            type:'gpio',
+            hardwareId: this.hardwareId
+        };
+        Ext.apply(values, this.getValues());
+
+        return values;
     }
 
 });
