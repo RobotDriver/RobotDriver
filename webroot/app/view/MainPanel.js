@@ -1481,12 +1481,14 @@ Ext.define('RobotDriver.view.MainPanel', {
     liveControlAdd: function(type, config) {
         config = config || false;
 
-        if(!config || !config.hardwareId){
+        if(!config || (!config.hardwareId && !config.xhardwareId && !config.yhardwareId)){
             return;
         }
 
         let panel;
         let panelConfig = {};
+
+        config.hardware = this.hardware[config.hardwareId];
 
         switch(type){
             default:
@@ -1514,6 +1516,29 @@ Ext.define('RobotDriver.view.MainPanel', {
                     }
                 });
                 break;
+            case 'stick':
+                console.log('add stick!');
+
+                Ext.apply(panelConfig,{
+                    xtype: 'basecontrolstick',
+                    label: config.label || false,
+                    listeners:{
+                        scope:this,
+                        change:function(x, y){
+                            this.websocketSend({
+                                action:'control',
+                                hardwareId:config.xhardwareId,
+                                value:x
+                            });
+                            this.websocketSend({
+                                action:'control',
+                                hardwareId:config.yhardwareId,
+                                value:y
+                            });
+                        }
+                    }
+                });
+                break;
             case 'button':
                 panelConfig.xtype = 'controlbutton';
                 break;
@@ -1525,6 +1550,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         panel = Ext.create(panelConfig);
 
         switch(type){
+            case 'stick':
             case 'button':
                 this.queryById('liveControlsButtons').add(panel);
                 break;
@@ -1563,6 +1589,10 @@ Ext.define('RobotDriver.view.MainPanel', {
     controlAdd: function(type, config) {
         config = config || false;
 
+        if(config.hardwareId){
+            config.hardware = this.hardware[config.hardwareId];
+        }
+
         var panel;
 
         switch(type){
@@ -1570,11 +1600,14 @@ Ext.define('RobotDriver.view.MainPanel', {
                 return false;
             case 'motorslider':
             case 'button':
+            case 'stick':
             case 'slider':
                 panel = Ext.create({
                     xtype:'control'+type+'config',
                     hidden:true,
                     margin:'3 0 0 0',
+                    label:config.name,
+                    hardware: config.hardware,
                     listeners:{
                         scope:this,
                         controlmoveup:function(){
@@ -1598,7 +1631,15 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         panel.show({type:'slide', direction:'right'});
 
-        panel.queryById('hardware').syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
+        let hardware = panel.queryById('hardware');
+        if(hardware){
+                hardware.syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
+        }
+        if(type==='stick'){
+            panel.queryById('xhardware').syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
+            panel.queryById('yhardware').syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
+        }
+
 
         if(config && panel.setConfigValues){
             panel.setConfigValues(config);

@@ -35,7 +35,10 @@ Ext.application({
         'ControlHardwareCombo',
         'ControlButton',
         'ControlManagementButtons',
-        'HardwareGpio'
+        'HardwareGpio',
+        'BaseControlSlider',
+        'BaseControlStick',
+        'ControlStickConfig'
     ],
     name: 'RobotDriver',
 

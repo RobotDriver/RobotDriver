@@ -89,10 +89,12 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
             ]
         }
     ],
+    listeners: {
+        painted: 'onFormpanelPainted'
+    },
 
     onHardwareSelect: function(selection) {
         if(selection !== null ){
-            console.log(selection.data);
 
             if(this.queryById('label').getValue() == null || this.queryById('label').getValue() == ''){
                 this.queryById('label').setValue(selection.data.name);
@@ -111,6 +113,17 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
         this.queryById('sliderPreview').setLabel(newValue);
     },
 
+    onFormpanelPainted: function(sender, element, eOpts) {
+        if(element.component.config.label){
+            this.queryById('sliderPreview').setLabel(element.component.config.label);
+        }
+        if(element.component.config.hardware && element.component.config.hardware.type === 'motor'){
+            this.queryById('sliderPreview').showMotorLabels();
+        }else{
+            this.queryById('sliderPreview').hideMotorLabels();
+        }
+    },
+
     getConfigValues: function() {
         let values = this.getValues();
         values.type='slider';
@@ -123,7 +136,7 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
     setConfigValues: function(config) {
         this.setValues(config);
 
-        if(config.type==='motor'){
+        if(config.hardware && config.hardware.type==='motor'){
             this.queryById('sliderPreview').showMotorLabels();
         }else{
             this.queryById('sliderPreview').hideMotorLabels();

@@ -78,8 +78,12 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
     },
 
     onContainerPainted: function(sender, element, eOpts) {
-        console.log(element.component);
-        console.log(element.component.config);
+        if(this.init){
+            return;
+        }else{
+            this.init = true;
+        }
+
         if(element.component.config.label){
             this.setLabel(element.component.config.label);
         }

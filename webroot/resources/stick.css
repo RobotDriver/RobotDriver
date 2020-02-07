@@ -9,7 +9,19 @@
   border-radius: 100%;
   padding:8px;
 }
-
+div.stick-container div.x-container-body-el {
+    overflow: visible;
+}
+div.stick-container div.x-container-body-el div.x-container {
+    overflow: visible;
+}
+div.stick-inner-container {
+    z-index:200;
+}
+div.stick-label {
+    text-align: center;
+    z-index:199;
+}
 .joystick {
   background-image: url('stick.png');
   background-repeat: no-repeat;
