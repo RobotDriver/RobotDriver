@@ -56,24 +56,40 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         {
             xtype: 'panel',
             border: true,
-            height: 130,
+            height: 163,
             itemId: 'controllerEventsContainer',
             margin: '0 4 0 4',
             padding: 10,
             scrollable: true,
-            layout: 'fit',
             title: 'Controller Events',
+            layout: {
+                type: 'vbox',
+                align: 'start'
+            },
             items: [
                 {
                     xtype: 'container',
+                    flex: 1,
                     itemId: 'controllerEvents'
                 }
             ]
         },
         {
             xtype: 'container',
+            html: 'Controller buttons can be mapped to buttons. Controller Axes can be mapped to sliders.',
+            padding: 10
+        },
+        {
+            xtype: 'container',
             itemId: 'mappingsContainer',
             margin: '0 4 0 4'
+        },
+        {
+            xtype: 'container',
+            itemId: 'noMappingMsg',
+            userCls: 'text-prompt-container',
+            html: 'No Controller Mapping Configured<BR><BR>Click <B><U>Add Controller Mapping</U></B>',
+            padding: 40
         }
     ],
     listeners: {
@@ -81,7 +97,22 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     onMybutton1Tap11: function(button, e, eOpts) {
-        this.controlSave();
+        console.log('save mapping');
+
+        var allMappings = [];
+        Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
+            let map = mapComp.getMapping();
+
+            if(map === false){ return; };
+
+            allMappings.push(map);
+        });
+
+        this.fireEvent('websocketSend',{
+            action:'updateConfig',
+            key:'controllerMapping',
+            config:allMappings
+        });
     },
 
     onMybutton5Tap11: function(button, e, eOpts) {
@@ -99,15 +130,22 @@ Ext.define('RobotDriver.view.GamepadMapping', {
             this.init = true;
         }
 
+        this.monitorEvents = true;
+
         this.activeGamepads = {};
         this.gamepadStates = {};
         this.activeMapping = false;
 
+        if(!this.controlsDataStoreData){
+            this.controlsDataStoreData = [];
+        }
+        this.logEvents = [];
+
         window.addEventListener("gamepadconnected", this.gamepadConnected.bind(this));
         window.addEventListener("gamepaddisconnected", this.gamepadDisconnected.bind(this));
 
-        this.gamePadLoop = setInterval(this.gamepadPoll.bind(this), 75);
-
+        this.gamePadLoop = false;
+        this.startControllerLoop();
     },
 
     gamepadConnected: function(e) {
@@ -120,6 +158,21 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         this.gamepadStates[gx] = this.getGamepadState(e.gamepad);
     },
 
+    stopControllerLoop: function() {
+        if(this.gamePadLoop === false){
+            return;
+        }
+        clearInterval(this.gamePadLoop);
+        this.gamePadLoop = false;
+    },
+
+    startControllerLoop: function() {
+        if(this.gamePadLoop !== false){
+            return;
+        }
+        this.gamePadLoop = setInterval(this.gamepadPoll.bind(this), 75);
+    },
+
     gamepadDisconnected: function(e) {
         let gx = e.gamepad.index+e.gamepad.id;
 
@@ -127,32 +180,45 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         delete this.gamepadStates[gx];
 
         this.appendControllerEvent("Disconnected! controller #"+(e.gamepad.index+1)+ " "+ e.gamepad.id + "<BR>\r\n");
-
-        //this.appendDebugOutput("Gamepad disconnected at index "+e.gamepad.index+", id "+e.gamepad.id);
-
-        //clearInterval(this.gamePadLoops[e.gamepad.index+e.gamepad.id]['loop']);
     },
 
     addMapping: function(config) {
         let newMapping = Ext.create({
             xtype:'gamepaditemmap',
+            controlsDataStoreData: this.controlsDataStoreData,
+            mapConfig:config,
             listeners:{
                 scope:this,
                 remap:function(){
                     this.activeMapping = newMapping;
+                },
+                mapDelete:function(panel){
+                    this.mapDelete(panel);
                 }
             }
         });
-        this.queryById('mappingsContainer').add(newMapping);
+        this.queryById('mappingsContainer').insert(0,newMapping);
+
+        this.queryById('noMappingMsg').hide();
 
         return newMapping;
     },
 
     loadConfig: function(config) {
         this.mappingConfig = config;
+
+        this.queryById('mappingsContainer').removeAll(true, true);
+
+        Ext.each(config,function(mapping){
+            this.addMapping(mapping);
+        },this);
     },
 
     gamepadPoll: function() {
+        if(!this.monitorEvents){
+            return false;
+        }
+
         var gamepadUpdate = navigator.getGamepads();
 
         for(var gx in this.activeGamepads){
@@ -161,12 +227,19 @@ Ext.define('RobotDriver.view.GamepadMapping', {
             if(gamepadUpdate[ag.index]){
                 ag = gamepadUpdate[ag.index];
             }else{
-                console.log('gamepad no longer available?');
                 this.gamepadDisconnected({gamepad:ag});
                 return;
             }
 
             this.gamepadCheckState(ag);
+        }
+    },
+
+    mapDelete: function(panel) {
+        Ext.destroy(panel);
+
+        if(this.queryById('mappingsContainer').getItems().length < 1){
+            this.queryById('noMappingMsg').show({type:'fade'});
         }
     },
 
@@ -190,6 +263,9 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         switch(type){
             case 'axis':
                 newValue = newValue.toFixed(2);
+                if(newValue == 0){
+                    newValue = 0;
+                }
                 break;
             case 'button':
                 newValue = newValue ? 'Down' : 'Up';
@@ -244,9 +320,39 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     appendControllerEvent: function(text) {
+        if(this.logEvents.length >= 6){
+            this.logEvents.shift();
+        }
+        this.logEvents.push(text);
+
+        let logBuf = '';
+        Ext.each(this.logEvents, function(line){
+            logBuf += line;
+        });
+
         let el = this.queryById('controllerEvents').el.dom;
-        el.innerHTML += text;
+
+        el.innerHTML = logBuf;
         el.scrollTop = el.scrollHeight - el.clientHeight;
+    },
+
+    updateMappingStores: function(controlsStoreData) {
+        this.controlsDataStoreData = [];
+        for(let c in controlsStoreData){
+            let ci = controlsStoreData[c];
+
+            this.controlsDataStoreData.push({
+                controlId: ci.controlId,
+                type:ci.type,
+                label:ci.label,
+                display:ci.type +' '+ci.label
+            });
+        }
+
+        Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
+            mapComp.setControlStoreData(this.controlsDataStoreData);
+        }, this);
+        console.log(this.controlsDataStoreData);
     }
 
 });

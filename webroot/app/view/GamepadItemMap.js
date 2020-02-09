@@ -30,22 +30,16 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
     border: true,
     margin: '6 0 0 0',
     padding: '0 0 6 10',
+    layout: 'vbox',
     defaultListenerScope: true,
 
-    layout: {
-        type: 'vbox',
-        align: 'start'
-    },
     items: [
         {
             xtype: 'container',
             height: 32,
             userCls: 'mapped-to',
             margin: '10 0 0 0',
-            layout: {
-                type: 'hbox',
-                align: 'start'
-            },
+            layout: 'hbox',
             items: [
                 {
                     xtype: 'container',
@@ -61,13 +55,27 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
                 },
                 {
                     xtype: 'button',
-                    hidden: true,
+                    hidden: false,
                     itemId: 'remap',
                     margin: '0 0 0 10',
                     iconCls: 'x-fa fa-pencil-square-o',
                     text: 'Remap',
                     listeners: {
                         tap: 'onMybuttonTap'
+                    }
+                },
+                {
+                    xtype: 'container',
+                    flex: 1
+                },
+                {
+                    xtype: 'button',
+                    itemId: 'delete',
+                    margin: '0 10 0 0',
+                    iconCls: 'x-fa fa-trash',
+                    text: 'Delete',
+                    listeners: {
+                        tap: 'onDeleteTap1'
                     }
                 }
             ]
@@ -81,8 +89,10 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
             label: 'Control',
             labelTextAlign: 'right',
             labelWidth: 110,
-            displayField: 'name',
+            displayField: 'display',
             valueField: 'controlId',
+            queryCaching: false,
+            queryMode: 'local',
             bind: {
                 store: '{controlStore}'
             }
@@ -91,14 +101,42 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
             xtype: 'textfield',
             itemId: 'name',
             name: 'name',
+            width: 300,
             label: 'Name (optional)',
-            labelWidth: 110
+            labelWidth: 110,
+            clearable: false
         }
     ],
+    listeners: {
+        painted: 'onPanelPainted'
+    },
 
     onMybuttonTap: function(button, e, eOpts) {
         this.fireEvent('remap', this);
         this.setMapping(false);
+    },
+
+    onDeleteTap1: function(button, e, eOpts) {
+        this.fireEvent('mapDelete', this);
+    },
+
+    onPanelPainted: function(sender, element, eOpts) {
+        if(this.init){
+            return;
+        }else{
+            this.init = true;
+        }
+
+        this.mapping = {};
+
+        this.setControlStoreData(element.component.config.controlsDataStoreData);
+
+        if(element.component.config.mapConfig){
+            let config = element.component.config.mapConfig;
+            this.setMapping(config.gamepadId, config.gamepadIndex, config.mapType, config.mapIndex);
+            this.queryById('name').setValue(config.name);
+            this.queryById('control').setValue(config.controlId);
+        }
     },
 
     setMapping: function(gamepadId, gamepadIndex, mapType, mapIndex) {
@@ -119,18 +157,31 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
             mapType:mapType,
             mapIndex:mapIndex
         };
-        console.log('insanity');
+
+        this.getViewModel().getStore('controlStore').clearFilter();
+        switch(mapType){
+            case 'button':
+                this.getViewModel().getStore('controlStore').filter('type','button');
+                break;
+            case 'axis':
+                this.getViewModel().getStore('controlStore').filter('type','slider');
+                break;
+        }
+
         this.queryById('mappedTo').setHtml(gamepadId + " "+mapType+" #"+ (parseInt(mapIndex)+1) );
         this.queryById('control').enable();
         this.queryById('remap').show();
     },
 
     getMapping: function() {
-        return this.mapping ? this.mapping : false;
+        this.mapping.name = this.queryById('name').getValue();
+        this.mapping.controlId = this.queryById('control').getValue();
+
+        return this.mapping;
     },
 
-    setControlStoreData: function() {
-
+    setControlStoreData: function(data) {
+        this.getViewModel().getStore('controlStore').loadData(data);
     }
 
 });

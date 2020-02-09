@@ -797,6 +797,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                     xtype: 'tabpanel',
                     title: 'Control',
                     iconCls: 'x-fa fa-gamepad',
+                    itemId: 'mytabpanel1',
                     items: [
                         {
                             xtype: 'container',
@@ -843,13 +844,20 @@ Ext.define('RobotDriver.view.MainPanel', {
                         },
                         {
                             xtype: 'gamepadmapping',
-                            title: 'Controller Button Mapping',
-                            iconCls: 'x-fa fa-gamepad'
+                            itemId: 'controllerMapping',
+                            title: 'Controller Mapping',
+                            iconCls: 'x-fa fa-gamepad',
+                            listeners: {
+                                websocketsend: 'onContainerWebsocketsend'
+                            }
                         }
                     ],
                     tabBar: {
                         docked: 'top',
                         padding: '10 0 0 100'
+                    },
+                    listeners: {
+                        activeItemchange: 'onMytabpanel1ActiveItemChange'
                     }
                 },
                 {
@@ -1143,6 +1151,21 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.controlShowAdd();
     },
 
+    onContainerWebsocketsend: function(data) {
+        this.websocketSend(data);
+    },
+
+    onMytabpanel1ActiveItemChange: function(sender, value, oldValue, eOpts) {
+        let activeItemId = value.getItemId();
+
+        let controllerMapping = this.queryById('controllerMapping');
+        if(activeItemId === 'controllerMapping'){
+            controllerMapping.startControllerLoop();
+        }else{
+            controllerMapping.stopControllerLoop();
+        }
+    },
+
     onMybutton13Tap: function(button, e, eOpts) {
         this.websocketSend({
             action:'configDefaults'
@@ -1175,13 +1198,16 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     onTabpanelActiveItemChange: function(sender, value, oldValue, eOpts) {
-        //console.log('tab change!');
-        //console.log(arguments);
-        //console.log(value.getItemId());
+        let activeItemId = value.getItemId();
+        if(activeItemId === 'tabVideo'){
+            this.startVideo();
+        }
 
-        switch(value.getItemId()){
-            case 'tabVideo':
-                this.startVideo();
+        let controllerMapping = this.queryById('controllerMapping');
+        if(activeItemId === 'tabConfig'){
+            controllerMapping.startControllerLoop();
+        }else{
+            controllerMapping.stopControllerLoop();
         }
     },
 
@@ -1321,9 +1347,15 @@ Ext.define('RobotDriver.view.MainPanel', {
         if(config.hardware){
             this.hardwareLoadConfig(config.hardware, true);
         }
+        let controllerMapping = this.queryById('controllerMapping');
+
         if(config.controls){
             this.controlsLoadConfig(config.controls);
             this.liveControlsLoadConfig(config.controls);
+            controllerMapping.updateMappingStores(config.controls);
+        }
+        if(config.controllerMapping){
+            controllerMapping.loadConfig(config.controllerMapping);
         }
     },
 
@@ -1520,6 +1552,8 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         this.controlsLoadConfig(controlConfig);
         this.liveControlsLoadConfig(controlConfig);
+
+        this.queryById('controllerButtonMapping').updateMappingStores(controlConfig);
     },
 
     controlsLoadConfig: function(controls) {

@@ -29,7 +29,13 @@ Ext.define('RobotDriver.view.GamepadItemMapViewModel', {
                     name: 'controlId'
                 },
                 {
-                    name: 'name'
+                    name: 'type'
+                },
+                {
+                    name: 'label'
+                },
+                {
+                    name: 'display'
                 }
             ]
         }
