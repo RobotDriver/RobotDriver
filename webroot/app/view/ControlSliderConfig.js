@@ -114,6 +114,14 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
     },
 
     onFormpanelPainted: function(sender, element, eOpts) {
+        if(this.init){
+           return;
+        }else{
+           this.init = true;
+        }
+
+        this.controlId = element.component.config.controlId;
+
         if(element.component.config.label){
             this.queryById('sliderPreview').setLabel(element.component.config.label);
         }
@@ -128,6 +136,8 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
         let values = this.getValues();
         values.type='slider';
 
+        values.controlId = this.controlId;
+
         values.hardwareId = this.queryById('hardware').getHardwareId();
 
         return values;
@@ -135,6 +145,8 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
 
     setConfigValues: function(config) {
         this.setValues(config);
+
+        //this.controlId = config.controlId;
 
         if(config.hardware && config.hardware.type==='motor'){
             this.queryById('sliderPreview').showMotorLabels();

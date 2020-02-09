@@ -38,7 +38,10 @@ Ext.application({
         'HardwareGpio',
         'BaseControlSlider',
         'BaseControlStick',
-        'ControlStickConfig'
+        'ControlStickConfig',
+        'GamepadInfo',
+        'GamepadMapping',
+        'GamepadItemMap'
     ],
     name: 'RobotDriver',
 

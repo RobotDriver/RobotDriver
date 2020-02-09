@@ -23,6 +23,7 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
         'RobotDriver.view.BaseControlStick',
         'RobotDriver.view.ControlManagementButtons',
         'Ext.field.Text',
+        'Ext.field.Checkbox',
         'Ext.Panel'
     ],
 
@@ -39,17 +40,50 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
     items: [
         {
             xtype: 'container',
+            itemId: 'mycontainer71',
             layout: {
                 type: 'vbox',
                 align: 'start'
             },
             items: [
                 {
+                    xtype: 'textfield',
+                    enableKeyEvents: true,
+                    itemId: 'labelText',
+                    name: 'label',
+                    margin: '6 0 0 70',
+                    label: 'Label',
+                    labelWidth: 50,
+                    autoComplete: false,
+                    clearable: false,
+                    listeners: {
+                        change: 'onMytextfield3Change1'
+                    }
+                },
+                {
+                    xtype: 'checkbox',
+                    itemId: 'mycheckbox',
+                    name: 'tankControls',
+                    width: 237,
+                    margin: '0 0 0 100',
+                    label: 'Enable Tank-Style Motor Control',
+                    labelAlign: 'right',
+                    labelWidth: 210,
+                    listeners: {
+                        change: 'onMycheckboxChange'
+                    }
+                },
+                {
                     xtype: 'container',
                     layout: 'hbox',
                     items: [
                         {
                             xtype: 'container',
+                            itemId: 'xMotorLabel',
+                            style: {
+                                'text-align': 'right'
+                            },
+                            width: 75,
                             html: 'X Axis',
                             margin: '18 0 0 6'
                         },
@@ -66,6 +100,11 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
                     items: [
                         {
                             xtype: 'container',
+                            itemId: 'yMotorLabel',
+                            style: {
+                                'text-align': 'right'
+                            },
+                            width: 75,
                             html: 'Y Axis',
                             margin: '18 0 0 6'
                         },
@@ -75,20 +114,6 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
                             width: 350
                         }
                     ]
-                },
-                {
-                    xtype: 'textfield',
-                    enableKeyEvents: true,
-                    itemId: 'labelText',
-                    name: 'label',
-                    margin: '0 0 0 70',
-                    label: 'Label',
-                    labelWidth: 50,
-                    autoComplete: false,
-                    clearable: false,
-                    listeners: {
-                        change: 'onMytextfield3Change1'
-                    }
                 }
             ]
         },
@@ -117,9 +142,27 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
             ]
         }
     ],
+    listeners: {
+        painted: 'onFormpanelPainted'
+    },
 
     onMytextfield3Change1: function(field, newValue, oldValue, eOpts) {
         this.queryById('stickPreview').setLabel(newValue);
+    },
+
+    onMycheckboxChange: function(checkbox, newValue, oldValue, eOpts) {
+        console.log(newValue, oldValue);
+        if(newValue === true){
+            this.queryById('xMotorLabel').setHtml('Left Motor');
+            this.queryById('yMotorLabel').setHtml('Right Motor');
+        }else{
+            this.queryById('xMotorLabel').setHtml('X Axis');
+            this.queryById('yMotorLabel').setHtml('Y Axis');
+        }
+    },
+
+    onFormpanelPainted: function(sender, element, eOpts) {
+        this.controlId = element.component.config.controlId;
     },
 
     setConfigValues: function(config) {

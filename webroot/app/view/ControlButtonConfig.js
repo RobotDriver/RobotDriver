@@ -224,6 +224,8 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
            this.init = true;
         }
 
+        this.controlId = element.component.config.controlId;
+
         this.colorPicker = Ext.create("RobotDriver.ColorPicker",
         {
             labelWidth: 55,
@@ -247,6 +249,7 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
         let values = this.getValues();
 
         values.type='button';
+        values.controlId = this.controlId;
 
         values.hardwareId = this.queryById('hardware').getHardwareId();
 
@@ -268,6 +271,8 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
     setConfigValues: function(config) {
         let button = this.queryById('controlbutton');
         button.setButtonActionType(config.actionType);
+
+        //this.controlId = config.controlId;
 
         this.setValues(config);
 
