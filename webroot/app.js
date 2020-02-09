@@ -41,7 +41,8 @@ Ext.application({
         'ControlStickConfig',
         'GamepadInfo',
         'GamepadMapping',
-        'GamepadItemMap'
+        'GamepadItemMap',
+        'liveController'
     ],
     name: 'RobotDriver',
 

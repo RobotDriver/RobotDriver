@@ -110,6 +110,10 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
 
     setValue: function(value) {
         this.queryById('slider').setValue(value);
+    },
+
+    liveSetValue: function(value) {
+        this.setValue(value);
     }
 
 });

@@ -72,6 +72,7 @@ Ext.define('RobotDriver.view.ControlButton', {
         }
 
         createFireButton(this.button, function(state){
+            console.log('button handler!', arguments);
 
             if(state==='down'){
                 if(this.buttonActionType==='toggle'){
@@ -79,7 +80,7 @@ Ext.define('RobotDriver.view.ControlButton', {
                     if(this.buttonToggled === true){
                         this.buttonToggled = false;
                     }else{
-                        this.fireEvent('toggledown');
+                        this.fireEvent('down'); //toggledown
                         this.buttonToggled = true;
                     }
                 }else{
@@ -89,7 +90,7 @@ Ext.define('RobotDriver.view.ControlButton', {
             }else if(state==='up'){
                 if(this.buttonActionType==='toggle'){
                     if(this.buttonToggled === false){
-                        this.fireEvent('toggleup');
+                        this.fireEvent('up'); // toggleup
                         this.button.classList.remove("toggledown");
                     }
                 }else{
@@ -165,6 +166,15 @@ Ext.define('RobotDriver.view.ControlButton', {
         this.configContrastColor = config.iconColor;
 
         this.updateButtonStyles(config.color, this.configColorShadow, this.configContrastColor);
+    },
+
+    liveSetValue: function(value) {
+        if(value === 'down'){
+            this.button.classList.add("toggledown");
+        }else{
+            this.button.classList.remove("toggledown");
+        }
+        this.fireEvent(value);
     }
 
 });

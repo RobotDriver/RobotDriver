@@ -130,8 +130,6 @@ Ext.define('RobotDriver.view.GamepadMapping', {
             this.init = true;
         }
 
-        this.monitorEvents = true;
-
         this.activeGamepads = {};
         this.gamepadStates = {};
         this.activeMapping = false;
@@ -215,10 +213,6 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     gamepadPoll: function() {
-        if(!this.monitorEvents){
-            return false;
-        }
-
         var gamepadUpdate = navigator.getGamepads();
 
         for(var gx in this.activeGamepads){
@@ -352,7 +346,6 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
             mapComp.setControlStoreData(this.controlsDataStoreData);
         }, this);
-        console.log(this.controlsDataStoreData);
     }
 
 });

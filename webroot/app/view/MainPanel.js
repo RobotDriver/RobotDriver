@@ -19,6 +19,7 @@ Ext.define('RobotDriver.view.MainPanel', {
 
     requires: [
         'RobotDriver.view.MainPanelViewModel',
+        'RobotDriver.view.liveController',
         'RobotDriver.view.GamepadMapping',
         'Ext.Panel',
         'Ext.Button',
@@ -61,18 +62,25 @@ Ext.define('RobotDriver.view.MainPanel', {
                 },
                 {
                     xtype: 'container',
+                    itemId: 'liveControlsButtons',
+                    layout: 'hbox'
+                },
+                {
+                    xtype: 'livecontroller',
+                    itemId: 'liveController',
+                    listeners: {
+                        action: 'onContainerAction'
+                    }
+                },
+                {
+                    xtype: 'container',
+                    itemId: 'liveControls'
+                },
+                {
+                    xtype: 'container',
                     hidden: true,
                     itemId: 'old controls',
                     items: [
-                        {
-                            xtype: 'container',
-                            itemId: 'liveControlsButtons',
-                            layout: 'hbox'
-                        },
-                        {
-                            xtype: 'container',
-                            itemId: 'liveControls'
-                        },
                         {
                             xtype: 'container',
                             itemId: 'steering',
@@ -934,6 +942,22 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.showVirtualController();
     },
 
+    onContainerAction: function(mapping, value) {
+        //console.log('mapped button pressed',mapping, value);
+
+        if(!this.liveControls || !this.liveControls[mapping.controlId]){
+            console.error('Controller mapping to invalid controlId ', mapping.controlId);
+            return;
+        }
+        let control = this.liveControls[mapping.controlId];
+
+        switch(control.xtype){
+            case 'controlbutton':
+                control.liveSetValue(value===true ? 'down' : 'up');
+                break;
+        }
+    },
+
     onTrexPanSliderChange: function(me, newValue, oldValue, eOpts) {
         if(newValue && newValue.constructor === Array){
             newValue = newValue[0];
@@ -1187,6 +1211,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.messageQueue = [];
         this.websocketInit();
 
+        this.liveControls = {};
         this.websocketSendAction("configRead",true);
 
         this.controllerInit();
@@ -1201,6 +1226,13 @@ Ext.define('RobotDriver.view.MainPanel', {
         let activeItemId = value.getItemId();
         if(activeItemId === 'tabVideo'){
             this.startVideo();
+        }
+
+        let liveController = this.queryById('liveController');
+        if(activeItemId === 'tabControls'){
+            liveController.startControllerLoop();
+        }else{
+            liveController.stopControllerLoop();
         }
 
         let controllerMapping = this.queryById('controllerMapping');
@@ -1356,6 +1388,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
         if(config.controllerMapping){
             controllerMapping.loadConfig(config.controllerMapping);
+            this.queryById('liveController').loadConfig(config.controllerMapping);
         }
     },
 
@@ -1363,6 +1396,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.queryById('liveControlsButtons').removeAll(true, true);
         this.queryById('liveControls').removeAll(true, true);
 
+        this.liveControls = {};
         Ext.each(controls,function(controlItem){
             this.liveControlAdd(controlItem.type, controlItem);
         },this);
@@ -1375,8 +1409,8 @@ Ext.define('RobotDriver.view.MainPanel', {
             return;
         }
 
-        let panel;
-        let panelConfig = {};
+        let control;
+        let controlConfig = {};
 
         config.hardware = this.hardware[config.hardwareId];
 
@@ -1385,7 +1419,7 @@ Ext.define('RobotDriver.view.MainPanel', {
                 return false;
             case 'slider':
 
-                Ext.apply(panelConfig,{
+                Ext.apply(controlConfig,{
                     xtype: 'basecontrolslider',
                     margin:5,
                     label: config.label || false,
@@ -1409,7 +1443,7 @@ Ext.define('RobotDriver.view.MainPanel', {
             case 'stick':
                 console.log('add stick!');
 
-                Ext.apply(panelConfig,{
+                Ext.apply(controlConfig,{
                     xtype: 'basecontrolstick',
                     label: config.label || false,
                     listeners:{
@@ -1430,30 +1464,69 @@ Ext.define('RobotDriver.view.MainPanel', {
                 });
                 break;
             case 'button':
-                panelConfig.xtype = 'controlbutton';
+                console.log(config);
+                Ext.apply(controlConfig,{
+                    xtype: 'controlbutton',
+                    listeners:{
+                        scope:this,
+                        down:function(){
+                            let msg = {
+                                action:'control',
+                                hardwareId:config.hardwareId
+                            };
+
+                            if(config.actionType === 'setValue'){
+                                msg.valueMs = config.value;
+                                msg.value = msg.valueMs;
+                            }else{
+                                msg.actionType = config.actionType;
+                                msg.value = config.value;
+                            }
+                            this.websocketSend(msg);
+                        },
+                        up:function(){
+                            let msg = {
+                                action:'control',
+                                hardwareId:config.hardwareId
+                            };
+                            if(config.actionType === 'setValue'){
+                                msg.valueMs = this.hardware[config.hardwareId].startingPosition;
+                                msg.value = msg.valueMs;
+                            }else{
+                                msg.actionType = config.actionType;
+                                msg.value = config.value;
+                            }
+
+                            this.websocketSend(msg);
+                        }
+                    }
+                });
+
                 break;
-            case 'motorslider':
-                panelConfig.xtype = 'controlmotorslider';
-                break;
+            //case 'motorslider':
+            //    panelConfig.xtype = 'controlmotorslider';
+            //    break;
         }
 
-        panel = Ext.create(panelConfig);
+        control = Ext.create(controlConfig);
 
         switch(type){
             case 'stick':
             case 'button':
-                this.queryById('liveControlsButtons').add(panel);
+                this.queryById('liveControlsButtons').add(control);
                 break;
             case 'motorslider':
             case 'slider':
-                this.queryById('liveControls').add(panel);
+                this.queryById('liveControls').add(control);
                 break;
 
         }
 
-        if(config && panel.setConfigValues){
-            panel.setConfigValues(config);
+        if(config && control.setConfigValues){
+            control.setConfigValues(config);
         }
+
+        this.liveControls[config.controlId] = control;
     },
 
     controlShowAdd: function() {
@@ -1553,7 +1626,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.controlsLoadConfig(controlConfig);
         this.liveControlsLoadConfig(controlConfig);
 
-        this.queryById('controllerButtonMapping').updateMappingStores(controlConfig);
+        this.queryById('controllerMapping').updateMappingStores(controlConfig);
     },
 
     controlsLoadConfig: function(controls) {

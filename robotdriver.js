@@ -238,6 +238,9 @@ function initServo(hardwareItem){
 		console.error(`Serious Error! Failed to initalize GPIO pin ${hardwareItem.pin} for ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
 		console.error(e);
 	}
+
+	hardware[hardwareItem.hardwareId].currentValue = hardwareItem.startingPosition;
+	hardware[hardwareItem.hardwareId].pin.servoWrite(hardwareItem.startingPosition);
 }
 
 function shutdownHardware(){
@@ -278,9 +281,41 @@ function controlHardware(message){
 			hw.newState = message.value;
 			break;
 		case 'servo':
+
+			if(message.valueMs){
+				hw.currentValue = message.valueMs;
+				hw.pin.servoWrite(message.valueMs);
+				return;
+			}
+			if(message.hasOwnProperty('actionType') ){
+				let newVal;
+				switch(message.actionType){
+					default:
+						console.error(`Control Error! Invalid actionType ${message.actionType}. Please contact support!`);
+						return;
+					case 'increase':
+						newVal = hw.currentValue + parseInt(message.value);
+						break;
+					case 'decrease':
+						newVal = hw.currentValue - parseInt(message.value);
+						break;
+				}
+				console.log('servo 1 '+message.actionType+ ' = '+newVal);
+				if(newVal > hw.rangeMax){
+					newVal = hw.rangeMax;
+				}
+				if(newVal < hw.rangeMin){
+					newVal = hw.rangeMin;
+				}
+				console.log('servo 2 '+message.actionType+ ' = '+newVal);
+				hw.currentValue = newVal;
+				hw.pin.servoWrite(newVal);
+				return;
+			}
 			let ms = Math.trunc(hw.rangeMin + ((message.value * (hw.rangeMax - hw.rangeMin))/1000));
 			//console.log(`value = ${message.value}`);
 			//console.log(`pwm ms = ${ms}`);
+			hw.currentValue = ms;
 			hw.pin.servoWrite(ms);
 			break;
 	}
