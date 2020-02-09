@@ -611,7 +611,7 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                 property: 'name'
             }
         },
-        actionTypeStore: {
+        buttonTypeStore: {
             data: [
                 [
                     'Momentary / Hold for On',
@@ -620,6 +620,30 @@ Ext.define('RobotDriver.view.HardwareServoViewModel4', {
                 [
                     'Toggle / Switch On & Off',
                     'toggle'
+                ]
+            ],
+            fields: [
+                {
+                    name: 'display'
+                },
+                {
+                    name: 'value'
+                }
+            ]
+        },
+        actionTypeStore: {
+            data: [
+                [
+                    'Set Value',
+                    'setValue'
+                ],
+                [
+                    'Increase Value',
+                    'increase'
+                ],
+                [
+                    'Decrease Value',
+                    'decrease'
                 ]
             ],
             fields: [

@@ -91,6 +91,7 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
             labelWidth: 110,
             displayField: 'display',
             valueField: 'controlId',
+            forceSelection: true,
             queryCaching: false,
             queryMode: 'local',
             bind: {

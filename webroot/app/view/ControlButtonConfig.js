@@ -37,6 +37,8 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
     items: [
         {
             xtype: 'container',
+            margin: '',
+            padding: '0 0 10 0',
             layout: 'hbox',
             items: [
                 {
@@ -105,6 +107,7 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
                                     ],
                                     valueField: 'name',
                                     anyMatch: true,
+                                    forceSelection: true,
                                     minChars: 1,
                                     queryMode: 'local',
                                     typeAhead: true,
@@ -125,22 +128,60 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
                             items: [
                                 {
                                     xtype: 'combobox',
-                                    itemId: 'actionType',
-                                    name: 'actionType',
+                                    itemId: 'buttonType',
+                                    name: 'buttonType',
                                     width: 347,
                                     margin: 10,
-                                    label: 'Action Type',
-                                    labelWidth: 80,
+                                    label: 'Button Type',
+                                    labelWidth: 90,
                                     value: 'momentary',
                                     displayField: 'display',
                                     valueField: 'value',
+                                    forceSelection: true,
                                     queryMode: 'local',
                                     bind: {
-                                        store: '{actionTypeStore}'
+                                        store: '{buttonTypeStore}'
                                     },
                                     listeners: {
                                         select: 'onActionTypeSelect'
                                     }
+                                },
+                                {
+                                    xtype: 'container',
+                                    margin: '0 0 0 10',
+                                    layout: 'hbox',
+                                    items: [
+                                        {
+                                            xtype: 'combobox',
+                                            itemId: 'actionType',
+                                            name: 'actionType',
+                                            width: 267,
+                                            label: 'Action Type',
+                                            labelWidth: 90,
+                                            value: 'momentary',
+                                            displayField: 'display',
+                                            valueField: 'value',
+                                            forceSelection: true,
+                                            queryMode: 'local',
+                                            bind: {
+                                                store: '{actionTypeStore}'
+                                            },
+                                            listeners: {
+                                                select: 'onActionTypeSelect1'
+                                            }
+                                        },
+                                        {
+                                            xtype: 'textfield',
+                                            itemId: 'value',
+                                            name: 'value',
+                                            width: 153,
+                                            margin: '0 0 0 20',
+                                            label: 'Value',
+                                            labelTextAlign: 'right',
+                                            labelWidth: 50,
+                                            clearable: false
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -214,6 +255,19 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
     onActionTypeSelect: function(combobox, newValue, oldValue, eOpts) {
         if(newValue !== null){
             this.queryById('controlbutton').setButtonActionType(newValue.data.value);
+        }
+    },
+
+    onActionTypeSelect1: function(combobox, newValue, oldValue, eOpts) {
+        console.log('button action type select', newValue.data.value, newValue);
+        if(newValue === null){
+            return;
+        }
+        if(newValue.data.value === 'setValue'){
+            this.queryById('value').setLabel('Value');
+        }else{
+            //decrease or increase
+            this.queryById('value').setLabel('By');
         }
     },
 
