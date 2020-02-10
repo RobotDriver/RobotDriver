@@ -207,7 +207,7 @@ function initL298n(hardwareItem){
 			m1.hardwareId = hardwareItem.hardwareId+':1';
 			m1.mainHardwareId = hardwareItem.hardwareId;
 			hardware[m1.hardwareId] = m1;
-			setupNewMotorInterval(m1);
+			addMotorToControlLoop(m1);
 		}catch(e){
 			console.error(`Serious Error! Failed to initalize GPIO pins for motor 1 aen, ain1, ain2 - ${hardwareItem.aen}, ${hardwareItem.ain1}, ${hardwareItem.ain2} for  ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
 			console.error(e);
@@ -223,7 +223,7 @@ function initL298n(hardwareItem){
 			m2.hardwareId = hardwareItem.hardwareId+':2';
 			m2.mainHardwareId = hardwareItem.hardwareId;
 			hardware[m2.hardwareId] = m2;
-			setupNewMotorInterval(m2);
+			addMotorToControlLoop(m2);
 		} catch (e){
 			console.error(`Serious Error! Failed to initalize GPIO pins for motor 2 ben, bin3, bin4 - ${hardwareItem.ben}, ${hardwareItem.bin3}, ${hardwareItem.bin4} for  ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
 			console.error(e);
@@ -238,6 +238,7 @@ function initServo(hardwareItem){
 		console.error(`Serious Error! Failed to initalize GPIO pin ${hardwareItem.pin} for ${hardwareItem.type} ${hardwareItem.name} ${hardwareItem.hardwareId}. Invalid pin!`);
 		console.error(e);
 	}
+	addServoToControlLoop(hardware[hardwareItem.hardwareId]);
 
 	hardware[hardwareItem.hardwareId].currentValue = hardwareItem.startingPosition;
 	hardware[hardwareItem.hardwareId].pin.servoWrite(hardwareItem.startingPosition);
@@ -300,33 +301,39 @@ function controlHardware(message){
 						newVal = hw.currentValue - parseInt(message.value);
 						break;
 				}
-				console.log('servo 1 '+message.actionType+ ' = '+newVal);
 				if(newVal > hw.rangeMax){
 					newVal = hw.rangeMax;
 				}
 				if(newVal < hw.rangeMin){
 					newVal = hw.rangeMin;
 				}
-				console.log('servo 2 '+message.actionType+ ' = '+newVal);
 				hw.currentValue = newVal;
-				hw.pin.servoWrite(newVal);
+				hw.newState = newVal;
 				return;
 			}
 			let ms = Math.trunc(hw.rangeMin + ((message.value * (hw.rangeMax - hw.rangeMin))/1000));
 			//console.log(`value = ${message.value}`);
-			//console.log(`pwm ms = ${ms}`);
+
 			hw.currentValue = ms;
-			hw.pin.servoWrite(ms);
+			hw.newState = ms;
 			break;
 	}
 
 }
+
 var movingNow = false;
 var currentSteeringValue = 500, currentThrottleValue=500;
 var newSteeringValue=500, newThrottleValue=500;
 var activeMotors = {};
+var activeServos = {};
 
-function setupNewMotorInterval(hardware){
+function addServoToControlLoop(hardware){
+	activeServos[hardware.hardwareId] = hardware;
+	hardware.currentState = hardware.startingPosition;
+	hardware.newState = hardware.startingPosition;
+}
+
+function addMotorToControlLoop(hardware){
 	activeMotors[hardware.hardwareId] = hardware;
 	hardware.currentState = 500;
 	hardware.newState = 500;
@@ -334,7 +341,16 @@ function setupNewMotorInterval(hardware){
 	hardware.lastChange = 0;
 }
 
-const motorMoveInterval = setInterval(() => {
+const hardwareControlLoop = setInterval(() => {
+
+	for(var s in activeServos){
+		let hw = activeServos[s];
+		if(hw.currentState === hw.newState){
+			continue;
+		}
+		hw.pin.servoWrite(hw.newState);
+		hw.currentState = hw.newState;
+	}
 
 	for(var m in activeMotors){
 		let hw = activeMotors[m];
