@@ -1,0 +1,42 @@
+{
+    "type": "Ext.app.Application",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "models": [
+            "HardwareModel"
+        ],
+        "name": "RobotDriver",
+        "views": [
+            "MainPanel",
+            "AddHardwareType",
+            "HardwareServo",
+            "HardwareMotor",
+            "HardwareI2c",
+            "AddControlType",
+            "ControlSliderConfig",
+            "ControlButtonConfig",
+            "ControlHardwareCombo",
+            "ControlButton",
+            "ControlManagementButtons",
+            "HardwareGpio",
+            "BaseControlSlider",
+            "BaseControlStick",
+            "ControlStickConfig",
+            "GamepadInfo",
+            "GamepadMapping",
+            "GamepadItemMap",
+            "liveController"
+        ]
+    },
+    "configAlternates": {
+        "name": "string",
+        "views": "typedarray",
+        "models": "typedarray"
+    },
+    "name": "Application",
+    "designerId": "application"
+}

@@ -1,0 +1,1346 @@
+{
+    "type": "Ext.form.Panel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "hardwaremotor",
+        "designer|userClassName": "HardwareMotor",
+        "padding": "0 0 10 0"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "title": "string",
+        "border": "boolean",
+        "padding": "auto"
+    },
+    "name": "HardwareServo1",
+    "designerId": "e922e367-9888-4e43-9dc7-a6ab4791cc62",
+    "viewControllerInstanceId": "92a55c70-5bd5-42d5-b3c7-457380cce474",
+    "viewModelInstanceId": "c24fe2be-4f43-4448-ba69-212fe049dd5a",
+    "cn": [
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "itemId": "tbar",
+                "layout": "hbox",
+                "padding": 10
+            },
+            "configAlternates": {
+                "itemId": "string",
+                "layout": "string",
+                "padding": "auto"
+            },
+            "name": "MyContainer47",
+            "designerId": "791e68c2-3354-4d08-8914-e87cf2965193",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "Motor",
+                        "itemId": "title",
+                        "style": [
+                            "{",
+                            "'margin':'5px 5px 0 12px',",
+                            "'font-weight':'bold',",
+                            "'font-size':'16px'",
+                            "}"
+                        ],
+                        "width": 97
+                    },
+                    "configAlternates": {
+                        "html": "string",
+                        "itemId": "string",
+                        "margin": "auto",
+                        "width": "auto",
+                        "style": "object"
+                    },
+                    "name": "MyContainer7",
+                    "designerId": "73807205-cf24-4f1c-8bba-b220f189c326"
+                },
+                {
+                    "type": "Ext.field.ComboBox",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "displayField": "display",
+                        "itemId": "motorDriverType",
+                        "label": "Motor Driver Type",
+                        "labelWidth": 120,
+                        "minChars": 1,
+                        "name": "motorDriverType",
+                        "queryMode": "local",
+                        "store": [
+                            "{motorDriverType}"
+                        ],
+                        "typeAhead": true,
+                        "value": [
+                            "'l298n'"
+                        ],
+                        "valueField": "value",
+                        "width": 340
+                    },
+                    "configAlternates": {
+                        "label": "string",
+                        "labelWidth": "auto",
+                        "margin": "auto",
+                        "name": "string",
+                        "width": "auto",
+                        "store": "binding",
+                        "displayField": "datafield",
+                        "value": "object",
+                        "valueField": "datafield",
+                        "minChars": "number",
+                        "queryMode": "string",
+                        "typeAhead": "boolean",
+                        "itemId": "string"
+                    },
+                    "name": "MyComboBox1",
+                    "designerId": "b41cb977-f663-4106-b44e-08a2cb760399",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMycombobox1Select",
+                                "implHandler": [
+                                    "if(newValue===null){",
+                                    "    return;",
+                                    "}",
+                                    "switch(newValue.data.value){",
+                                    "    case 'pca9685':",
+                                    "        this.queryById('l298npins').hide();",
+                                    "        this.queryById('escpins').hide();",
+                                    "        break;",
+                                    "    case 'l298n':",
+                                    "        this.queryById('l298npins').show();",
+                                    "        this.queryById('escpins').hide();",
+                                    "        break;",
+                                    "    case 'esc':",
+                                    "        this.queryById('l298npins').hide();",
+                                    "        this.queryById('escpins').show();",
+                                    "        break;",
+                                    "}"
+                                ],
+                                "name": "select"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMycombobox1Select",
+                            "designerId": "f4f8ea2e-4748-400d-acba-a92b591eb933"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Spacer",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "name": "MySpacer",
+                    "designerId": "cd8fcd2c-838a-4d7a-9efd-b4b65f446e4c"
+                },
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-trash",
+                        "text": "Delete"
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "text": "string"
+                    },
+                    "name": "MyButton9",
+                    "designerId": "22abea6a-d1ab-4cae-b746-9d1894f4a888",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton9Tap",
+                                "implHandler": [
+                                    "this.fireEvent('hardwaredelete', this);"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton9Tap",
+                            "designerId": "fc380dc5-4d46-490c-be51-f1d12f2bfa40"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Ext.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "itemId": "outputDrive1Form"
+            },
+            "configAlternates": {
+                "itemId": "string"
+            },
+            "name": "MyPanel7",
+            "designerId": "55ad254b-cfd9-4108-be3e-ed52347b7646",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "style": [
+                            "{",
+                            "'color':'#fff'",
+                            "}"
+                        ]
+                    },
+                    "configAlternates": {
+                        "style": "object"
+                    },
+                    "name": "MyContainer",
+                    "designerId": "f9a1b5aa-3e2d-4c2b-a77e-771c3c90eea5"
+                },
+                {
+                    "type": "Ext.form.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "defaults": [
+                            "{",
+                            "    defaults:{",
+                            "        clearable:false,",
+                            "        validationMessage: 'Invalid Pin Number',",
+                            "        defaults:{",
+                            "            clearable:false,",
+                            "            validationMessage: 'Invalid Pin Number',",
+                            "            defaults:{",
+                            "                clearable:false,",
+                            "                validationMessage: 'Invalid Pin Number'",
+                            "            }",
+                            "        }",
+                            "    }",
+                            "}"
+                        ],
+                        "itemId": "l298npins"
+                    },
+                    "configAlternates": {
+                        "border": "boolean",
+                        "defaults": "object",
+                        "itemId": "string",
+                        "margin": "auto",
+                        "padding": "auto"
+                    },
+                    "name": "MyFormPanel",
+                    "designerId": "95870def-5144-4020-b3f1-4e2d2d8829cd",
+                    "cn": [
+                        {
+                            "type": "Ext.Panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "border": true,
+                                "margin": "0 4 0 20",
+                                "padding": 6
+                            },
+                            "configAlternates": {
+                                "border": "boolean",
+                                "margin": "auto",
+                                "padding": "auto"
+                            },
+                            "name": "MyPanel5",
+                            "designerId": "d268ddf4-77a7-48ac-8f11-3b37aacab792",
+                            "cn": [
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "itemId": "motora",
+                                        "layout": "hbox"
+                                    },
+                                    "configAlternates": {
+                                        "itemId": "string",
+                                        "layout": "string"
+                                    },
+                                    "name": "MyContainer40",
+                                    "designerId": "5e4a982d-efa8-4773-98a1-7e4926d89724",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.Container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "html": "<b>Motor A</b>",
+                                                "padding": "8 10 0 0"
+                                            },
+                                            "configAlternates": {
+                                                "html": "string",
+                                                "itemId": "string",
+                                                "padding": "auto"
+                                            },
+                                            "name": "MyContainer53",
+                                            "designerId": "f8fc5c6b-a61a-4907-98db-7c0f05f895e8"
+                                        },
+                                        {
+                                            "type": "Ext.field.Text",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "autoComplete": false,
+                                                "clearable": false,
+                                                "enableKeyEvents": true,
+                                                "itemId": "name1",
+                                                "label": "Name",
+                                                "labelTextAlign": "right",
+                                                "labelWidth": 80,
+                                                "maxLength": 30,
+                                                "name": "name1",
+                                                "width": 200
+                                            },
+                                            "configAlternates": {
+                                                "clearable": "boolean",
+                                                "placeholder": "string",
+                                                "name": "string",
+                                                "autoComplete": "boolean",
+                                                "enableKeyEvents": "boolean",
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "width": "auto",
+                                                "itemId": "string",
+                                                "labelTextAlign": "string",
+                                                "maxLength": "number"
+                                            },
+                                            "name": "MyTextField3",
+                                            "designerId": "175cb0ed-4ffe-448c-9080-b3453f3ee0b4",
+                                            "customConfigs": [
+                                                {
+                                                    "group": "(Custom Properties)",
+                                                    "name": "enableKeyEvents",
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout": "hbox",
+                                        "margin": "5 0 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "layout": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer57",
+                                    "designerId": "9984e9ba-1f9f-4df1-ba1f-f336544dbf8d",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.Container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "html": "Pins:",
+                                                "padding": "8 10 0 0"
+                                            },
+                                            "configAlternates": {
+                                                "html": "string",
+                                                "itemId": "string",
+                                                "padding": "auto"
+                                            },
+                                            "name": "MyContainer61",
+                                            "designerId": "c306c289-9629-4bd5-b707-08c782878cac"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "itemId": "aen",
+                                                "label": "A EN",
+                                                "labelTextAlign": "right",
+                                                "labelWidth": 45,
+                                                "margin": "0 0 0 15",
+                                                "maxValue": 27,
+                                                "minValue": 2,
+                                                "name": "aen",
+                                                "width": 95
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "labelTextAlign": "string",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "itemId": "string"
+                                            },
+                                            "name": "MyNumberField7",
+                                            "designerId": "171ce1c8-bca0-4ddd-9ce4-c1d5019864ef"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "itemId": "ain1",
+                                                "label": "IN1",
+                                                "labelWidth": 35,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 27,
+                                                "minValue": 2,
+                                                "name": "ain1",
+                                                "width": 75
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "itemId": "string"
+                                            },
+                                            "name": "MyNumberField8",
+                                            "designerId": "d2bca4ec-e514-4093-9cb3-c21c729b5727"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "itemId": "ain2",
+                                                "label": "IN2",
+                                                "labelWidth": 35,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 27,
+                                                "minValue": 2,
+                                                "name": "ain2",
+                                                "width": 75
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "itemId": "string"
+                                            },
+                                            "name": "MyNumberField9",
+                                            "designerId": "c1724430-dadc-4701-8069-0115accaf591"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout": "hbox",
+                                        "margin": "5 0 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "layout": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer59",
+                                    "designerId": "a30862a1-2d9d-478b-a530-100d18950a46",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.Container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "html": "Power:",
+                                                "padding": "8 10 0 0"
+                                            },
+                                            "configAlternates": {
+                                                "html": "string",
+                                                "itemId": "string",
+                                                "padding": "auto"
+                                            },
+                                            "name": "MyContainer62",
+                                            "designerId": "46505dbe-49fe-4a25-a183-b5b90be20371"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "label": "Min %",
+                                                "labelTextAlign": "right",
+                                                "labelWidth": 50,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 100,
+                                                "minValue": 0,
+                                                "name": "amin",
+                                                "value": [
+                                                    "0",
+                                                    ""
+                                                ],
+                                                "width": 100
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "value": "object",
+                                                "labelTextAlign": "string"
+                                            },
+                                            "name": "MyNumberField8",
+                                            "designerId": "37aed936-e71e-48e2-9212-96254a0c6572"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "label": "Max %",
+                                                "labelWidth": 50,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 100,
+                                                "minValue": 0,
+                                                "name": "amax",
+                                                "value": [
+                                                    "100"
+                                                ],
+                                                "width": 100
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "value": "object"
+                                            },
+                                            "name": "MyNumberField10",
+                                            "designerId": "3e02164d-6131-4298-91db-dd69ccc3c1db"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.Panel",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "border": true,
+                                "layout": "vbox",
+                                "margin": "6 4 0 20",
+                                "padding": 6
+                            },
+                            "configAlternates": {
+                                "border": "boolean",
+                                "layout": "string",
+                                "margin": "auto",
+                                "padding": "auto"
+                            },
+                            "name": "MyPanel4",
+                            "designerId": "53bd315d-f45a-4c32-862f-7e1e110e4358",
+                            "cn": [
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "itemId": "motorb",
+                                        "layout": "hbox"
+                                    },
+                                    "configAlternates": {
+                                        "itemId": "string",
+                                        "layout": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer42",
+                                    "designerId": "40037a31-fb12-4be3-94d0-0f2df974af6b",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.Container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "html": "<b>Motor B</b>",
+                                                "padding": "6 10 0 0"
+                                            },
+                                            "configAlternates": {
+                                                "html": "string",
+                                                "itemId": "string",
+                                                "padding": "auto"
+                                            },
+                                            "name": "MyContainer56",
+                                            "designerId": "91bbe2d0-2fcf-4ade-837c-7bd80656e473"
+                                        },
+                                        {
+                                            "type": "Ext.field.Text",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "autoComplete": false,
+                                                "clearable": false,
+                                                "enableKeyEvents": true,
+                                                "itemId": "name2",
+                                                "label": "Name",
+                                                "labelTextAlign": "right",
+                                                "labelWidth": 80,
+                                                "maxLength": 30,
+                                                "name": "name2",
+                                                "width": 200
+                                            },
+                                            "configAlternates": {
+                                                "clearable": "boolean",
+                                                "placeholder": "string",
+                                                "name": "string",
+                                                "autoComplete": "boolean",
+                                                "enableKeyEvents": "boolean",
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "width": "auto",
+                                                "itemId": "string",
+                                                "labelTextAlign": "string",
+                                                "maxLength": "number"
+                                            },
+                                            "name": "MyTextField",
+                                            "designerId": "8e346d36-67ad-418c-b5cb-4845b896e313",
+                                            "customConfigs": [
+                                                {
+                                                    "group": "(Custom Properties)",
+                                                    "name": "enableKeyEvents",
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout": "hbox",
+                                        "margin": "5 0 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "layout": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer58",
+                                    "designerId": "e07ce71a-2bb6-4853-9d3d-cb85453c0f45",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.Container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "html": "Pins:",
+                                                "padding": "8 10 0 0"
+                                            },
+                                            "configAlternates": {
+                                                "html": "string",
+                                                "itemId": "string",
+                                                "padding": "auto"
+                                            },
+                                            "name": "MyContainer65",
+                                            "designerId": "f7fe98d4-afa0-4b27-a337-a36137e8bdfa"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "itemId": "ben",
+                                                "label": "B EN",
+                                                "labelTextAlign": "right",
+                                                "labelWidth": 45,
+                                                "margin": "0 0 0 15",
+                                                "maxValue": 27,
+                                                "minValue": 2,
+                                                "name": "ben",
+                                                "width": 95
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "labelTextAlign": "string",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "itemId": "string"
+                                            },
+                                            "name": "MyNumberField7",
+                                            "designerId": "e873ebf2-a772-424b-b618-bc8e8eae297c"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "itemId": "bin3",
+                                                "label": "IN3",
+                                                "labelWidth": 35,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 27,
+                                                "minValue": 2,
+                                                "name": "bin3",
+                                                "width": 75
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "itemId": "string"
+                                            },
+                                            "name": "MyNumberField8",
+                                            "designerId": "682f68c8-20ec-4e73-9580-be2ff1505a0a"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "itemId": "bin4",
+                                                "label": "IN4",
+                                                "labelWidth": 35,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 27,
+                                                "minValue": 2,
+                                                "name": "bin4",
+                                                "width": 75
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "itemId": "string"
+                                            },
+                                            "name": "MyNumberField9",
+                                            "designerId": "58376c52-f4e6-446b-a9d1-b2c0de62697b"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "layout": "hbox",
+                                        "margin": "5 0 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "layout": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer60",
+                                    "designerId": "5970c9fa-8b92-4843-b75d-582d6765c923",
+                                    "cn": [
+                                        {
+                                            "type": "Ext.Container",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "html": "Power:",
+                                                "padding": "8 10 0 0"
+                                            },
+                                            "configAlternates": {
+                                                "html": "string",
+                                                "itemId": "string",
+                                                "padding": "auto"
+                                            },
+                                            "name": "MyContainer64",
+                                            "designerId": "7b4bb9fc-b22b-4c2b-8e96-2b7a681d4ec4"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "label": "Min %",
+                                                "labelTextAlign": "right",
+                                                "labelWidth": 50,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 100,
+                                                "minValue": 0,
+                                                "name": "bmin",
+                                                "value": [
+                                                    "0"
+                                                ],
+                                                "width": 100
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "value": "object",
+                                                "labelTextAlign": "string"
+                                            },
+                                            "name": "MyNumberField8",
+                                            "designerId": "78956de9-f0c8-46af-8fa0-5102d3049eb1"
+                                        },
+                                        {
+                                            "type": "Ext.field.Number",
+                                            "reference": {
+                                                "name": "items",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "label": "Max %",
+                                                "labelWidth": 50,
+                                                "margin": "0 0 0 10",
+                                                "maxValue": 100,
+                                                "minValue": 0,
+                                                "name": "bmax",
+                                                "value": [
+                                                    "100",
+                                                    ""
+                                                ],
+                                                "width": 100
+                                            },
+                                            "configAlternates": {
+                                                "label": "string",
+                                                "labelWidth": "auto",
+                                                "margin": "auto",
+                                                "name": "string",
+                                                "width": "auto",
+                                                "maxValue": "number",
+                                                "minValue": "number",
+                                                "value": "object"
+                                            },
+                                            "name": "MyNumberField10",
+                                            "designerId": "5dda9c79-f0e5-45bb-a3e9-a87cad2e76eb"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.form.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "defaults": [
+                            "{",
+                            "    defaults:{",
+                            "        clearable:false",
+                            "    }",
+                            "}"
+                        ],
+                        "itemId": "escpins",
+                        "margin": "4 0 0 10"
+                    },
+                    "configAlternates": {
+                        "border": "boolean",
+                        "defaults": "object",
+                        "itemId": "string",
+                        "margin": "auto",
+                        "padding": "auto"
+                    },
+                    "name": "MyFormPanel3",
+                    "designerId": "ac888754-266b-4d09-933d-ac9b96ed797e",
+                    "cn": [
+                        {
+                            "type": "Ext.field.Text",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "autoComplete": false,
+                                "clearable": false,
+                                "enableKeyEvents": true,
+                                "itemId": "name1",
+                                "label": "Name",
+                                "labelWidth": 45,
+                                "maxLength": 30,
+                                "name": "name1",
+                                "width": 200
+                            },
+                            "configAlternates": {
+                                "clearable": "boolean",
+                                "placeholder": "string",
+                                "name": "string",
+                                "autoComplete": "boolean",
+                                "enableKeyEvents": "boolean",
+                                "label": "string",
+                                "labelWidth": "auto",
+                                "width": "auto",
+                                "itemId": "string",
+                                "maxLength": "number"
+                            },
+                            "name": "MyTextField1",
+                            "designerId": "8752db18-2692-4ea4-91fa-668f1c419a83",
+                            "customConfigs": [
+                                {
+                                    "group": "(Custom Properties)",
+                                    "name": "enableKeyEvents",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "itemId": "motora",
+                                "layout": "hbox"
+                            },
+                            "configAlternates": {
+                                "itemId": "string",
+                                "layout": "string"
+                            },
+                            "name": "MyContainer40",
+                            "designerId": "778b1762-34b0-4e15-8e5e-8a41db15db0a",
+                            "cn": [
+                                {
+                                    "type": "Ext.field.Number",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "allowBlank": false,
+                                        "itemId": "pin",
+                                        "label": "Pin",
+                                        "labelWidth": 40,
+                                        "margin": "0 0 0 10",
+                                        "maxValue": 27,
+                                        "minValue": 2,
+                                        "name": "pin",
+                                        "validationMessage": "Invalid Pin Number",
+                                        "width": 100
+                                    },
+                                    "configAlternates": {
+                                        "label": "string",
+                                        "labelWidth": "auto",
+                                        "margin": "auto",
+                                        "name": "string",
+                                        "width": "auto",
+                                        "maxValue": "number",
+                                        "minValue": "number",
+                                        "validationMessage": "string",
+                                        "allowBlank": "boolean",
+                                        "itemId": "string"
+                                    },
+                                    "name": "MyNumberField7",
+                                    "designerId": "3e9abcbd-008d-4a54-8f95-171cba2e8ea6",
+                                    "customConfigs": [
+                                        {
+                                            "group": "(Custom Properties)",
+                                            "name": "allowBlank",
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Ext.field.Number",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "label": "&#181;S Min",
+                                        "labelWidth": 55,
+                                        "margin": "0 0 0 10",
+                                        "name": "rangeMin",
+                                        "value": [
+                                            "1000",
+                                            ""
+                                        ],
+                                        "width": 120
+                                    },
+                                    "configAlternates": {
+                                        "label": "string",
+                                        "labelWidth": "auto",
+                                        "margin": "auto",
+                                        "name": "string",
+                                        "width": "auto",
+                                        "value": "object"
+                                    },
+                                    "name": "MyNumberField2",
+                                    "designerId": "5addfbc4-7a25-416c-bcc0-a77128594f86"
+                                },
+                                {
+                                    "type": "Ext.field.Number",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "label": "&#181;S Max",
+                                        "labelWidth": 55,
+                                        "margin": "0 0 0 10",
+                                        "name": "rangeMax",
+                                        "value": [
+                                            "2000"
+                                        ],
+                                        "width": 120
+                                    },
+                                    "configAlternates": {
+                                        "label": "string",
+                                        "labelWidth": "auto",
+                                        "margin": "auto",
+                                        "name": "string",
+                                        "width": "auto",
+                                        "value": "object"
+                                    },
+                                    "name": "MyNumberField1",
+                                    "designerId": "d0de62a7-a652-4590-a047-692423b19075"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "layout": "hbox",
+                                "margin": "5 0 0 0"
+                            },
+                            "configAlternates": {
+                                "layout": "string",
+                                "margin": "auto"
+                            },
+                            "name": "MyContainer66",
+                            "designerId": "e3983139-34d9-4abe-bc91-019b2aa20e37",
+                            "cn": [
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "html": "Power:",
+                                        "padding": "8 10 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "html": "string",
+                                        "itemId": "string",
+                                        "padding": "auto"
+                                    },
+                                    "name": "MyContainer64",
+                                    "designerId": "3be3b771-33e1-4c37-a730-6ce9082bb9a9"
+                                },
+                                {
+                                    "type": "Ext.field.Number",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "label": "Min %",
+                                        "labelTextAlign": "right",
+                                        "labelWidth": 50,
+                                        "margin": "0 0 0 10",
+                                        "maxValue": 100,
+                                        "minValue": 0,
+                                        "name": "min",
+                                        "value": [
+                                            "0"
+                                        ],
+                                        "width": 100
+                                    },
+                                    "configAlternates": {
+                                        "label": "string",
+                                        "labelWidth": "auto",
+                                        "margin": "auto",
+                                        "name": "string",
+                                        "width": "auto",
+                                        "maxValue": "number",
+                                        "minValue": "number",
+                                        "value": "object",
+                                        "labelTextAlign": "string"
+                                    },
+                                    "name": "MyNumberField8",
+                                    "designerId": "1f1aa98b-8687-4613-a0a2-50bcbc1ce594"
+                                },
+                                {
+                                    "type": "Ext.field.Number",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "label": "Max %",
+                                        "labelWidth": 50,
+                                        "margin": "0 0 0 10",
+                                        "maxValue": 100,
+                                        "minValue": 0,
+                                        "name": "max",
+                                        "value": [
+                                            "100",
+                                            ""
+                                        ],
+                                        "width": 100
+                                    },
+                                    "configAlternates": {
+                                        "label": "string",
+                                        "labelWidth": "auto",
+                                        "margin": "auto",
+                                        "name": "string",
+                                        "width": "auto",
+                                        "maxValue": "number",
+                                        "minValue": "number",
+                                        "value": "object"
+                                    },
+                                    "name": "MyNumberField10",
+                                    "designerId": "98cd4eda-c5a1-4d47-a90a-17a22a2070ff"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "config"
+                ],
+                "fn": "setConfigValues",
+                "implHandler": [
+                    "this.setValues(config);",
+                    "",
+                    "switch(config.motorDriverType){",
+                    "    case 'pca9685':",
+                    "        break;",
+                    "    case 'l298n':",
+                    "        //this.queryById('namedual1').setValue(config.name1);",
+                    "        //this.queryById('namedual2').setValue(config.name2);",
+                    "        //this.queryById('motorConfigs2').setValues(config);",
+                    "        this.queryById('l298npins').setValues(config);",
+                    "        break;",
+                    "    case 'esc':",
+                    "        //this.queryById('namesingle').setValue(config.name1);",
+                    "        //this.queryById('motorConfigs1').setValues(config);",
+                    "        this.queryById('escpins').setValues(config);",
+                    "        break;",
+                    "}",
+                    "",
+                    "this.hardwareId = config.hardwareId;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setConfigValues",
+            "designerId": "4c422608-8fe0-4156-8878-190fdfe58751"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "getConfigValues",
+                "implHandler": [
+                    "let values = {",
+                    "    type:'motor',",
+                    "    hardwareId: this.hardwareId,",
+                    "    motorDriverType: this.queryById('motorDriverType').getValue()",
+                    "};",
+                    "",
+                    "switch(values.motorDriverType){",
+                    "    case 'pca9685':",
+                    "        break;",
+                    "    case 'l298n':",
+                    "        //Ext.apply(values, this.queryById('motorConfigs2').getValues());",
+                    "        Ext.apply(values, this.queryById('l298npins').getValues());",
+                    "        break;",
+                    "    case 'esc':",
+                    "        Ext.apply(values, this.queryById('escpins').getValues());",
+                    "        //Ext.apply(values, this.queryById('motorConfigs1').getValues());",
+                    "        break;",
+                    "}",
+                    "",
+                    "return values;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getConfigValues",
+            "designerId": "8cbb9540-830f-47a3-8241-5610e987624e"
+        }
+    ]
+}

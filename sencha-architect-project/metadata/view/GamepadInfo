@@ -1,0 +1,41 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "border": true,
+        "bubbleEvents": [
+            "['controllerIgnoreStart']"
+        ],
+        "designer|userAlias": "gamepadinfo",
+        "designer|userClassName": "GamepadInfo",
+        "height": 150,
+        "margin": 10,
+        "padding": 20,
+        "scrollable": true
+    },
+    "configAlternates": {
+        "bubbleEvents": "array",
+        "border": "boolean",
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "height": "auto",
+        "margin": "auto",
+        "padding": "auto",
+        "scrollable": "auto"
+    },
+    "name": "MyContainer76",
+    "designerId": "e7849b23-335e-4279-8c26-a44445b43a86",
+    "customConfigs": [
+        {
+            "group": "(Custom Properties)",
+            "name": "bubbleEvents",
+            "type": "string"
+        }
+    ],
+    "viewControllerInstanceId": "ffd174cc-40fd-4bda-9d95-a13a800f0fbd",
+    "viewModelInstanceId": "43780477-a40c-4d6b-a629-5c93d2c5bb43"
+}

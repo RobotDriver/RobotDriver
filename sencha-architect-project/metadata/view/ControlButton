@@ -1,0 +1,352 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "controlbutton",
+        "designer|userClassName": "ControlButton"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "MyContainer63",
+    "designerId": "23774b6a-d480-4af8-bc3a-0915e82a308d",
+    "viewControllerInstanceId": "f8872c97-a250-4981-9946-4375fbcce125",
+    "viewModelInstanceId": "c9ae9729-1f4f-4073-8690-ded902e5d7bf",
+    "cn": [
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "itemId": "buttonStyles"
+            },
+            "configAlternates": {
+                "itemId": "string"
+            },
+            "name": "MyContainer57",
+            "designerId": "71594eaa-2ec3-406b-a1eb-171e79b6b694"
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "html": "<button class=\"control-button\"><span class=\"control-button-icon\"></span></button>",
+                "itemId": "virctrlbuttonFire",
+                "style": [
+                    "{",
+                    "'font-size':'40px'",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "style": "object",
+                "html": "string",
+                "itemId": "string"
+            },
+            "name": "MyContainer51",
+            "designerId": "328ff30c-0503-4435-b3cc-7b32b39fdbfb"
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "height": 35,
+                "itemId": "previewName",
+                "margin": "0 0 0 10",
+                "maxWidth": 150,
+                "style": [
+                    "{",
+                    "'text-align':'center'",
+                    "}"
+                ],
+                "width": 70
+            },
+            "configAlternates": {
+                "style": "object",
+                "height": "auto",
+                "itemId": "string",
+                "margin": "auto",
+                "maxWidth": "auto",
+                "width": "auto"
+            },
+            "name": "MyContainer58",
+            "designerId": "41ef7e41-b246-414f-b3d4-98a66202c1bf"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "color",
+                    "colorShadow",
+                    "contrastColor"
+                ],
+                "fn": "updateButtonStyles",
+                "implHandler": [
+                    "let styleContainer = this.queryById('buttonStyles').bodyElement.dom;",
+                    "",
+                    "styleContainer.innerHTML = '';",
+                    "",
+                    "if(!this.buttonId){",
+                    "    this.buttonId = 'control-button-'+Ext.id();",
+                    "}",
+                    "",
+                    "let styles = document.createElement(\"style\");",
+                    "let stylesText = document.createTextNode(",
+                    "    `button#${this.buttonId} .control-button-icon:before {\\r\\n`+",
+                    "    `  color: ${contrastColor}; \\r\\n`+",
+                    "    `}\\r\\n`+",
+                    "    `button#${this.buttonId} { \\r\\n`+",
+                    "    `  background-color: ${color}; \\r\\n`+",
+                    "    `  box-shadow: 0 8px ${colorShadow}; \\r\\n`+",
+                    "    `}\\r\\n`+",
+                    "    `button#${this.buttonId}:hover { \\r\\n`+",
+                    "    `  box-shadow: 0 7px ${colorShadow}; \\r\\n`+",
+                    "    `}\\r\\n`+",
+                    "    `button#${this.buttonId}.pressed {\\r\\n `+",
+                    "    `  box-shadow: 0 0 ${colorShadow}; \\r\\n`+",
+                    "    `}\\r\\n`+",
+                    "    `button#${this.buttonId}.toggledown { \\r\\n`+",
+                    "    `  box-shadow: 0 1px ${colorShadow}; \\r\\n`+",
+                    "    `  top: 7px; \\r\\n`+",
+                    "    `}\\r\\n`",
+                    ");",
+                    "styles.appendChild(stylesText);",
+                    "",
+                    "styleContainer.appendChild(styles);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "updateButtonStyles",
+            "designerId": "0fdcc765-0b0d-4463-b26a-75fdb7dca4fa"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "type"
+                ],
+                "fn": "setButtonActionType",
+                "implHandler": [
+                    "this.buttonActionType = type;",
+                    "",
+                    "if(type !== 'toggle'){",
+                    "    if(this.button && this.button.classList){",
+                    "        this.button.classList.remove(\"toggledown\");",
+                    "    }",
+                    "    this.buttonToggled = false;",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setButtonActionType",
+            "designerId": "5efb63bd-f9e7-4383-b6a0-8e37ab0543f4"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "icon"
+                ],
+                "fn": "setButtonIcon",
+                "implHandler": [
+                    "iconel = this.el.dom.querySelector(\".control-button-icon\");",
+                    "iconel.className = 'control-button-icon x-fa fa-'+icon;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setButtonIcon",
+            "designerId": "3be17152-d3bc-4c6f-ae7e-5c329c503a8a"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "label"
+                ],
+                "fn": "setLabel",
+                "implHandler": [
+                    "this.queryById('previewName').setHtml(label);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setLabel",
+            "designerId": "625d2b39-bfc7-42c6-9a3c-feb1ec72c5d7"
+        },
+        {
+            "type": "basiceventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onContainerPainted",
+                "implHandler": [
+                    "if(this.init){",
+                    "    return;",
+                    "}else{",
+                    "    this.init = true;",
+                    "}",
+                    "",
+                    "this.button = this.el.dom.querySelector('.control-button');",
+                    "if(this.buttonId){",
+                    "    this.button.id = this.buttonId;",
+                    "}else{",
+                    "    this.buttonId = 'control-button-'+Ext.id();",
+                    "    this.button.id = this.buttonId;",
+                    "}",
+                    "",
+                    "createFireButton(this.button, function(state){",
+                    "",
+                    "    if(state==='down'){",
+                    "        if(this.buttonActionType==='toggle'){",
+                    "            this.button.classList.add(\"toggledown\");",
+                    "            if(this.buttonToggled === true){",
+                    "                this.buttonToggled = false;",
+                    "            }else{",
+                    "                this.fireEvent('down'); //toggledown",
+                    "                this.buttonToggled = true;",
+                    "            }",
+                    "        }else{",
+                    "            this.fireEvent('down');",
+                    "        }",
+                    "",
+                    "    }else if(state==='up'){",
+                    "        if(this.buttonActionType==='toggle'){",
+                    "            if(this.buttonToggled === false){",
+                    "                this.fireEvent('up'); // toggleup",
+                    "                this.button.classList.remove(\"toggledown\");",
+                    "            }",
+                    "        }else{",
+                    "            this.fireEvent('up');",
+                    "        }",
+                    "",
+                    "    }",
+                    "",
+                    "}.bind(this));"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onContainerPainted",
+            "designerId": "75f4c6c2-00aa-4038-b10e-dd68450fde9a"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "config"
+                ],
+                "fn": "setConfigValues",
+                "implHandler": [
+                    "this.setLabel(config.label);",
+                    "this.setButtonIcon(config.icon);",
+                    "this.setButtonActionType(config.actionType);",
+                    "",
+                    "this.configColor = config.color;",
+                    "this.configColorShadow = config.colorShadow;",
+                    "this.configContrastColor = config.iconColor;",
+                    "",
+                    "this.updateButtonStyles(config.color, this.configColorShadow, this.configContrastColor);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setConfigValues",
+            "designerId": "99832ef4-46b3-45ae-924f-1279c4f0df50"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "value"
+                ],
+                "fn": "liveSetValue",
+                "implHandler": [
+                    "if(value === 'down'){",
+                    "    this.button.classList.add(\"toggledown\");",
+                    "}else{",
+                    "    this.button.classList.remove(\"toggledown\");",
+                    "}",
+                    "this.fireEvent(value);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "liveSetValue",
+            "designerId": "54091b37-0c42-483e-b3b6-5aac3fd570cb"
+        }
+    ]
+}

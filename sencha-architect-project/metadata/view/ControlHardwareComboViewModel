@@ -1,0 +1,55 @@
+{
+    "type": "Ext.app.ViewModel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "controlhardwarecombo",
+        "designer|userClassName": "ControlHardwareComboViewModel"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "designerId": "96a4f7d4-3576-4fae-bbaa-b94ac6450dd3",
+    "cn": [
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "model": "HardwareModel",
+                "name": "hardwareComboStore"
+            },
+            "configAlternates": {
+                "name": "string",
+                "model": "model"
+            },
+            "name": "MyStore6",
+            "designerId": "9f5f6542-90d2-48e7-9c4e-2395b21d56e4",
+            "cn": [
+                {
+                    "type": "Ext.util.Sorter",
+                    "reference": {
+                        "name": "sorters",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "property": "display"
+                    },
+                    "configAlternates": {
+                        "property": "string"
+                    },
+                    "name": "MySorter2",
+                    "designerId": "f5028dd2-4ee3-4310-a19d-9724ff2395fe"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "type": "Ext.app.ViewController",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "hardwarei2c",
+        "designer|userClassName": "HardwareServoViewController2"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "HardwareServoViewController2",
+    "designerId": "f1e38659-ce6c-48bf-b8d9-2495217add0f"
+}

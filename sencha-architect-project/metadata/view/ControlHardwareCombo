@@ -1,0 +1,214 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "controlhardwarecombo",
+        "designer|userClassName": "ControlHardwareCombo",
+        "itemId": "hardware",
+        "padding": 10
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "itemId": "string",
+        "padding": "auto"
+    },
+    "name": "MyContainer52",
+    "designerId": "b73450f5-546f-44a5-b8d2-1e8ced314676",
+    "viewControllerInstanceId": "7fdd7ed0-7be8-44db-b16e-74921e2445f2",
+    "viewModelInstanceId": "96a4f7d4-3576-4fae-bbaa-b94ac6450dd3",
+    "cn": [
+        {
+            "type": "Ext.field.ComboBox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "displayField": "display",
+                "forceSelection": true,
+                "itemId": "hardwareCombo",
+                "label": "Hardware",
+                "labelWidth": 70,
+                "matchFieldWidth": false,
+                "minChars": 1,
+                "queryCaching": false,
+                "queryMode": "local",
+                "store": [
+                    "{hardwareComboStore}"
+                ],
+                "typeAhead": true,
+                "valueField": "hardwareId"
+            },
+            "configAlternates": {
+                "label": "string",
+                "labelWidth": "auto",
+                "margin": "auto",
+                "name": "string",
+                "width": "auto",
+                "store": "binding",
+                "displayField": "datafield",
+                "value": "object",
+                "valueField": "datafield",
+                "itemId": "string",
+                "matchFieldWidth": "boolean",
+                "minChars": "number",
+                "queryCaching": "boolean",
+                "queryMode": "string",
+                "typeAhead": "boolean",
+                "tpl": "array",
+                "forceSelection": "boolean"
+            },
+            "name": "MyComboBox",
+            "designerId": "7482d46f-c9e7-4d4b-afa4-fcbe9ecec28f",
+            "customConfigs": [
+                {
+                    "group": "(Custom Properties)",
+                    "name": "tpl",
+                    "type": "string"
+                }
+            ],
+            "cn": [
+                {
+                    "type": "Ext.XTemplate",
+                    "reference": {
+                        "name": "itemTpl",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|displayName": "itemTpl",
+                        "implHandler": [
+                            "{type} {name}"
+                        ]
+                    },
+                    "configAlternates": {
+                        "designer|displayName": "string",
+                        "implHandler": "code"
+                    },
+                    "name": "itemTpl",
+                    "designerId": "4c48061c-3e0e-42d8-a725-d3994f7d8af0"
+                },
+                {
+                    "type": "basiceventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "fn": "onHardwareSelect",
+                        "implHandler": [
+                            "this.fireEvent('select',newValue);"
+                        ],
+                        "name": "select"
+                    },
+                    "configAlternates": {
+                        "fn": "string",
+                        "implHandler": "code",
+                        "name": "string"
+                    },
+                    "name": "onHardwareSelect",
+                    "designerId": "d8167f53-3652-491f-9c91-247a0960d3dd"
+                }
+            ]
+        },
+        {
+            "type": "controllercategory",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "name": "component1",
+            "designerId": "3324a404-badb-4104-9cb9-ccc9a4513b0c"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "store"
+                ],
+                "fn": "syncHardwareStore",
+                "implHandler": [
+                    "let hardwareStore = this.getViewModel().getStore('hardwareComboStore');",
+                    "",
+                    "hardwareStore.removeAll();",
+                    "",
+                    "store.getData().each(function(rec){",
+                    "    let newRec = rec.clone();",
+                    "    newRec.set('display',newRec.get('type')+' '+newRec.get('name'));",
+                    "    hardwareStore.add(newRec);",
+                    "},this);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "syncHardwareStore",
+            "designerId": "36f032b2-bffd-4394-8118-d73296a3dcfb"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "getHardwareId",
+                "implHandler": [
+                    "let sel = this.queryById('hardwareCombo').getSelection();",
+                    "",
+                    "if(sel === null){",
+                    "    return null;",
+                    "}",
+                    "",
+                    "return sel.data.hardwareId;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getHardwareId",
+            "designerId": "426d4967-b1b6-479f-9d3c-81eaaf0280c4"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "hardwareId"
+                ],
+                "fn": "setHardwareId",
+                "implHandler": [
+                    "this.queryById('hardwareCombo').setValue(hardwareId);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setHardwareId",
+            "designerId": "94349716-7d13-4da9-bebe-530b0f4f49ec"
+        }
+    ]
+}

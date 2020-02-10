@@ -1,0 +1,18 @@
+{
+    "type": "Ext.app.ViewController",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "hardwaregpio",
+        "designer|userClassName": "HardwareServoViewController5"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "HardwareServoViewController5",
+    "designerId": "b3b01d87-4c9b-471f-a6fb-949a461c8fdf"
+}

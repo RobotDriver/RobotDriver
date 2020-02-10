@@ -1,0 +1,174 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "basecontrolstick",
+        "designer|userClassName": "BaseControlStick",
+        "height": 150,
+        "maxHeight": 150,
+        "maxWidth": 150,
+        "userCls": [
+            "stick-container"
+        ],
+        "width": 150
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "height": "auto",
+        "maxHeight": "auto",
+        "maxWidth": "auto",
+        "userCls": "typedarray",
+        "width": "auto"
+    },
+    "name": "MyContainer33",
+    "designerId": "11f01990-214e-419b-a24b-ab849baeb5c9",
+    "viewControllerInstanceId": "cc8cd4f2-934a-4f8e-9bfd-840519dad65e",
+    "viewModelInstanceId": "b65a5753-43b9-4410-b912-f25995d64032",
+    "cn": [
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "height": 80,
+                "html": "<div class=\"stick\"></div>",
+                "margin": "35 35 0 35",
+                "maxHeight": 80,
+                "maxWidth": 80,
+                "userCls": [
+                    "stick-inner-container"
+                ],
+                "width": 80
+            },
+            "configAlternates": {
+                "height": "auto",
+                "html": "string",
+                "margin": "auto",
+                "maxHeight": "auto",
+                "maxWidth": "auto",
+                "userCls": "typedarray",
+                "width": "auto"
+            },
+            "name": "MyContainer67",
+            "designerId": "bcbca914-765f-4ab2-a208-d3a3ea5997f9"
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "height": 30,
+                "itemId": "label",
+                "userCls": [
+                    "stick-label"
+                ]
+            },
+            "configAlternates": {
+                "height": "auto",
+                "itemId": "string",
+                "userCls": "typedarray"
+            },
+            "name": "MyContainer33",
+            "designerId": "756e4c24-7741-4a39-bdd3-47c01a3085df"
+        },
+        {
+            "type": "basiceventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onContainerPainted",
+                "implHandler": [
+                    "if(this.init){",
+                    "    return;",
+                    "}else{",
+                    "    this.init = true;",
+                    "}",
+                    "",
+                    "if(element.component.config.label){",
+                    "    this.setLabel(element.component.config.label);",
+                    "}else{",
+                    "    this.setLabel('');",
+                    "}",
+                    "",
+                    "let stickRange = 50;",
+                    "",
+                    "this.virtualControllerStickLeft = createStick(element.dom.getElementsByClassName('stick')[0], stickRange, 'left', function(pos){",
+                    "",
+                    "    var x = Math.round(((pos.x/stickRange) * 500) + 500);",
+                    "    var y = 1000 - Math.round(((pos.y/stickRange) * 500) + 500);",
+                    "",
+                    "    //console.log('stick move!', x, y);",
+                    "    this.fireEvent('change', x, y);",
+                    "}.bind(this));"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onContainerPainted",
+            "designerId": "db282877-538b-4b03-acc3-e7e886d75917"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "text"
+                ],
+                "fn": "setLabel",
+                "implHandler": [
+                    "this.label = text;",
+                    "this.queryById('label').setHtml(text);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setLabel",
+            "designerId": "9e2d56a2-8bc2-456e-8094-720313ff88d1"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "getLabel",
+                "implHandler": [
+                    "return this.label;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getLabel",
+            "designerId": "d0e4b30c-bf9d-46da-b20a-d4b3fb1b8b5d"
+        }
+    ]
+}

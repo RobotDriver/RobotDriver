@@ -1,0 +1,192 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "controlmanagementbuttons",
+        "designer|userClassName": "ControlManagementButtons"
+    },
+    "configAlternates": {
+        "bubbleEvents": "array",
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "MyContainer63",
+    "designerId": "26326839-1b69-4573-b083-32c2ed867e91",
+    "customConfigs": [
+        {
+            "group": "(Custom Properties)",
+            "name": "bubbleEvents",
+            "type": "string"
+        }
+    ],
+    "viewControllerInstanceId": "98bd08fb-496b-4cf0-8ec2-6a8c78b7707a",
+    "viewModelInstanceId": "6bf74759-5bea-4358-b223-9322026600c0",
+    "cn": [
+        {
+            "type": "Ext.Button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "iconCls": "x-fa fa-arrow-up",
+                "itemId": "moveup",
+                "margin": "10 10 0 0",
+                "text": ""
+            },
+            "configAlternates": {
+                "iconCls": "string",
+                "text": "string",
+                "margin": "auto",
+                "bubbleEvents": "array",
+                "itemId": "string"
+            },
+            "name": "MyButton9",
+            "designerId": "ee0713a5-31d6-4b34-a4fc-e1eae4f9b77e",
+            "customConfigs": [
+                {
+                    "group": "(Custom Properties)",
+                    "name": "bubbleEvents",
+                    "type": "string"
+                }
+            ],
+            "cn": [
+                {
+                    "type": "basiceventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "fn": "onMoveupTap",
+                        "implHandler": [
+                            "this.fireEvent('controlmoveup');"
+                        ],
+                        "name": "tap"
+                    },
+                    "configAlternates": {
+                        "fn": "string",
+                        "implHandler": "code",
+                        "name": "string"
+                    },
+                    "name": "onMoveupTap",
+                    "designerId": "b9a355f6-7edf-4250-99bf-4b99cc76125a"
+                }
+            ]
+        },
+        {
+            "type": "Ext.Button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "iconCls": "x-fa fa-arrow-down",
+                "itemId": "movedown",
+                "margin": "10 10 0 0",
+                "text": ""
+            },
+            "configAlternates": {
+                "iconCls": "string",
+                "text": "string",
+                "margin": "auto",
+                "bubbleEvents": "array",
+                "itemId": "string"
+            },
+            "name": "MyButton12",
+            "designerId": "5072aea1-c61c-43ea-86e3-3ba71808bfc1",
+            "customConfigs": [
+                {
+                    "group": "(Custom Properties)",
+                    "name": "bubbleEvents",
+                    "type": "string"
+                }
+            ],
+            "cn": [
+                {
+                    "type": "basiceventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "fn": "onMovedownTap",
+                        "implHandler": [
+                            "this.fireEvent('controlmovedown');"
+                        ],
+                        "name": "tap"
+                    },
+                    "configAlternates": {
+                        "fn": "string",
+                        "implHandler": "code",
+                        "name": "string"
+                    },
+                    "name": "onMovedownTap",
+                    "designerId": "6b444faf-abe2-4171-93f2-48c1bdae045f"
+                }
+            ]
+        },
+        {
+            "type": "Ext.Button",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "iconCls": "x-fa fa-trash",
+                "itemId": "delete",
+                "margin": "10 10 0 0",
+                "text": "Delete"
+            },
+            "configAlternates": {
+                "iconCls": "string",
+                "text": "string",
+                "margin": "auto",
+                "bubbleEvents": "array",
+                "itemId": "string"
+            },
+            "name": "MyButton10",
+            "designerId": "9cae9927-b41b-47ef-baad-73a17d6669d2",
+            "customConfigs": [
+                {
+                    "group": "(Custom Properties)",
+                    "name": "bubbleEvents",
+                    "type": "string"
+                }
+            ],
+            "cn": [
+                {
+                    "type": "basiceventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "fn": "onDeleteTap",
+                        "implHandler": [
+                            "this.fireEvent('controldelete');"
+                        ],
+                        "name": "tap"
+                    },
+                    "configAlternates": {
+                        "fn": "string",
+                        "implHandler": "code",
+                        "name": "string"
+                    },
+                    "name": "onDeleteTap",
+                    "designerId": "3e144f42-79ff-4b24-a791-06930ba91001"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,349 @@
+{
+    "type": "Ext.app.ViewModel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "controlbuttonconfig",
+        "designer|userClassName": "HardwareServoViewModel4"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "HardwareServoViewModel4",
+    "designerId": "1eb354ea-3ef7-4163-8805-b9a8be0217dc",
+    "cn": [
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "data": [
+                    "[",
+                    "['glass', 'f000'],",
+                    "['music', 'f001'],",
+                    "['search', 'f002'],",
+                    "['envelope', 'f003'],",
+                    "['heart', 'f004'],",
+                    "['star', 'f005'],",
+                    "['user', 'f007'],",
+                    "['film', 'f008'],",
+                    "['th-large', 'f009'],",
+                    "['th', 'f00a'],",
+                    "['th-list', 'f00b'],",
+                    "['check', 'f00c'],",
+                    "['remove', 'f00d'],",
+                    "['search-plus', 'f00e'],",
+                    "['search-minus', 'f010'],",
+                    "['power-off', 'f011'],",
+                    "['signal', 'f012'],",
+                    "['gear', 'f013'],",
+                    "['trash', 'f014'],",
+                    "['home', 'f015'],",
+                    "['file', 'f016'],",
+                    "['clock-o', 'f017'],",
+                    "['road', 'f018'],",
+                    "['download', 'f019'],",
+                    "['arrow-circle-o-down', 'f01a'],",
+                    "['arrow-circle-o-up', 'f01b'],",
+                    "['inbox', 'f01c'],",
+                    "['play-circle', 'f01d'],",
+                    "['rotate-right', 'f01e'],",
+                    "['refresh', 'f021'],",
+                    "['list-alt', 'f022'],",
+                    "['lock', 'f023'],",
+                    "['flag', 'f024'],",
+                    "['headphones', 'f025'],",
+                    "['volume-off', 'f026'],",
+                    "['volume-down', 'f027'],",
+                    "['volume-up', 'f028'],",
+                    "['qrcode', 'f029'],",
+                    "['barcode', 'f02a'],",
+                    "['tag', 'f02b'],",
+                    "['tags', 'f02c'],",
+                    "['book', 'f02d'],",
+                    "['bookmark', 'f02e'],",
+                    "['print', 'f02f'],",
+                    "['camera', 'f030'],",
+                    "['font', 'f031'],",
+                    "['bold', 'f032'],",
+                    "['italic', 'f033'],",
+                    "['text-height', 'f034'],",
+                    "['text-width', 'f035'],",
+                    "['align-left', 'f036'],",
+                    "['align-center', 'f037'],",
+                    "['align-right', 'f038'],",
+                    "['align-justify', 'f039'],",
+                    "['list', 'f03a'],",
+                    "['dedent', 'f03b'],",
+                    "['indent', 'f03c'],",
+                    "['video-camera', 'f03d'],",
+                    "['photo', 'f03e'],",
+                    "['pencil', 'f040'],",
+                    "['map-marker', 'f041'],",
+                    "['adjust', 'f042'],",
+                    "['tint', 'f043'],",
+                    "['edit', 'f044'],",
+                    "['share-square', 'f045'],",
+                    "['check-square', 'f046'],",
+                    "['arrows', 'f047'],",
+                    "['step-backward', 'f048'],",
+                    "['fast-backward', 'f049'],",
+                    "['backward', 'f04a'],",
+                    "['play', 'f04b'],",
+                    "['pause', 'f04c'],",
+                    "['stop', 'f04d'],",
+                    "['forward', 'f04e'],",
+                    "['fast-forward', 'f050'],",
+                    "['step-forward', 'f051'],",
+                    "['eject', 'f052'],",
+                    "['chevron-left', 'f053'],",
+                    "['chevron-right', 'f054'],",
+                    "['plus-circle', 'f055'],",
+                    "['minus-circle', 'f056'],",
+                    "['times-circle', 'f057'],",
+                    "['check-circle', 'f058'],",
+                    "['question-circle', 'f059'],",
+                    "['info-circle', 'f05a'],",
+                    "['crosshairs', 'f05b'],",
+                    "['ban', 'f05e'],",
+                    "['arrow-left', 'f060'],",
+                    "['arrow-right', 'f061'],",
+                    "['arrow-up', 'f062'],",
+                    "['arrow-down', 'f063'],",
+                    "['mail-forward', 'f064'],",
+                    "['expand', 'f065'],",
+                    "['compress', 'f066'],",
+                    "['plus', 'f067'],",
+                    "['minus', 'f068'],",
+                    "['asterisk', 'f069'],",
+                    "['exclamation-circle', 'f06a'],",
+                    "['gift', 'f06b'],",
+                    "['leaf', 'f06c'],",
+                    "['fire', 'f06d'],",
+                    "['eye', 'f06e'],",
+                    "['eye-slash', 'f070'],",
+                    "['warning', 'f071'],",
+                    "['plane', 'f072'],",
+                    "['calendar', 'f073'],",
+                    "['random', 'f074'],",
+                    "['comment', 'f075'],",
+                    "['magnet', 'f076'],",
+                    "['chevron-up', 'f077'],",
+                    "['chevron-down', 'f078'],",
+                    "['retweet', 'f079'],",
+                    "['shopping-cart', 'f07a'],",
+                    "['folder', 'f07b'],",
+                    "['folder-open', 'f07c'],",
+                    "['arrows-v', 'f07d'],",
+                    "['arrows-h', 'f07e'],",
+                    "['bar-chart', 'f080'],",
+                    "['twitter-square', 'f081'],",
+                    "['facebook-square', 'f082'],",
+                    "['camera-retro', 'f083'],",
+                    "['key', 'f084'],",
+                    "['gears', 'f085'],",
+                    "['comments', 'f086'],",
+                    "['thumbs-o-up', 'f087'],",
+                    "['thumbs-o-down', 'f088'],",
+                    "['star-half', 'f089'],",
+                    "['sign-out', 'f08b'],",
+                    "['thumb-tack', 'f08d'],",
+                    "['external-link', 'f08e'],",
+                    "['sign-in', 'f090'],",
+                    "['trophy', 'f091'],",
+                    "['github-square', 'f092'],",
+                    "['upload', 'f093'],",
+                    "['lemon-o', 'f094'],",
+                    "['phone', 'f095'],",
+                    "['square', 'f096'],",
+                    "['phone-square', 'f098'],",
+                    "['twitter', 'f099'],",
+                    "['github', 'f09b'],",
+                    "['unlock', 'f09c'],",
+                    "['credit-card', 'f09d'],",
+                    "['feed', 'f09e']",
+                    "]"
+                ],
+                "name": "iconStore"
+            },
+            "configAlternates": {
+                "data": "array",
+                "name": "string"
+            },
+            "name": "MyStore1",
+            "designerId": "5a1e56e4-b8fd-44ab-9e8b-f0d3ace49955",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "name"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field5",
+                    "designerId": "8cbec7e1-41f2-486c-a7b0-a9b65b87b3e7"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "code"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field6",
+                    "designerId": "fb4270a3-1e7e-4689-b53f-531eb7f8c2d5"
+                },
+                {
+                    "type": "Ext.util.Sorter",
+                    "reference": {
+                        "name": "sorters",
+                        "type": "object"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "property": "name"
+                    },
+                    "configAlternates": {
+                        "property": "string"
+                    },
+                    "name": "MySorter",
+                    "designerId": "d281ee33-ab6e-45aa-84a7-e3ae5fdb1fa2"
+                }
+            ]
+        },
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "data": [
+                    "[",
+                    "['Momentary / Hold for On','momentary'],",
+                    "['Toggle / Switch On & Off','toggle']",
+                    "]"
+                ],
+                "name": "buttonTypeStore"
+            },
+            "configAlternates": {
+                "data": "array",
+                "name": "string"
+            },
+            "name": "MyStore2",
+            "designerId": "afee64ca-9ee9-4ea6-befa-8b1f3c7fa61a",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "display"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field7",
+                    "designerId": "bf8b59ea-46fa-4a41-88aa-c61bfeb9daeb"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "value"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field8",
+                    "designerId": "983de39d-a4d6-4bee-917f-e40c143ba355"
+                }
+            ]
+        },
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "data": [
+                    "[",
+                    "['Set Value','setValue'],",
+                    "['Increase Value','increase'],",
+                    "['Decrease Value','decrease']",
+                    "]"
+                ],
+                "name": "actionTypeStore"
+            },
+            "configAlternates": {
+                "data": "array",
+                "name": "string"
+            },
+            "name": "MyStore8",
+            "designerId": "b0e0e7de-735e-455e-a534-ce853ce00615",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "display"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field7",
+                    "designerId": "ad246fa9-b8ca-4f3f-bf26-7b88b004e773"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "value"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field8",
+                    "designerId": "5bdc4835-8959-49c8-8f1f-dd9c6197c331"
+                }
+            ]
+        }
+    ]
+}

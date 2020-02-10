@@ -1,0 +1,26 @@
+{
+    "type": "libraryresource",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "basePath": "/inc/js/ext-6.6-latest/build/",
+        "debug": true,
+        "designer|userClassName": "Library",
+        "libraryRequires": [
+            "sencha-charts",
+            "font-awesome"
+        ]
+    },
+    "configAlternates": {
+        "designer|userClassName": "string",
+        "theme": "string",
+        "basePath": "uri",
+        "libraryRequires": "typedarray",
+        "debug": "boolean"
+    },
+    "name": "Library",
+    "designerId": "0bed7e48-343e-4468-9c92-33f050cfcaf9"
+}

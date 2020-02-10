@@ -1,0 +1,79 @@
+{
+    "type": "Ext.app.ViewModel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "addcontroltype",
+        "designer|userClassName": "AddHardwareTypeViewModel1"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "AddHardwareTypeViewModel1",
+    "designerId": "54ce83b2-fe9c-447a-ab9e-eb4cbfc6ba32",
+    "cn": [
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "data": [
+                    "[",
+                    "['slider','Slider'],",
+                    "['stick','Stick'],",
+                    "['button','Button']//,",
+                    "//['dpad','D-Pad']",
+                    "]"
+                ],
+                "name": "controlTypeStore"
+            },
+            "configAlternates": {
+                "data": "array",
+                "name": "string"
+            },
+            "name": "MyStore2",
+            "designerId": "d889b9fc-16ce-4783-8c7c-005ccf7dfe89",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "value"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field3",
+                    "designerId": "e62538c3-212d-4763-a88b-91c7ebe78da0"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "display"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field4",
+                    "designerId": "bcf6ae63-7606-4987-8e8c-18cb044b3fe5"
+                }
+            ]
+        }
+    ]
+}

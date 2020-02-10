@@ -1,0 +1,763 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "gamepadmapping",
+        "designer|userClassName": "GamepadMapping"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "MyContainer74",
+    "designerId": "abecd0d9-7fdf-4245-b1a2-4165f72320da",
+    "viewControllerInstanceId": "797de427-32a3-4dfe-8c95-14c1d6038586",
+    "viewModelInstanceId": "cbf85f4d-dc72-420c-a64d-e8f215a9d537",
+    "cn": [
+        {
+            "type": "Ext.Toolbar",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "docked": "top",
+                "itemId": "mytoolbar3"
+            },
+            "configAlternates": {
+                "docked": "string",
+                "itemId": "string"
+            },
+            "name": "MyToolbar3",
+            "designerId": "ad348b66-bb6e-468e-9272-b8d2d6a22ebc",
+            "cn": [
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-save",
+                        "text": "Save Changes"
+                    },
+                    "configAlternates": {
+                        "text": "string",
+                        "iconCls": "string"
+                    },
+                    "name": "MyButton1",
+                    "designerId": "c2a414f3-8097-4c2b-a6de-79e3b46dea0a",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton1Tap11",
+                                "implHandler": [
+                                    "console.log('save mapping');",
+                                    "",
+                                    "var allMappings = [];",
+                                    "Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){",
+                                    "    let map = mapComp.getMapping();",
+                                    "",
+                                    "    if(map === false){ return; };",
+                                    "",
+                                    "    allMappings.push(map);",
+                                    "});",
+                                    "",
+                                    "this.fireEvent('websocketSend',{",
+                                    "    action:'updateConfig',",
+                                    "    key:'controllerMapping',",
+                                    "    config:allMappings",
+                                    "});"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton1Tap11",
+                            "designerId": "038dd165-fd4b-43d3-8ae4-26a636e34e26"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-plus",
+                        "text": "Add Controller Mapping"
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "text": "string"
+                    },
+                    "name": "MyButton5",
+                    "designerId": "3d4bbb46-b41b-4d65-9067-b0e7b493a6c5",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton5Tap11",
+                                "implHandler": [
+                                    "if(this.activeMapping !== false){",
+                                    "    return;",
+                                    "}",
+                                    "",
+                                    "this.activeMapping = this.addMapping();"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton5Tap11",
+                            "designerId": "94f113f7-f4fa-4530-a418-d221d6a5f13d"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Ext.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "border": true,
+                "container|align": "start",
+                "height": 163,
+                "itemId": "controllerEventsContainer",
+                "layout": "vbox",
+                "margin": "0 4 0 4",
+                "padding": 10,
+                "scrollable": true,
+                "title": "Controller Events"
+            },
+            "configAlternates": {
+                "border": "boolean",
+                "height": "auto",
+                "itemId": "string",
+                "layout": "string",
+                "margin": "auto",
+                "scrollable": "auto",
+                "title": "string",
+                "container|align": "string",
+                "padding": "auto"
+            },
+            "name": "MyPanel9",
+            "designerId": "8aa7a853-dece-4bb2-88a1-635c4a1479b4",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "controllerEvents",
+                        "layout|flex": 1
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "padding": "auto",
+                        "layout|flex": "number"
+                    },
+                    "name": "MyContainer79",
+                    "designerId": "029869b3-41eb-47dc-86f7-180e11cebd75"
+                }
+            ]
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "html": "Controller buttons can be mapped to buttons. Controller Axes can be mapped to sliders.",
+                "padding": 10
+            },
+            "configAlternates": {
+                "html": "string",
+                "padding": "auto"
+            },
+            "name": "MyContainer36",
+            "designerId": "34e2bcc5-ba40-415d-98a2-0a31d4e1659e"
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "itemId": "mappingsContainer",
+                "margin": "0 4 0 4"
+            },
+            "configAlternates": {
+                "itemId": "string",
+                "padding": "auto",
+                "margin": "auto"
+            },
+            "name": "MyContainer78",
+            "designerId": "40b02f82-d2aa-4e02-8425-cf5d78c08046"
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "html": "No Controller Mapping Configured<BR><BR>Click <B><U>Add Controller Mapping</U></B>",
+                "itemId": "noMappingMsg",
+                "padding": 40,
+                "userCls": [
+                    "text-prompt-container"
+                ]
+            },
+            "configAlternates": {
+                "style": "object",
+                "html": "string",
+                "itemId": "string",
+                "padding": "auto",
+                "userCls": "typedarray"
+            },
+            "name": "MyContainer35",
+            "designerId": "9307a252-f332-46cb-b354-4db4c1d79b90"
+        },
+        {
+            "type": "basiceventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onContainerPainted",
+                "implHandler": [
+                    "if(this.init){",
+                    "    return;",
+                    "}else{",
+                    "    this.init = true;",
+                    "}",
+                    "",
+                    "this.activeGamepads = {};",
+                    "this.gamepadStates = {};",
+                    "this.activeMapping = false;",
+                    "",
+                    "if(!this.controlsDataStoreData){",
+                    "    this.controlsDataStoreData = [];",
+                    "}",
+                    "this.logEvents = [];",
+                    "",
+                    "var gamepadUpdate = navigator.getGamepads();",
+                    "for(var i=0; i<9; i++){",
+                    "    if(gamepadUpdate[i] && gamepadUpdate[i].id){",
+                    "        this.gamepadConnected({gamepad: gamepadUpdate[i]});",
+                    "    }",
+                    "}",
+                    "",
+                    "window.addEventListener(\"gamepadconnected\", this.gamepadConnected.bind(this));",
+                    "window.addEventListener(\"gamepaddisconnected\", this.gamepadDisconnected.bind(this));",
+                    "",
+                    "this.gamePadLoop = false;",
+                    "this.startControllerLoop();"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onContainerPainted",
+            "designerId": "6f79e076-8716-4711-9610-db5958ad59e9"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "e"
+                ],
+                "fn": "gamepadConnected",
+                "implHandler": [
+                    "let gx = e.gamepad.index+e.gamepad.id;",
+                    "",
+                    "this.activeGamepads[gx] = e.gamepad;",
+                    "",
+                    "this.appendControllerEvent(\"Connected! controller #\"+(e.gamepad.index+1)+ \" \"+ e.gamepad.id + \"<BR>\\r\\n\");",
+                    "",
+                    "this.gamepadStates[gx] = this.getGamepadState(e.gamepad);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadConnected",
+            "designerId": "8d8f0b1e-9ef9-4cd0-bbfd-7fcbe01f24bc"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "stopControllerLoop",
+                "implHandler": [
+                    "if(this.gamePadLoop === false){",
+                    "    return;",
+                    "}",
+                    "clearInterval(this.gamePadLoop);",
+                    "this.gamePadLoop = false;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "stopControllerLoop",
+            "designerId": "b497f417-b1f3-41c5-8436-6d57f6f4d2ac"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "startControllerLoop",
+                "implHandler": [
+                    "if(this.gamePadLoop !== false){",
+                    "    return;",
+                    "}",
+                    "this.gamePadLoop = setInterval(this.gamepadPoll.bind(this), 75);"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "startControllerLoop",
+            "designerId": "95920d4d-690a-4690-a548-b9efc0ebef49"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "e"
+                ],
+                "fn": "gamepadDisconnected",
+                "implHandler": [
+                    "let gx = e.gamepad.index+e.gamepad.id;",
+                    "",
+                    "delete this.activeGamepads[gx];",
+                    "delete this.gamepadStates[gx];",
+                    "",
+                    "this.appendControllerEvent(\"Disconnected! controller #\"+(e.gamepad.index+1)+ \" \"+ e.gamepad.id + \"<BR>\\r\\n\");"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadDisconnected",
+            "designerId": "777639d0-72fd-4717-8f4d-835ff7a90f51"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "config"
+                ],
+                "fn": "addMapping",
+                "implHandler": [
+                    "let newMapping = Ext.create({",
+                    "    xtype:'gamepaditemmap',",
+                    "    controlsDataStoreData: this.controlsDataStoreData,",
+                    "    mapConfig:config,",
+                    "    listeners:{",
+                    "        scope:this,",
+                    "        remap:function(){",
+                    "            this.activeMapping = newMapping;",
+                    "        },",
+                    "        mapDelete:function(panel){",
+                    "            this.mapDelete(panel);",
+                    "        }",
+                    "    }",
+                    "});",
+                    "this.queryById('mappingsContainer').insert(0,newMapping);",
+                    "",
+                    "this.queryById('noMappingMsg').hide();",
+                    "",
+                    "return newMapping;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "addMapping",
+            "designerId": "3ce9ad20-46e8-4187-91c7-2fa5abd3a0af"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "config"
+                ],
+                "fn": "loadConfig",
+                "implHandler": [
+                    "this.mappingConfig = config;",
+                    "",
+                    "this.queryById('mappingsContainer').removeAll(true, true);",
+                    "",
+                    "Ext.each(config,function(mapping){",
+                    "    this.addMapping(mapping);",
+                    "},this);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "loadConfig",
+            "designerId": "66a1dde0-9d7f-4513-a2db-2cff3d77abe0"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "gamepadPoll",
+                "implHandler": [
+                    "var gamepadUpdate = navigator.getGamepads();",
+                    "",
+                    "for(var gx in this.activeGamepads){",
+                    "    let ag = this.activeGamepads[gx];",
+                    "",
+                    "    if(gamepadUpdate[ag.index]){",
+                    "        ag = gamepadUpdate[ag.index];",
+                    "    }else{",
+                    "        this.gamepadDisconnected({gamepad:ag});",
+                    "        return;",
+                    "    }",
+                    "",
+                    "    this.gamepadCheckState(ag);",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadPoll",
+            "designerId": "325fea71-b5aa-481a-9e85-75d4b728f9c3"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "panel"
+                ],
+                "fn": "mapDelete",
+                "implHandler": [
+                    "Ext.destroy(panel);",
+                    "",
+                    "if(this.queryById('mappingsContainer').getItems().length < 1){",
+                    "    this.queryById('noMappingMsg').show({type:'fade'});",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "mapDelete",
+            "designerId": "cb69f9d2-7eb3-4933-a0aa-50c0e0f6b018"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepad"
+                ],
+                "fn": "getGamepadState",
+                "implHandler": [
+                    "let state = {",
+                    "    buttons:{},",
+                    "    axes:{}",
+                    "};",
+                    "",
+                    "for(let b in gamepad.buttons){",
+                    "    state.buttons[b] = gamepad.buttons[b].pressed;",
+                    "}",
+                    "for(let a in gamepad.axes){",
+                    "    state.axes[a] = gamepad.axes[a];",
+                    "}",
+                    "",
+                    "return state;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getGamepadState",
+            "designerId": "db2d411b-f67c-4dd2-81cb-b9f70baf8903"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepad",
+                    "type",
+                    "index",
+                    "newValue",
+                    "oldValue"
+                ],
+                "fn": "gamepadChange",
+                "implHandler": [
+                    "switch(type){",
+                    "    case 'axis':",
+                    "        newValue = newValue.toFixed(2);",
+                    "        if(newValue == 0){",
+                    "            newValue = 0;",
+                    "        }",
+                    "        break;",
+                    "    case 'button':",
+                    "        newValue = newValue ? 'Down' : 'Up';",
+                    "        break;",
+                    "}",
+                    "",
+                    "this.appendControllerEvent(\"controller #\"+(gamepad.index+1)+ \" \"+ gamepad.id + \" &nbsp;&nbsp; \" + type + \" #\" + (parseInt(index)+1) + \" = \" + newValue + \"<BR>\\r\\n\");",
+                    "",
+                    "let mapFound = false;",
+                    "if(this.activeMapping !== false){",
+                    "",
+                    "    Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){",
+                    "        let map = mapComp.getMapping();",
+                    "",
+                    "        if(map === false){ return; };",
+                    "",
+                    "        if(map.gamepadId === gamepad.id && map.mapType === type && map.mapIndex===index ){",
+                    "            mapFound = true;",
+                    "            return false;",
+                    "        }",
+                    "",
+                    "    });",
+                    "    if(mapFound){",
+                    "        Ext.Msg.alert('Error!',type + \" #\" + (parseInt(index)+1) +' is already mapped!');",
+                    "        return false;",
+                    "    }",
+                    "",
+                    "    this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index);",
+                    "    this.activeMapping = false;",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadChange",
+            "designerId": "8f48db40-383b-423c-bbad-63a4c3f21e64"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepad"
+                ],
+                "fn": "gamepadCheckState",
+                "implHandler": [
+                    "let gx = gamepad.index+gamepad.id;",
+                    "let gs = this.gamepadStates[gx];",
+                    "",
+                    "//detect changes!",
+                    "let newState = this.getGamepadState(gamepad);",
+                    "for(b in newState.buttons){",
+                    "    if(newState.buttons[b] != gs.buttons[b]){",
+                    "       this.gamepadChange(gamepad, 'button', b, newState.buttons[b], gs.buttons[b]);",
+                    "    }",
+                    "}",
+                    "for(a in newState.axes){",
+                    "    if(Math.abs(newState.axes[a] -gs.axes[a]) >= 0.15){ //for axes detect change more than 15%",
+                    "       this.gamepadChange(gamepad, 'axis', a, newState.axes[a], gs.axes[a]);",
+                    "    }else{",
+                    "       newState.axes[a] = gs.axes[a];",
+                    "    }",
+                    "}",
+                    "this.gamepadStates[gx] = newState;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadCheckState",
+            "designerId": "312cdda8-b169-4b59-8924-fe29865aa3a8"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "text"
+                ],
+                "fn": "appendControllerEvent",
+                "implHandler": [
+                    "if(this.logEvents.length >= 6){",
+                    "    this.logEvents.shift();",
+                    "}",
+                    "this.logEvents.push(text);",
+                    "",
+                    "let logBuf = '';",
+                    "Ext.each(this.logEvents, function(line){",
+                    "    logBuf += line;",
+                    "});",
+                    "",
+                    "let el = this.queryById('controllerEvents').el.dom;",
+                    "",
+                    "el.innerHTML = logBuf;",
+                    "el.scrollTop = el.scrollHeight - el.clientHeight;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "appendControllerEvent",
+            "designerId": "571dc180-4b3d-4ea9-8739-635bf61198fc"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "controlsStoreData"
+                ],
+                "fn": "updateMappingStores",
+                "implHandler": [
+                    "this.controlsDataStoreData = [];",
+                    "for(let c in controlsStoreData){",
+                    "    let ci = controlsStoreData[c];",
+                    "",
+                    "    this.controlsDataStoreData.push({",
+                    "        controlId: ci.controlId,",
+                    "        type:ci.type,",
+                    "        label:ci.label,",
+                    "        display:ci.type +' '+ci.label",
+                    "    });",
+                    "}",
+                    "",
+                    "Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){",
+                    "    mapComp.setControlStoreData(this.controlsDataStoreData);",
+                    "}, this);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "updateMappingStores",
+            "designerId": "8f324657-07ca-4dc9-b3db-e20eb533b7ff"
+        }
+    ]
+}

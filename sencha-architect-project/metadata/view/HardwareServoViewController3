@@ -1,0 +1,18 @@
+{
+    "type": "Ext.app.ViewController",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "controlsliderconfig",
+        "designer|userClassName": "HardwareServoViewController3"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "HardwareServoViewController3",
+    "designerId": "97593bc7-8f1b-4c55-adfe-49e0abd74a84"
+}

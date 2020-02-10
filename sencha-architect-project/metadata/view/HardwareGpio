@@ -1,0 +1,257 @@
+{
+    "type": "Ext.form.Panel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "hardwaregpio",
+        "designer|userClassName": "HardwareGpio"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "title": "string",
+        "border": "boolean"
+    },
+    "name": "HardwareServo1",
+    "designerId": "3d710f1a-749f-485e-b2c9-d6a6ea84d6b0",
+    "viewControllerInstanceId": "b3b01d87-4c9b-471f-a6fb-949a461c8fdf",
+    "viewModelInstanceId": "c08a1aba-3e06-4966-bd93-f3e326063472",
+    "cn": [
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "itemId": "tbar",
+                "layout": "hbox",
+                "padding": 10
+            },
+            "configAlternates": {
+                "itemId": "string",
+                "layout": "string",
+                "padding": "auto"
+            },
+            "name": "MyContainer45",
+            "designerId": "581c468b-f5dc-4165-939b-40446cfe1e72",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "GPIO",
+                        "itemId": "title",
+                        "style": [
+                            "{",
+                            "'margin':'5px 5px 0 12px',",
+                            "'font-weight':'bold',",
+                            "'font-size':'16px'",
+                            "}"
+                        ],
+                        "width": 63
+                    },
+                    "configAlternates": {
+                        "html": "string",
+                        "itemId": "string",
+                        "margin": "auto",
+                        "width": "auto",
+                        "style": "object"
+                    },
+                    "name": "MyContainer7",
+                    "designerId": "de21dedf-fd15-4d85-98f9-77abf6a185b5"
+                },
+                {
+                    "type": "Ext.field.Text",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "autoComplete": false,
+                        "clearable": false,
+                        "itemId": "name",
+                        "label": "Name",
+                        "labelWidth": 50,
+                        "name": "name"
+                    },
+                    "configAlternates": {
+                        "clearable": "boolean",
+                        "placeholder": "string",
+                        "name": "string",
+                        "autoComplete": "boolean",
+                        "itemId": "string",
+                        "label": "string",
+                        "labelWidth": "auto"
+                    },
+                    "name": "MyTextField3",
+                    "designerId": "15586be9-efa8-4584-b7a1-a79d8cf0e6e5"
+                },
+                {
+                    "type": "Ext.field.Display",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "hidden": true,
+                        "name": "type",
+                        "value": [
+                            "'servo'"
+                        ]
+                    },
+                    "configAlternates": {
+                        "hidden": "boolean",
+                        "label": "string",
+                        "name": "string",
+                        "value": "object"
+                    },
+                    "name": "MyDisplayField1",
+                    "designerId": "bad8f7c7-2d1f-4a7b-9001-75e7436320f8"
+                },
+                {
+                    "type": "Ext.field.Number",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "clearable": false,
+                        "itemId": "pin",
+                        "label": "Pin",
+                        "labelWidth": 35,
+                        "margin": "0 0 0 10",
+                        "name": "pin",
+                        "width": 100
+                    },
+                    "configAlternates": {
+                        "label": "string",
+                        "labelWidth": "auto",
+                        "margin": "auto",
+                        "name": "string",
+                        "width": "auto",
+                        "clearable": "boolean",
+                        "itemId": "string"
+                    },
+                    "name": "MyNumberField7",
+                    "designerId": "375763c6-1869-405f-bc85-a35749797fe4"
+                },
+                {
+                    "type": "Ext.Spacer",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "name": "MySpacer",
+                    "designerId": "69c3beea-363a-42a8-bf2f-91a31b6a88d8"
+                },
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-trash",
+                        "text": "Delete"
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "text": "string"
+                    },
+                    "name": "MyButton9",
+                    "designerId": "5a637896-8caf-4a15-b3a2-2c0b6609bf96",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton9Tap",
+                                "implHandler": [
+                                    "this.fireEvent('hardwaredelete', this);"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton9Tap",
+                            "designerId": "f1db186e-7bd0-4de9-be93-feafe7bca899"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "config"
+                ],
+                "fn": "setConfigValues",
+                "implHandler": [
+                    "this.setValues(config);",
+                    "",
+                    "this.hardwareId = config.hardwareId;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setConfigValues",
+            "designerId": "7e0e0ef6-fc96-4e85-ab7c-33c2a5785a3e"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "getConfigValues",
+                "implHandler": [
+                    "let values = {",
+                    "    type:'gpio',",
+                    "    hardwareId: this.hardwareId",
+                    "};",
+                    "Ext.apply(values, this.getValues());",
+                    "",
+                    "return values;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getConfigValues",
+            "designerId": "6b25593c-fb75-4a35-9967-f72e78028c28"
+        }
+    ]
+}

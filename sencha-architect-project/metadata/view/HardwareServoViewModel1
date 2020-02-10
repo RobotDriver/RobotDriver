@@ -1,0 +1,78 @@
+{
+    "type": "Ext.app.ViewModel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "hardwaremotor",
+        "designer|userClassName": "HardwareServoViewModel1"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "HardwareServoViewModel1",
+    "designerId": "c24fe2be-4f43-4448-ba69-212fe049dd5a",
+    "cn": [
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "data": [
+                    "[",
+                    "['l298n','L298N on GPIO'],",
+                    "['esc','RC ESC / GPIO PWM'],",
+                    "['pca9685','PCA9685 i2c PWM Driver']",
+                    "]"
+                ],
+                "name": "motorDriverType"
+            },
+            "configAlternates": {
+                "data": "array",
+                "name": "string"
+            },
+            "name": "MyStore4",
+            "designerId": "5391f79d-5173-4042-a35f-6643556ad6dc",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "value"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field3",
+                    "designerId": "45919ca1-8b83-42e7-abb4-852d5bc96856"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "display"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field4",
+                    "designerId": "170bbe58-9683-4b48-9dd8-63f7adbda009"
+                }
+            ]
+        }
+    ]
+}

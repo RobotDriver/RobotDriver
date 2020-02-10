@@ -1,0 +1,106 @@
+.left-buttons, .right-buttons{
+    margin:30px;
+}
+.stick {
+  border: 1.5px solid #bbb;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  padding:8px;
+}
+div.stick-container div.x-container-body-el {
+    overflow: visible;
+}
+div.stick-container div.x-container-body-el div.x-container {
+    overflow: visible;
+}
+div.stick-inner-container {
+    z-index:200;
+}
+div.stick-label {
+    text-align: center;
+    z-index:199;
+}
+.joystick {
+  background-image: url('stick.png');
+  background-repeat: no-repeat;
+  background-size:cover;
+  border-radius: 100%;
+  cursor: pointer;
+  height: 100%;
+  user-select: none;
+  width: 100%;
+}
+
+.control-button {
+  font-size: 40px;
+  /*background-size:cover;*/
+  border: none;
+  text-decoration: none;
+  width:70px;
+  height:70px;
+  margin:10px;
+  color: #ffffff;
+  border-radius: 50px;
+  background-color: #e67e22;
+  display: inline-block;
+  position: relative;
+  box-shadow: 0 8px #bf6516;
+}
+.control-button:hover {
+  color: #ffffff;
+  box-shadow: 0 7px #bf6516;
+  top: 1px;
+}
+.control-button.toggledown {
+  box-shadow: 0 1px #bf6516;
+  top: 7px;
+}
+.control-button.pressed {
+  box-shadow: 0 0px;
+  top: 8px;
+}
+.control-button:focus {
+  outline: 0;
+}
+
+
+.btn-fire {
+  background-image: url('shoot.png');
+  background-repeat: no-repeat;
+  background-position:center;
+  /*background-size:cover;*/
+  border: none;
+  text-decoration: none;
+  width:70px;
+  height:70px;
+  margin:10px;
+  color: #ffffff;
+  border-radius: 50px;
+  background-color: #e67e22;
+  display: inline-block;
+  position: relative;
+  box-shadow: 0 8px #bf6516;
+}
+.btn-fire:hover {
+  color: #ffffff;
+  box-shadow: 0 6px #bf6516;
+  top: 2px;
+}
+.btn-fire.pressed { /*.btn-fire:active, */
+  box-shadow: 0 0px #bf6516;
+  top: 8px;
+}
+.btn-fire:focus {
+  outline: 0;
+}
+.left-buttons {
+	position:absolute;
+	left: 0px;
+	bottom:0px;
+}
+.right-buttons {
+	position:absolute;
+	right: 0px;
+	bottom:0px;
+}

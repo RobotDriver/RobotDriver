@@ -1,0 +1,342 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "livecontroller",
+        "designer|userClassName": "liveController"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "MyContainer39",
+    "designerId": "e580d8f3-9c79-4b02-9d80-00aaf3ba5110",
+    "viewControllerInstanceId": "12902b1d-21de-4027-936a-308f434dabc7",
+    "viewModelInstanceId": "d8f39285-ce80-46f7-bdf6-36eca5e85ee0",
+    "cn": [
+        {
+            "type": "basiceventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onContainerPainted",
+                "implHandler": [
+                    "if(this.init){",
+                    "    return;",
+                    "}else{",
+                    "    this.init = true;",
+                    "}",
+                    "",
+                    "this.activeGamepads = {};",
+                    "this.gamepadStates = {};",
+                    "",
+                    "var gamepadUpdate = navigator.getGamepads();",
+                    "for(var i=0; i<9; i++){",
+                    "    if(gamepadUpdate[i] && gamepadUpdate[i].id){",
+                    "        this.gamepadConnected({gamepad: gamepadUpdate[i]});",
+                    "    }",
+                    "}",
+                    "",
+                    "window.addEventListener(\"gamepadconnected\", this.gamepadConnected.bind(this));",
+                    "window.addEventListener(\"gamepaddisconnected\", this.gamepadDisconnected.bind(this));",
+                    "",
+                    "this.gamePadLoop = false;",
+                    "this.startControllerLoop();"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onContainerPainted",
+            "designerId": "5fc83e7d-0551-4401-9cfe-f4235e578d85"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "config"
+                ],
+                "fn": "loadConfig",
+                "implHandler": [
+                    "this.mappedGamepads = config;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "loadConfig",
+            "designerId": "377df78b-37b8-4f20-a2e6-6315e56bf6a6"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "startControllerLoop",
+                "implHandler": [
+                    "if(this.gamePadLoop !== false){",
+                    "    return;",
+                    "}",
+                    "this.gamePadLoop = setInterval(this.gamepadPoll.bind(this), 75);"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "startControllerLoop",
+            "designerId": "1c3da327-834b-4c47-bfc6-638096798cc4"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "stopControllerLoop",
+                "implHandler": [
+                    "if(this.gamePadLoop === false){",
+                    "    return;",
+                    "}",
+                    "clearInterval(this.gamePadLoop);",
+                    "this.gamePadLoop = false;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "stopControllerLoop",
+            "designerId": "b6987be6-d0c4-4f5d-9e04-5b2bc7dd1394"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "e"
+                ],
+                "fn": "gamepadConnected",
+                "implHandler": [
+                    "let gx = e.gamepad.index+e.gamepad.id;",
+                    "",
+                    "this.activeGamepads[gx] = e.gamepad;",
+                    "",
+                    "this.fireEvent('gamepadConnect', e.gamepad);",
+                    "",
+                    "this.gamepadStates[gx] = this.getGamepadState(e.gamepad);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadConnected",
+            "designerId": "77de43c9-0a79-4673-beab-c2ef1893b85b"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "e"
+                ],
+                "fn": "gamepadDisconnected",
+                "implHandler": [
+                    "let gx = e.gamepad.index+e.gamepad.id;",
+                    "",
+                    "delete this.activeGamepads[gx];",
+                    "delete this.gamepadStates[gx];",
+                    "",
+                    "this.fireEvent('gamepadDisconnect', e.gamepad);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadDisconnected",
+            "designerId": "c2ab286d-ef60-472c-84ea-de58502f29db"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "gamepadPoll",
+                "implHandler": [
+                    "var gamepadUpdate = navigator.getGamepads();",
+                    "",
+                    "for(var gx in this.activeGamepads){",
+                    "    let ag = this.activeGamepads[gx];",
+                    "",
+                    "    if(gamepadUpdate[ag.index]){",
+                    "        ag = gamepadUpdate[ag.index];",
+                    "    }else{",
+                    "        this.gamepadDisconnected({gamepad:ag});",
+                    "        return;",
+                    "    }",
+                    "",
+                    "    this.gamepadCheckState(ag);",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadPoll",
+            "designerId": "2142852c-8a28-49c0-903b-bcb1f28401ef"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepad"
+                ],
+                "fn": "getGamepadState",
+                "implHandler": [
+                    "let state = {",
+                    "    buttons:{},",
+                    "    axes:{}",
+                    "};",
+                    "",
+                    "for(let b in gamepad.buttons){",
+                    "    state.buttons[b] = gamepad.buttons[b].pressed;",
+                    "}",
+                    "for(let a in gamepad.axes){",
+                    "    state.axes[a] = gamepad.axes[a];",
+                    "}",
+                    "",
+                    "return state;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getGamepadState",
+            "designerId": "12d1549e-5ec8-4f21-9a39-bce23d5a7049"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepad",
+                    "type",
+                    "index",
+                    "newValue",
+                    "oldValue"
+                ],
+                "fn": "gamepadChange",
+                "implHandler": [
+                    "let foundMap = false;",
+                    "Ext.each(this.mappedGamepads, function(mapped){",
+                    "    if(mapped.gamepadId == gamepad.id && mapped.gamepadIndex == gamepad.index && mapped.mapIndex === index){",
+                    "        foundMap = mapped;",
+                    "        return false;",
+                    "    }",
+                    "});",
+                    "if(foundMap){",
+                    "    this.fireEvent('action', foundMap, newValue);",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadChange",
+            "designerId": "dcc3e53f-50e7-452a-ab38-49cedeff76d1"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepad"
+                ],
+                "fn": "gamepadCheckState",
+                "implHandler": [
+                    "let gx = gamepad.index+gamepad.id;",
+                    "let gs = this.gamepadStates[gx];",
+                    "",
+                    "//detect changes!",
+                    "let newState = this.getGamepadState(gamepad);",
+                    "for(b in newState.buttons){",
+                    "    if(newState.buttons[b] != gs.buttons[b]){",
+                    "       this.gamepadChange(gamepad, 'button', b, newState.buttons[b], gs.buttons[b]);",
+                    "    }",
+                    "}",
+                    "for(a in newState.axes){",
+                    "    if(Math.abs(newState.axes[a] -gs.axes[a]) >= 0.15){ //for axes detect change more than 15%",
+                    "       this.gamepadChange(gamepad, 'axis', a, newState.axes[a], gs.axes[a]);",
+                    "    }else{",
+                    "       newState.axes[a] = gs.axes[a];",
+                    "    }",
+                    "}",
+                    "this.gamepadStates[gx] = newState;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "gamepadCheckState",
+            "designerId": "feb61a74-72a1-4ddc-94a5-0d4821fe8df7"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "type": "Ext.app.ViewController",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "addcontroltype",
+        "designer|userClassName": "AddHardwareTypeViewController1"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "AddHardwareTypeViewController1",
+    "designerId": "08b8224f-4d85-44e7-ae1b-b5f7bddbb21a"
+}

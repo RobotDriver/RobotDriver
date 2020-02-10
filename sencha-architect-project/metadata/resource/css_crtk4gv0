@@ -1,0 +1,18 @@
+{
+    "type": "cssresource",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "css_crtk4gv0",
+        "url": "/inc/js/ext-6.6-latest/build/packages/charts/modern/modern-triton/resources/charts-all.css"
+    },
+    "configAlternates": {
+        "designer|userClassName": "string",
+        "url": "uri"
+    },
+    "name": "css1",
+    "designerId": "57573090-29f1-4dea-ab65-e720f3c42d5a"
+}

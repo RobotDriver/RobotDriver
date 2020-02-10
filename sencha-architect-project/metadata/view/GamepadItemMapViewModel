@@ -1,0 +1,101 @@
+{
+    "type": "Ext.app.ViewModel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "gamepaditemmap",
+        "designer|userClassName": "GamepadItemMapViewModel"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "designerId": "dafe3ae2-32a0-45e7-bb01-2916269bf0b7",
+    "cn": [
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "controlStore"
+            },
+            "configAlternates": {
+                "name": "string"
+            },
+            "name": "MyStore5",
+            "designerId": "12885e04-3a6f-4aa0-86f6-8f6c142ccb14",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "controlId"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field9",
+                    "designerId": "6b48c73c-b0ac-4c4f-8239-aa25f0daaa4e"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "type"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field11",
+                    "designerId": "21f5e39d-ddf6-4d92-83f3-ae2a1f50d430"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "label"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field10",
+                    "designerId": "5e3a817d-4c50-44d8-9a01-5845d80ceda7"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "display"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field12",
+                    "designerId": "f896e6ad-02cb-45da-a4ca-3f08c246ea6c"
+                }
+            ]
+        }
+    ]
+}

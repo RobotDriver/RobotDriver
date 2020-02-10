@@ -1,0 +1,204 @@
+{
+    "type": "Ext.form.Panel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "centered": true,
+        "closable": true,
+        "closeAction": "hide",
+        "designer|userAlias": "addhardwaretype",
+        "designer|userClassName": "AddHardwareType",
+        "draggable": true,
+        "height": 193,
+        "iconCls": "x-fa fa-microchip",
+        "margin": 20,
+        "padding": 20,
+        "showAnimation": [
+            "{type:'fade'}"
+        ],
+        "title": "Add Hardware",
+        "width": 417
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "title": "string",
+        "showAnimation": "object",
+        "centered": "boolean",
+        "closable": "boolean",
+        "closeAction": "string",
+        "draggable": "boolean",
+        "height": "auto",
+        "iconCls": "string",
+        "margin": "auto",
+        "padding": "auto",
+        "width": "auto"
+    },
+    "designerId": "a6140996-007c-49d0-9204-6370dd07e608",
+    "viewControllerInstanceId": "98169556-206c-4585-b1bb-f3db7d5eaece",
+    "viewModelInstanceId": "b0cd91f9-2edf-4953-abc5-73a4d9a9a837",
+    "cn": [
+        {
+            "type": "Ext.field.ComboBox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "displayField": "display",
+                "forceSelection": true,
+                "itemId": "type",
+                "label": "Type",
+                "labelWidth": 60,
+                "queryMode": "local",
+                "store": [
+                    "{hardwareTypeStore}"
+                ],
+                "typeAhead": true,
+                "value": [
+                    "'servo'"
+                ],
+                "valueField": "value",
+                "width": 338
+            },
+            "configAlternates": {
+                "store": "binding",
+                "displayField": "datafield",
+                "itemId": "string",
+                "label": "string",
+                "labelWidth": "auto",
+                "value": "object",
+                "valueField": "datafield",
+                "width": "auto",
+                "forceSelection": "boolean",
+                "queryMode": "string",
+                "typeAhead": "boolean"
+            },
+            "name": "MyComboBox6",
+            "designerId": "ed6a8f76-9c91-4e29-ac9e-0af601994ac2"
+        },
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "margin": "20 0 0 0"
+            },
+            "configAlternates": {
+                "margin": "auto"
+            },
+            "name": "MyContainer6",
+            "designerId": "a042a583-7bcd-4a52-a579-58cce286cfc2",
+            "cn": [
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-check",
+                        "margin": "0 0 0 60",
+                        "text": "OK",
+                        "width": 120
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "margin": "auto",
+                        "text": "string",
+                        "width": "auto"
+                    },
+                    "name": "MyButton10",
+                    "designerId": "6efe57d4-2e59-40f4-8629-049f26ac33aa",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton10Tap",
+                                "implHandler": [
+                                    "let typeField = this.queryById('type');",
+                                    "let type=typeField.getValue();",
+                                    "",
+                                    "if(type===null || type == ''){",
+                                    "    Ext.Msg.alert('&nbsp;','<B>Please select a hardware type!</B>');",
+                                    "    typeField.markInvalid();",
+                                    "    return false;",
+                                    "}",
+                                    "this.fireEvent('typeselected',type);",
+                                    "this.hide();"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton10Tap",
+                            "designerId": "351da3e1-e7c9-446b-af94-49dc8a862e3d"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-ban",
+                        "margin": "0 0 0 40",
+                        "text": "Cancel",
+                        "width": 120
+                    },
+                    "configAlternates": {
+                        "text": "string",
+                        "iconCls": "string",
+                        "margin": "auto",
+                        "width": "auto"
+                    },
+                    "name": "MyButton12",
+                    "designerId": "d436c156-bdc4-4b4e-9c6e-43aa11caf74d",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton12Tap",
+                                "implHandler": [
+                                    "this.hide();"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton12Tap",
+                            "designerId": "60bd2e4e-1e8e-41ec-addc-549499aa8ae9"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

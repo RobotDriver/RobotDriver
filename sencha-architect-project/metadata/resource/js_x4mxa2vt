@@ -1,0 +1,20 @@
+{
+    "type": "jsresource",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userClassName": "js_x4mxa2vt",
+        "includeInBundle": true,
+        "url": "resources/jsmpeg.min.js"
+    },
+    "configAlternates": {
+        "designer|userClassName": "string",
+        "includeInBundle": "boolean",
+        "url": "uri"
+    },
+    "name": "js1",
+    "designerId": "484d22d7-aed5-4570-8b0d-55d3d7a0e6f2"
+}

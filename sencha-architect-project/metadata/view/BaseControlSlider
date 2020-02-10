@@ -1,0 +1,319 @@
+{
+    "type": "Ext.Container",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "basecontrolslider",
+        "designer|userClassName": "BaseControlSlider"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "name": "MyContainer33",
+    "designerId": "96901acf-5527-4f8a-9b47-96b1beecf7ce",
+    "viewControllerInstanceId": "a0eea015-5df2-42c5-9120-dbc1ed5bbf67",
+    "viewModelInstanceId": "fb620af6-982f-41c6-b1cb-da6671b4147b",
+    "cn": [
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "hidden": true,
+                "itemId": "motorFwdRevLabel",
+                "layout": "hbox",
+                "userCls": [
+                    "steering-label"
+                ]
+            },
+            "configAlternates": {
+                "layout": "string",
+                "margin": "auto",
+                "userCls": "typedarray",
+                "hidden": "boolean",
+                "itemId": "string"
+            },
+            "name": "MyContainer25",
+            "designerId": "f7a48c13-6578-491f-97d6-60aa2cd8b428",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "Reverse",
+                        "itemId": "rev",
+                        "margin": "0 0 0 100"
+                    },
+                    "configAlternates": {
+                        "html": "string",
+                        "margin": "auto",
+                        "width": "auto",
+                        "itemId": "string"
+                    },
+                    "name": "MyContainer13",
+                    "designerId": "01bc3bcc-bad9-42c8-8ceb-fb1b413f3f3d"
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "spacer",
+                        "layout|flex": 1
+                    },
+                    "configAlternates": {
+                        "layout|flex": "number",
+                        "itemId": "string"
+                    },
+                    "name": "MyContainer11",
+                    "designerId": "1bb9d612-6f83-4a0c-abce-d4e5e2ca881f"
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "Forward",
+                        "itemId": "fwd"
+                    },
+                    "configAlternates": {
+                        "html": "string",
+                        "width": "auto",
+                        "itemId": "string"
+                    },
+                    "name": "MyContainer12",
+                    "designerId": "34673a04-1708-46f5-be4e-d5ee3dd5da11"
+                }
+            ]
+        },
+        {
+            "type": "Ext.field.Slider",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "bubbleEvents": [
+                    "['change']"
+                ],
+                "itemId": "slider",
+                "label": "Name",
+                "liveUpdate": true,
+                "maxValue": 1000,
+                "readOnly": true
+            },
+            "configAlternates": {
+                "itemId": "string",
+                "label": "string",
+                "margin": "auto",
+                "labelStyle": "object",
+                "labelWidth": "auto",
+                "readOnly": "boolean",
+                "bubbleEvents": "array",
+                "liveUpdate": "boolean",
+                "maxValue": "number"
+            },
+            "name": "MySliderField2",
+            "designerId": "2e6ed1c3-eb29-47c6-98ad-5e85b44bcac9",
+            "customConfigs": [
+                {
+                    "group": "(Custom Properties)",
+                    "name": "labelStyle",
+                    "type": "string"
+                },
+                {
+                    "group": "(Custom Properties)",
+                    "name": "bubbleEvents",
+                    "type": "string"
+                }
+            ],
+            "cn": [
+                {
+                    "type": "basiceventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "fn": "onSliderChange",
+                        "name": "change"
+                    },
+                    "configAlternates": {
+                        "fn": "string",
+                        "name": "string"
+                    },
+                    "name": "onSliderChange",
+                    "designerId": "937a05bc-db1d-4ee5-a6be-3cc6ae0fa41a"
+                }
+            ]
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "label"
+                ],
+                "fn": "setLabel",
+                "implHandler": [
+                    "this.queryById('slider').setLabel(label);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setLabel",
+            "designerId": "5d6c5169-e57b-4f81-9ee9-4881ae717047"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "hideMotorLabels",
+                "implHandler": [
+                    "this.queryById('motorFwdRevLabel').hide();",
+                    "this.setValue(0);"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "hideMotorLabels",
+            "designerId": "cf6cfa3d-f2b4-4bd5-9c06-d7dceb0058e3"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "showMotorLabels",
+                "implHandler": [
+                    "this.queryById('motorFwdRevLabel').show();",
+                    "this.setValue(500);"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "showMotorLabels",
+            "designerId": "32547041-83a2-4d46-a07d-51c6f574ccbb"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "value"
+                ],
+                "fn": "setValue",
+                "implHandler": [
+                    "this.queryById('slider').setValue(value);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setValue",
+            "designerId": "1cc0f8e8-0927-4c93-936c-c654cadff54d"
+        },
+        {
+            "type": "basiceventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onContainerPainted",
+                "implHandler": [
+                    "if(this.init){",
+                    "    return;",
+                    "}else{",
+                    "    this.init = true;",
+                    "}",
+                    "",
+                    "if(element.component.config.label){",
+                    "    this.setLabel(element.component.config.label);",
+                    "}",
+                    "if(element.component.config.hardware && element.component.config.hardware.type === 'motor'){",
+                    "    this.showMotorLabels();",
+                    "}else{",
+                    "    this.hideMotorLabels();",
+                    "}"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onContainerPainted",
+            "designerId": "8aadacb3-0d53-4480-a0c2-532310516756"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "value"
+                ],
+                "fn": "liveSetValue",
+                "implHandler": [
+                    "this.setValue(value);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "liveSetValue",
+            "designerId": "797ad2c6-3c40-4e32-8efc-db4e048a2c5c"
+        }
+    ]
+}

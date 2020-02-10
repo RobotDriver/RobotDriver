@@ -1,0 +1,78 @@
+{
+    "type": "Ext.app.ViewModel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "designer|userAlias": "addhardwaretype",
+        "designer|userClassName": "AddHardwareTypeViewModel"
+    },
+    "configAlternates": {
+        "designer|userAlias": "string",
+        "designer|userClassName": "string"
+    },
+    "designerId": "b0cd91f9-2edf-4953-abc5-73a4d9a9a837",
+    "cn": [
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "data": [
+                    "[",
+                    "['servo','Servo'],",
+                    "['motor','Motor'],",
+                    "['gpio','GPIO'],",
+                    "['i2c','I2C Device']",
+                    "]"
+                ],
+                "name": "hardwareTypeStore"
+            },
+            "configAlternates": {
+                "data": "array",
+                "name": "string"
+            },
+            "name": "MyStore2",
+            "designerId": "d3d6fe44-3d83-4281-a0cc-6eab6b5f0e9a",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "value"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field3",
+                    "designerId": "21a9493e-e57c-4a2f-bcc7-42f705524541"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "display"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field4",
+                    "designerId": "8436f015-a251-4c4b-8eda-679873003c05"
+                }
+            ]
+        }
+    ]
+}
