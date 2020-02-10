@@ -1397,6 +1397,8 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.queryById('liveControls').removeAll(true, true);
 
         this.liveControls = {};
+        this.liveControlsByHardware = {};
+
         Ext.each(controls,function(controlItem){
             this.liveControlAdd(controlItem.type, controlItem);
         },this);
@@ -1527,6 +1529,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
 
         this.liveControls[config.controlId] = control;
+        this.liveControlsByHardware[config.hardwareId] = control;
     },
 
     controlShowAdd: function() {

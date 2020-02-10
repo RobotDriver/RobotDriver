@@ -139,6 +139,13 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         }
         this.logEvents = [];
 
+        var gamepadUpdate = navigator.getGamepads();
+        for(var i=0; i<9; i++){
+            if(gamepadUpdate[i] && gamepadUpdate[i].index){
+                this.gamepadConnected({gamepad: gamepadUpdate[i]});
+            }
+        }
+
         window.addEventListener("gamepadconnected", this.gamepadConnected.bind(this));
         window.addEventListener("gamepaddisconnected", this.gamepadDisconnected.bind(this));
 

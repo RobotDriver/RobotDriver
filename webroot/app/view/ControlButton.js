@@ -72,7 +72,6 @@ Ext.define('RobotDriver.view.ControlButton', {
         }
 
         createFireButton(this.button, function(state){
-            console.log('button handler!', arguments);
 
             if(state==='down'){
                 if(this.buttonActionType==='toggle'){

@@ -38,7 +38,7 @@ Ext.define('RobotDriver.view.BaseControlStick', {
             height: 80,
             userCls: 'stick-inner-container',
             width: 80,
-            html: '<div class="stick" id="virctrlstickRight"></div>',
+            html: '<div class="stick"></div>',
             margin: '35 35 0 35',
             maxHeight: 80,
             maxWidth: 80
@@ -68,6 +68,7 @@ Ext.define('RobotDriver.view.BaseControlStick', {
         }
 
         let stickRange = 50;
+
         this.virtualControllerStickLeft = createStick(element.dom.getElementsByClassName('stick')[0], stickRange, 'left', function(pos){
 
             var x = Math.round(((pos.x/stickRange) * 500) + 500);
