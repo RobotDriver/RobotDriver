@@ -56,12 +56,11 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         {
             xtype: 'panel',
             border: true,
-            height: 163,
-            itemId: 'controllerEventsContainer',
+            itemId: 'connectecControllersContainer',
             margin: '0 4 0 4',
-            padding: 10,
+            minHeight: 51,
+            padding: 6,
             scrollable: true,
-            title: 'Controller Events',
             layout: {
                 type: 'vbox',
                 align: 'start'
@@ -69,8 +68,39 @@ Ext.define('RobotDriver.view.GamepadMapping', {
             items: [
                 {
                     xtype: 'container',
+                    html: '<u><b>Active Controllers<b></u>',
+                    margin: '0 0 5 0'
+                },
+                {
+                    xtype: 'container',
+                    itemId: 'connectedControllers',
+                    html: 'No Controllers Detected'
+                }
+            ]
+        },
+        {
+            xtype: 'panel',
+            border: true,
+            itemId: 'controllerEventsContainer',
+            margin: '0 4 0 4',
+            minHeight: 70,
+            padding: 6,
+            scrollable: true,
+            layout: {
+                type: 'vbox',
+                align: 'start'
+            },
+            items: [
+                {
+                    xtype: 'container',
+                    html: '<u><b>Controller Events<b></u>',
+                    margin: '0 0 5 0'
+                },
+                {
+                    xtype: 'container',
                     flex: 1,
-                    itemId: 'controllerEvents'
+                    itemId: 'controllerEvents',
+                    html: '<b><font color=red>Press Buttons or Move Axes to see events</font></b>'
                 }
             ]
         },
@@ -157,6 +187,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         let gx = e.gamepad.index+e.gamepad.id;
 
         this.activeGamepads[gx] = e.gamepad;
+        this.updateConnectedControllers();
 
         this.appendControllerEvent("Connected! controller #"+(e.gamepad.index+1)+ " "+ e.gamepad.id + "<BR>\r\n");
 
@@ -183,6 +214,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
         delete this.activeGamepads[gx];
         delete this.gamepadStates[gx];
+        this.updateConnectedControllers();
 
         this.appendControllerEvent("Disconnected! controller #"+(e.gamepad.index+1)+ " "+ e.gamepad.id + "<BR>\r\n");
     },
@@ -353,6 +385,22 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
             mapComp.setControlStoreData(this.controlsDataStoreData);
         }, this);
+    },
+
+    updateConnectedControllers: function(index, id) {
+        let el = this.queryById('connectedControllers').el.dom;
+
+        let active = 0;
+        let logBuf = '';
+        for(var gx in this.activeGamepads){
+            let ag = this.activeGamepads[gx];
+            logBuf += '#'+(ag.index+1) + " " + ag.id + "<BR>\r\n";
+        }
+        if(logBuf === ''){
+            logBuf = 'No Controllers Detected';
+        }
+
+        el.innerHTML = logBuf;
     }
 
 });

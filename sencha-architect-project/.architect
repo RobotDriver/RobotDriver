@@ -1752,8 +1752,22 @@
                     ]
                 },
                 {
+                    "id": "e713eb2c-23fd-488a-97a5-0b544c3e3b40",
+                    "cn": [
+                        {
+                            "id": "7490e3d2-fa00-44dd-b3c2-9c5e846f0f7a"
+                        },
+                        {
+                            "id": "e915e9f5-99fd-4b93-ad14-fdb8cf322263"
+                        }
+                    ]
+                },
+                {
                     "id": "8aa7a853-dece-4bb2-88a1-635c4a1479b4",
                     "cn": [
+                        {
+                            "id": "eda45227-d61c-4108-9418-26cfac3891e0"
+                        },
                         {
                             "id": "029869b3-41eb-47dc-86f7-180e11cebd75"
                         }
@@ -1809,6 +1823,9 @@
                 },
                 {
                     "id": "8f324657-07ca-4dc9-b3db-e20eb533b7ff"
+                },
+                {
+                    "id": "56ea6a4e-a485-47a5-90a4-66bdccff907d"
                 }
             ]
         },
@@ -1961,8 +1978,8 @@
         },
         "controller": true,
         "resource": true,
-        "b2e93e82-8f7d-4722-a482-a8b94b2d30cb": {
-            "id": "b2e93e82-8f7d-4722-a482-a8b94b2d30cb"
+        "012ca7e7-5cdb-4332-870c-e07c4c96942e": {
+            "id": "012ca7e7-5cdb-4332-870c-e07c4c96942e"
         },
         "0bed7e48-343e-4468-9c92-33f050cfcaf9": {
             "id": "0bed7e48-343e-4468-9c92-33f050cfcaf9"
@@ -2006,13 +2023,13 @@
         ]
     },
     "canvasState": {
-        "topInstance": null
+        "topInstance": "abecd0d9-7fdf-4245-b1a2-4165f72320da"
     },
     "inspectorState": {
         "topInstance": "abecd0d9-7fdf-4245-b1a2-4165f72320da",
-        "selectedInstance": "6f79e076-8716-4711-9610-db5958ad59e9"
+        "selectedInstance": "abecd0d9-7fdf-4245-b1a2-4165f72320da"
     },
-    "editMode": "code",
+    "editMode": "design",
     "userSettings": {
         "no-cmd": true
     }

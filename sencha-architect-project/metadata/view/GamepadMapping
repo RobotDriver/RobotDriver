@@ -151,13 +151,12 @@
             "userConfig": {
                 "border": true,
                 "container|align": "start",
-                "height": 163,
-                "itemId": "controllerEventsContainer",
+                "itemId": "connectecControllersContainer",
                 "layout": "vbox",
                 "margin": "0 4 0 4",
-                "padding": 10,
-                "scrollable": true,
-                "title": "Controller Events"
+                "minHeight": 51,
+                "padding": 6,
+                "scrollable": true
             },
             "configAlternates": {
                 "border": "boolean",
@@ -168,7 +167,80 @@
                 "scrollable": "auto",
                 "title": "string",
                 "container|align": "string",
-                "padding": "auto"
+                "padding": "auto",
+                "minHeight": "auto"
+            },
+            "name": "MyPanel3",
+            "designerId": "e713eb2c-23fd-488a-97a5-0b544c3e3b40",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "<u><b>Active Controllers<b></u>",
+                        "margin": "0 0 5 0"
+                    },
+                    "configAlternates": {
+                        "html": "string",
+                        "margin": "auto"
+                    },
+                    "name": "MyContainer",
+                    "designerId": "7490e3d2-fa00-44dd-b3c2-9c5e846f0f7a"
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "No Controllers Detected",
+                        "itemId": "connectedControllers"
+                    },
+                    "configAlternates": {
+                        "itemId": "string",
+                        "padding": "auto",
+                        "layout|flex": "number",
+                        "html": "string"
+                    },
+                    "name": "MyContainer79",
+                    "designerId": "e915e9f5-99fd-4b93-ad14-fdb8cf322263"
+                }
+            ]
+        },
+        {
+            "type": "Ext.Panel",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "border": true,
+                "container|align": "start",
+                "itemId": "controllerEventsContainer",
+                "layout": "vbox",
+                "margin": "0 4 0 4",
+                "minHeight": 70,
+                "padding": 6,
+                "scrollable": true
+            },
+            "configAlternates": {
+                "border": "boolean",
+                "height": "auto",
+                "itemId": "string",
+                "layout": "string",
+                "margin": "auto",
+                "scrollable": "auto",
+                "title": "string",
+                "container|align": "string",
+                "padding": "auto",
+                "minHeight": "auto"
             },
             "name": "MyPanel9",
             "designerId": "8aa7a853-dece-4bb2-88a1-635c4a1479b4",
@@ -181,13 +253,33 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "html": "<u><b>Controller Events<b></u>",
+                        "margin": "0 0 5 0"
+                    },
+                    "configAlternates": {
+                        "html": "string",
+                        "margin": "auto"
+                    },
+                    "name": "MyContainer",
+                    "designerId": "eda45227-d61c-4108-9418-26cfac3891e0"
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "html": "<b><font color=red>Press Buttons or Move Axes to see events</font></b>",
                         "itemId": "controllerEvents",
                         "layout|flex": 1
                     },
                     "configAlternates": {
                         "itemId": "string",
                         "padding": "auto",
-                        "layout|flex": "number"
+                        "layout|flex": "number",
+                        "html": "string"
                     },
                     "name": "MyContainer79",
                     "designerId": "029869b3-41eb-47dc-86f7-180e11cebd75"
@@ -320,6 +412,7 @@
                     "let gx = e.gamepad.index+e.gamepad.id;",
                     "",
                     "this.activeGamepads[gx] = e.gamepad;",
+                    "this.updateConnectedControllers();",
                     "",
                     "this.appendControllerEvent(\"Connected! controller #\"+(e.gamepad.index+1)+ \" \"+ e.gamepad.id + \"<BR>\\r\\n\");",
                     "",
@@ -398,6 +491,7 @@
                     "",
                     "delete this.activeGamepads[gx];",
                     "delete this.gamepadStates[gx];",
+                    "this.updateConnectedControllers();",
                     "",
                     "this.appendControllerEvent(\"Disconnected! controller #\"+(e.gamepad.index+1)+ \" \"+ e.gamepad.id + \"<BR>\\r\\n\");"
                 ]
@@ -758,6 +852,42 @@
             },
             "name": "updateMappingStores",
             "designerId": "8f324657-07ca-4dc9-b3db-e20eb533b7ff"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "index, id"
+                ],
+                "fn": "updateConnectedControllers",
+                "implHandler": [
+                    "let el = this.queryById('connectedControllers').el.dom;",
+                    "",
+                    "let active = 0;",
+                    "let logBuf = '';",
+                    "for(var gx in this.activeGamepads){",
+                    "    let ag = this.activeGamepads[gx];",
+                    "    logBuf += '#'+(ag.index+1) + \" \" + ag.id + \"<BR>\\r\\n\";",
+                    "}",
+                    "if(logBuf === ''){",
+                    "    logBuf = 'No Controllers Detected';",
+                    "}",
+                    "",
+                    "el.innerHTML = logBuf;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "updateConnectedControllers",
+            "designerId": "56ea6a4e-a485-47a5-90a4-66bdccff907d"
         }
     ]
 }
