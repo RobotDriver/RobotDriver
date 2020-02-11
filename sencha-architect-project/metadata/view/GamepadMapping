@@ -7,11 +7,13 @@
     "codeClass": null,
     "userConfig": {
         "designer|userAlias": "gamepadmapping",
-        "designer|userClassName": "GamepadMapping"
+        "designer|userClassName": "GamepadMapping",
+        "layout": "fit"
     },
     "configAlternates": {
         "designer|userAlias": "string",
-        "designer|userClassName": "string"
+        "designer|userClassName": "string",
+        "layout": "string"
     },
     "name": "MyContainer74",
     "designerId": "abecd0d9-7fdf-4245-b1a2-4165f72320da",
@@ -142,54 +144,163 @@
             ]
         },
         {
-            "type": "Ext.Panel",
+            "type": "Ext.Container",
             "reference": {
                 "name": "items",
                 "type": "array"
             },
             "codeClass": null,
             "userConfig": {
-                "border": true,
-                "container|align": "start",
-                "itemId": "connectecControllersContainer",
-                "layout": "vbox",
-                "margin": "0 4 0 4",
-                "minHeight": 51,
-                "padding": 6,
-                "scrollable": true
+                "scrollable": "vertical"
             },
             "configAlternates": {
-                "border": "boolean",
-                "height": "auto",
-                "itemId": "string",
-                "layout": "string",
-                "margin": "auto",
-                "scrollable": "auto",
-                "title": "string",
-                "container|align": "string",
-                "padding": "auto",
-                "minHeight": "auto"
+                "scrollable": "auto"
             },
-            "name": "MyPanel3",
-            "designerId": "e713eb2c-23fd-488a-97a5-0b544c3e3b40",
+            "name": "MyContainer39",
+            "designerId": "177deafd-f94d-43c3-a211-5682ece68460",
             "cn": [
                 {
-                    "type": "Ext.Container",
+                    "type": "Ext.Panel",
                     "reference": {
                         "name": "items",
                         "type": "array"
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "html": "<u><b>Active Controllers<b></u>",
-                        "margin": "0 0 5 0"
+                        "border": true,
+                        "container|align": "start",
+                        "itemId": "connectecControllersContainer",
+                        "layout": "vbox",
+                        "margin": "0 4 0 4",
+                        "minHeight": 51,
+                        "padding": 6
                     },
                     "configAlternates": {
-                        "html": "string",
-                        "margin": "auto"
+                        "border": "boolean",
+                        "height": "auto",
+                        "itemId": "string",
+                        "layout": "string",
+                        "margin": "auto",
+                        "scrollable": "auto",
+                        "title": "string",
+                        "container|align": "string",
+                        "padding": "auto",
+                        "minHeight": "auto"
                     },
-                    "name": "MyContainer",
-                    "designerId": "7490e3d2-fa00-44dd-b3c2-9c5e846f0f7a"
+                    "name": "MyPanel3",
+                    "designerId": "e713eb2c-23fd-488a-97a5-0b544c3e3b40",
+                    "cn": [
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "html": "<u><b>Active Controllers<b></u>",
+                                "margin": "0 0 5 0"
+                            },
+                            "configAlternates": {
+                                "html": "string",
+                                "margin": "auto"
+                            },
+                            "name": "MyContainer",
+                            "designerId": "7490e3d2-fa00-44dd-b3c2-9c5e846f0f7a"
+                        },
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "html": "No Controllers Detected",
+                                "itemId": "connectedControllers"
+                            },
+                            "configAlternates": {
+                                "itemId": "string",
+                                "padding": "auto",
+                                "layout|flex": "number",
+                                "html": "string"
+                            },
+                            "name": "MyContainer79",
+                            "designerId": "e915e9f5-99fd-4b93-ad14-fdb8cf322263"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Panel",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "border": true,
+                        "container|align": "start",
+                        "itemId": "controllerEventsContainer",
+                        "layout": "vbox",
+                        "margin": "0 4 0 4",
+                        "minHeight": 70,
+                        "padding": 6
+                    },
+                    "configAlternates": {
+                        "border": "boolean",
+                        "height": "auto",
+                        "itemId": "string",
+                        "layout": "string",
+                        "margin": "auto",
+                        "scrollable": "auto",
+                        "title": "string",
+                        "container|align": "string",
+                        "padding": "auto",
+                        "minHeight": "auto"
+                    },
+                    "name": "MyPanel9",
+                    "designerId": "8aa7a853-dece-4bb2-88a1-635c4a1479b4",
+                    "cn": [
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "html": "<u><b>Controller Events<b></u>",
+                                "margin": "0 0 5 0"
+                            },
+                            "configAlternates": {
+                                "html": "string",
+                                "margin": "auto"
+                            },
+                            "name": "MyContainer",
+                            "designerId": "eda45227-d61c-4108-9418-26cfac3891e0"
+                        },
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "html": "<b><font color=red>Press Buttons or Move Axes to see events</font></b>",
+                                "itemId": "controllerEvents",
+                                "layout|flex": 1
+                            },
+                            "configAlternates": {
+                                "itemId": "string",
+                                "padding": "auto",
+                                "layout|flex": "number",
+                                "html": "string"
+                            },
+                            "name": "MyContainer79",
+                            "designerId": "029869b3-41eb-47dc-86f7-180e11cebd75"
+                        }
+                    ]
                 },
                 {
                     "type": "Ext.Container",
@@ -199,69 +310,15 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "html": "No Controllers Detected",
-                        "itemId": "connectedControllers"
-                    },
-                    "configAlternates": {
-                        "itemId": "string",
-                        "padding": "auto",
-                        "layout|flex": "number",
-                        "html": "string"
-                    },
-                    "name": "MyContainer79",
-                    "designerId": "e915e9f5-99fd-4b93-ad14-fdb8cf322263"
-                }
-            ]
-        },
-        {
-            "type": "Ext.Panel",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "border": true,
-                "container|align": "start",
-                "itemId": "controllerEventsContainer",
-                "layout": "vbox",
-                "margin": "0 4 0 4",
-                "minHeight": 70,
-                "padding": 6,
-                "scrollable": true
-            },
-            "configAlternates": {
-                "border": "boolean",
-                "height": "auto",
-                "itemId": "string",
-                "layout": "string",
-                "margin": "auto",
-                "scrollable": "auto",
-                "title": "string",
-                "container|align": "string",
-                "padding": "auto",
-                "minHeight": "auto"
-            },
-            "name": "MyPanel9",
-            "designerId": "8aa7a853-dece-4bb2-88a1-635c4a1479b4",
-            "cn": [
-                {
-                    "type": "Ext.Container",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "html": "<u><b>Controller Events<b></u>",
-                        "margin": "0 0 5 0"
+                        "html": "Controller buttons can be mapped to buttons. Controller Axes can be mapped to sliders.",
+                        "padding": 10
                     },
                     "configAlternates": {
                         "html": "string",
-                        "margin": "auto"
+                        "padding": "auto"
                     },
-                    "name": "MyContainer",
-                    "designerId": "eda45227-d61c-4108-9418-26cfac3891e0"
+                    "name": "MyContainer36",
+                    "designerId": "34e2bcc5-ba40-415d-98a2-0a31d4e1659e"
                 },
                 {
                     "type": "Ext.Container",
@@ -271,82 +328,43 @@
                     },
                     "codeClass": null,
                     "userConfig": {
-                        "html": "<b><font color=red>Press Buttons or Move Axes to see events</font></b>",
-                        "itemId": "controllerEvents",
-                        "layout|flex": 1
+                        "html": "No Controller Mapping Configured<BR><BR>Click <B><U>Add Controller Mapping</U></B>",
+                        "itemId": "noMappingMsg",
+                        "padding": 40,
+                        "userCls": [
+                            "text-prompt-container"
+                        ]
+                    },
+                    "configAlternates": {
+                        "style": "object",
+                        "html": "string",
+                        "itemId": "string",
+                        "padding": "auto",
+                        "userCls": "typedarray"
+                    },
+                    "name": "MyContainer35",
+                    "designerId": "9307a252-f332-46cb-b354-4db4c1d79b90"
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "itemId": "mappingsContainer",
+                        "margin": "0 4 20 4"
                     },
                     "configAlternates": {
                         "itemId": "string",
                         "padding": "auto",
-                        "layout|flex": "number",
-                        "html": "string"
+                        "margin": "auto"
                     },
-                    "name": "MyContainer79",
-                    "designerId": "029869b3-41eb-47dc-86f7-180e11cebd75"
+                    "name": "MyContainer78",
+                    "designerId": "40b02f82-d2aa-4e02-8425-cf5d78c08046"
                 }
             ]
-        },
-        {
-            "type": "Ext.Container",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "html": "Controller buttons can be mapped to buttons. Controller Axes can be mapped to sliders.",
-                "padding": 10
-            },
-            "configAlternates": {
-                "html": "string",
-                "padding": "auto"
-            },
-            "name": "MyContainer36",
-            "designerId": "34e2bcc5-ba40-415d-98a2-0a31d4e1659e"
-        },
-        {
-            "type": "Ext.Container",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "itemId": "mappingsContainer",
-                "margin": "0 4 0 4"
-            },
-            "configAlternates": {
-                "itemId": "string",
-                "padding": "auto",
-                "margin": "auto"
-            },
-            "name": "MyContainer78",
-            "designerId": "40b02f82-d2aa-4e02-8425-cf5d78c08046"
-        },
-        {
-            "type": "Ext.Container",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "html": "No Controller Mapping Configured<BR><BR>Click <B><U>Add Controller Mapping</U></B>",
-                "itemId": "noMappingMsg",
-                "padding": 40,
-                "userCls": [
-                    "text-prompt-container"
-                ]
-            },
-            "configAlternates": {
-                "style": "object",
-                "html": "string",
-                "itemId": "string",
-                "padding": "auto",
-                "userCls": "typedarray"
-            },
-            "name": "MyContainer35",
-            "designerId": "9307a252-f332-46cb-b354-4db4c1d79b90"
         },
         {
             "type": "basiceventbinding",

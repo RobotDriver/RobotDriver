@@ -128,12 +128,12 @@ Ext.define('RobotDriver.view.liveController', {
     gamepadChange: function(gamepad, type, index, newValue, oldValue) {
         let foundMap = false;
         Ext.each(this.mappedGamepads, function(mapped){
-            if(mapped.gamepadId == gamepad.id && mapped.gamepadIndex == gamepad.index && mapped.mapIndex === index){
+            if(mapped.gamepadId == gamepad.id && mapped.gamepadIndex == gamepad.index && mapped.mapType === type && mapped.mapIndex === index){
                 foundMap = mapped;
                 return false;
             }
         });
-        if(foundMap){
+        if(foundMap!==false){
             this.fireEvent('action', foundMap, newValue);
         }
     },

@@ -330,7 +330,7 @@
                 "designer|params": [
                     "value"
                 ],
-                "fn": "liveSetValue",
+                "fn": "setValue",
                 "implHandler": [
                     "if(value === 'down'){",
                     "    this.button.classList.add(\"toggledown\");",
@@ -345,7 +345,7 @@
                 "fn": "string",
                 "implHandler": "code"
             },
-            "name": "liveSetValue",
+            "name": "setValue",
             "designerId": "54091b37-0c42-483e-b3b6-5aac3fd570cb"
         }
     ]

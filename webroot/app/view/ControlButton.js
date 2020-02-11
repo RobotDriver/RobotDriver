@@ -167,7 +167,7 @@ Ext.define('RobotDriver.view.ControlButton', {
         this.updateButtonStyles(config.color, this.configColorShadow, this.configContrastColor);
     },
 
-    liveSetValue: function(value) {
+    setValue: function(value) {
         if(value === 'down'){
             this.button.classList.add("toggledown");
         }else{

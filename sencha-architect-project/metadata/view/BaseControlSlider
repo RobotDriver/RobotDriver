@@ -119,7 +119,10 @@
                 "liveUpdate": true,
                 "margin": "0 20 0 20",
                 "minValue": -100,
-                "readOnly": true
+                "readOnly": true,
+                "value": [
+                    0
+                ]
             },
             "configAlternates": {
                 "itemId": "string",
@@ -131,7 +134,8 @@
                 "bubbleEvents": "array",
                 "liveUpdate": "boolean",
                 "maxValue": "number",
-                "minValue": "number"
+                "minValue": "number",
+                "value": "typedarray"
             },
             "name": "MySliderField2",
             "designerId": "2e6ed1c3-eb29-47c6-98ad-5e85b44bcac9",
@@ -148,24 +152,6 @@
                 }
             ],
             "cn": [
-                {
-                    "type": "basiceventbinding",
-                    "reference": {
-                        "name": "listeners",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "fn": "onSliderChange",
-                        "name": "change"
-                    },
-                    "configAlternates": {
-                        "fn": "string",
-                        "name": "string"
-                    },
-                    "name": "onSliderChange",
-                    "designerId": "937a05bc-db1d-4ee5-a6be-3cc6ae0fa41a"
-                },
                 {
                     "type": "basiceventbinding",
                     "reference": {
@@ -259,7 +245,7 @@
                 "fn": "showMotorLabels",
                 "implHandler": [
                     "this.queryById('motorFwdRevLabel').show();",
-                    "this.setValue(500);"
+                    "this.setValue(0);"
                 ]
             },
             "configAlternates": {
@@ -339,9 +325,10 @@
                 "designer|params": [
                     "value"
                 ],
-                "fn": "liveSetValue",
+                "fn": "setSlidervalue",
                 "implHandler": [
-                    "this.setValue(value);"
+                    "this.queryById('slider').updateValue(value);",
+                    ""
                 ]
             },
             "configAlternates": {
@@ -349,7 +336,7 @@
                 "fn": "string",
                 "implHandler": "code"
             },
-            "name": "liveSetValue",
+            "name": "setSlidervalue",
             "designerId": "797ad2c6-3c40-4e32-8efc-db4e048a2c5c"
         }
     ]

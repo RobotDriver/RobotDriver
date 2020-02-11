@@ -7,6 +7,7 @@
     "codeClass": null,
     "userConfig": {
         "activeItem": 4,
+        "deferredRender": false,
         "designer|initialView": true,
         "designer|userAlias": "mainpanel",
         "designer|userClassName": "MainPanel",
@@ -21,9 +22,17 @@
         "scrollable": "auto",
         "title": "string",
         "activeItem": "number",
-        "padding": "auto"
+        "padding": "auto",
+        "deferredRender": "boolean"
     },
     "designerId": "b2f39c25-2aa9-445d-8149-537c726e51f5",
+    "customConfigs": [
+        {
+            "group": "(Custom Properties)",
+            "name": "deferredRender",
+            "type": "string"
+        }
+    ],
     "viewControllerInstanceId": "c2fcd374-9b5c-4853-ba64-ff821433b1d3",
     "viewModelInstanceId": "5860a2a4-649c-4332-ad24-582babee6904",
     "cn": [
@@ -96,24 +105,6 @@
                     ]
                 },
                 {
-                    "type": "Ext.Container",
-                    "reference": {
-                        "name": "items",
-                        "type": "array"
-                    },
-                    "codeClass": null,
-                    "userConfig": {
-                        "itemId": "liveControlsButtons",
-                        "layout": "hbox"
-                    },
-                    "configAlternates": {
-                        "itemId": "string",
-                        "layout": "string"
-                    },
-                    "name": "MyContainer51",
-                    "designerId": "eff32092-de12-406c-adf5-ad12a03da4b8"
-                },
-                {
                     "type": "linkedinstance",
                     "reference": {
                         "name": "items",
@@ -144,19 +135,25 @@
                                 ],
                                 "fn": "onContainerAction",
                                 "implHandler": [
-                                    "//console.log('mapped button pressed',mapping, value);",
+                                    "console.log('controller action',mapping, value);",
                                     "",
-                                    "if(!this.liveControls || !this.liveControls[mapping.controlId]){",
+                                    "console.log(this.liveControls);",
+                                    "if(!this.liveControls || !this.liveControls.controlId || !this.liveControls.controlId[mapping.controlId]){",
                                     "    console.error('Controller mapping to invalid controlId ', mapping.controlId);",
                                     "    return;",
                                     "}",
-                                    "let control = this.liveControls[mapping.controlId];",
+                                    "let control = this.liveControls.controlId[mapping.controlId];",
                                     "",
                                     "switch(control.xtype){",
                                     "    case 'controlbutton':",
-                                    "        control.liveSetValue(value===true ? 'down' : 'up');",
+                                    "        control.setValue(value===true ? 'down' : 'up');",
                                     "        break;",
-                                    "}"
+                                    "    case 'basecontrolslider':",
+                                    "        console.log(control);",
+                                    "        control.setSlidervalue(value * 100);",
+                                    "        break;",
+                                    "}",
+                                    ""
                                 ],
                                 "name": "action"
                             },
@@ -172,7 +169,7 @@
                     ]
                 },
                 {
-                    "type": "Ext.Container",
+                    "type": "linkedinstance",
                     "reference": {
                         "name": "items",
                         "type": "array"
@@ -184,8 +181,37 @@
                     "configAlternates": {
                         "itemId": "string"
                     },
-                    "name": "MyContainer55",
-                    "designerId": "5436f9fa-f877-493f-8a65-e67023320b3c"
+                    "name": "livecontrols",
+                    "designerId": "70ae63ab-9466-4db1-b261-d63123405bdc",
+                    "masterInstanceId": "5442e900-ec2c-4b8d-86d1-3121206780ab",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "designer|params": [
+                                    "msg"
+                                ],
+                                "fn": "onContainerWebsocketSend",
+                                "implHandler": [
+                                    "this.websocketSend(msg);"
+                                ],
+                                "name": "websocketSend"
+                            },
+                            "configAlternates": {
+                                "designer|params": "typedarray",
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onContainerWebsocketSend",
+                            "designerId": "d1fb6249-c3df-4963-863a-ae7daad1b5fd"
+                        }
+                    ]
                 },
                 {
                     "type": "Ext.Container",
@@ -3804,7 +3830,8 @@
                     "",
                     "if(config.controls){",
                     "    this.controlsLoadConfig(config.controls);",
-                    "    this.liveControlsLoadConfig(config.controls);",
+                    "    this.liveControls = this.queryById('liveControls').loadConfig(config.controls, this.hardware);",
+                    "    console.log(this.liveControls);",
                     "    controllerMapping.updateMappingStores(config.controls);",
                     "}",
                     "if(config.controllerMapping){",
@@ -3820,187 +3847,6 @@
             },
             "name": "configLoad",
             "designerId": "db7df046-3974-45ad-999f-57662eb4379b"
-        },
-        {
-            "type": "basicfunction",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "designer|params": [
-                    "controls"
-                ],
-                "fn": "liveControlsLoadConfig",
-                "implHandler": [
-                    "this.queryById('liveControlsButtons').removeAll(true, true);",
-                    "this.queryById('liveControls').removeAll(true, true);",
-                    "",
-                    "this.liveControls = {};",
-                    "this.liveControlsByHardware = {};",
-                    "",
-                    "Ext.each(controls,function(controlItem){",
-                    "    this.liveControlAdd(controlItem.type, controlItem);",
-                    "},this);"
-                ]
-            },
-            "configAlternates": {
-                "designer|params": "typedarray",
-                "fn": "string",
-                "implHandler": "code"
-            },
-            "name": "liveControlsLoadConfig",
-            "designerId": "7449a3e1-9c32-484e-8f6a-0745d6026e99"
-        },
-        {
-            "type": "basicfunction",
-            "reference": {
-                "name": "items",
-                "type": "array"
-            },
-            "codeClass": null,
-            "userConfig": {
-                "designer|params": [
-                    "type",
-                    "config"
-                ],
-                "fn": "liveControlAdd",
-                "implHandler": [
-                    "config = config || false;",
-                    "",
-                    "if(!config || (!config.hardwareId && !config.xhardwareId && !config.yhardwareId)){",
-                    "    return;",
-                    "}",
-                    "",
-                    "let control;",
-                    "let controlConfig = {};",
-                    "",
-                    "config.hardware = this.hardware[config.hardwareId];",
-                    "",
-                    "switch(type){",
-                    "    default:",
-                    "        return false;",
-                    "    case 'slider':",
-                    "",
-                    "        Ext.apply(controlConfig,{",
-                    "            xtype: 'basecontrolslider',",
-                    "            margin:5,",
-                    "            label: config.label || false,",
-                    "            hardwareId: config.hardwareId,",
-                    "            hardware: this.hardware[config.hardwareId],",
-                    "            listeners:{",
-                    "                scope:this,",
-                    "                change:function(field, value){",
-                    "                    if(value.constructor === Array){",
-                    "                        value = value[0];//live update sends arrays for some reason",
-                    "                    }",
-                    "                    this.websocketSend({",
-                    "                        action:'control',",
-                    "                        hardwareId:config.hardwareId,",
-                    "                        value:value",
-                    "                    });",
-                    "                }",
-                    "            }",
-                    "        });",
-                    "        break;",
-                    "    case 'stick':",
-                    "        console.log('add stick!');",
-                    "",
-                    "        Ext.apply(controlConfig,{",
-                    "            xtype: 'basecontrolstick',",
-                    "            label: config.label || false,",
-                    "            listeners:{",
-                    "                scope:this,",
-                    "                change:function(x, y){",
-                    "                    this.websocketSend({",
-                    "                        action:'control',",
-                    "                        hardwareId:config.xhardwareId,",
-                    "                        value:x",
-                    "                    });",
-                    "                    this.websocketSend({",
-                    "                        action:'control',",
-                    "                        hardwareId:config.yhardwareId,",
-                    "                        value:y",
-                    "                    });",
-                    "                }",
-                    "            }",
-                    "        });",
-                    "        break;",
-                    "    case 'button':",
-                    "        console.log(config);",
-                    "        Ext.apply(controlConfig,{",
-                    "            xtype: 'controlbutton',",
-                    "            listeners:{",
-                    "                scope:this,",
-                    "                down:function(){",
-                    "                    let msg = {",
-                    "                        action:'control',",
-                    "                        hardwareId:config.hardwareId",
-                    "                    };",
-                    "",
-                    "                    if(config.actionType === 'setValue'){",
-                    "                        msg.valueMs = config.value;",
-                    "                        msg.value = msg.valueMs;",
-                    "                    }else{",
-                    "                        msg.actionType = config.actionType;",
-                    "                        msg.value = config.value;",
-                    "                    }",
-                    "                    this.websocketSend(msg);",
-                    "                },",
-                    "                up:function(){",
-                    "                    let msg = {",
-                    "                        action:'control',",
-                    "                        hardwareId:config.hardwareId",
-                    "                    };",
-                    "                    if(config.actionType === 'setValue'){",
-                    "                        msg.valueMs = this.hardware[config.hardwareId].startingPosition;",
-                    "                        msg.value = msg.valueMs;",
-                    "                    }else{",
-                    "                        msg.actionType = config.actionType;",
-                    "                        msg.value = config.value;",
-                    "                    }",
-                    "",
-                    "                    this.websocketSend(msg);",
-                    "                }",
-                    "            }",
-                    "        });",
-                    "",
-                    "        break;",
-                    "    //case 'motorslider':",
-                    "    //    panelConfig.xtype = 'controlmotorslider';",
-                    "    //    break;",
-                    "}",
-                    "",
-                    "control = Ext.create(controlConfig);",
-                    "",
-                    "switch(type){",
-                    "    case 'stick':",
-                    "    case 'button':",
-                    "        this.queryById('liveControlsButtons').add(control);",
-                    "        break;",
-                    "    case 'motorslider':",
-                    "    case 'slider':",
-                    "        this.queryById('liveControls').add(control);",
-                    "        break;",
-                    "",
-                    "}",
-                    "",
-                    "if(config && control.setConfigValues){",
-                    "    control.setConfigValues(config);",
-                    "}",
-                    "",
-                    "this.liveControls[config.controlId] = control;",
-                    "this.liveControlsByHardware[config.hardwareId] = control;"
-                ]
-            },
-            "configAlternates": {
-                "designer|params": "typedarray",
-                "fn": "string",
-                "implHandler": "code"
-            },
-            "name": "liveControlAdd",
-            "designerId": "5f9bc4ce-d2fb-45dc-afe1-753db1449448"
         },
         {
             "type": "basicfunction",
@@ -4291,6 +4137,7 @@
                 ],
                 "fn": "hardwareLoadConfig",
                 "implHandler": [
+                    "console.log('hardwareLoadConfig');",
                     "this.hardware = {};",
                     "for(var i in hardware){",
                     "    let hi = hardware[i];",

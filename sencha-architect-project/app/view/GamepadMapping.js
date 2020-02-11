@@ -27,6 +27,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     viewModel: {
         type: 'gamepadmapping'
     },
+    layout: 'fit',
     defaultListenerScope: true,
 
     items: [
@@ -54,72 +55,76 @@ Ext.define('RobotDriver.view.GamepadMapping', {
             ]
         },
         {
-            xtype: 'panel',
-            border: true,
-            itemId: 'connectecControllersContainer',
-            margin: '0 4 0 4',
-            minHeight: 51,
-            padding: 6,
-            scrollable: true,
-            layout: {
-                type: 'vbox',
-                align: 'start'
-            },
+            xtype: 'container',
+            scrollable: 'vertical',
             items: [
                 {
-                    xtype: 'container',
-                    html: '<u><b>Active Controllers<b></u>',
-                    margin: '0 0 5 0'
+                    xtype: 'panel',
+                    border: true,
+                    itemId: 'connectecControllersContainer',
+                    margin: '0 4 0 4',
+                    minHeight: 51,
+                    padding: 6,
+                    layout: {
+                        type: 'vbox',
+                        align: 'start'
+                    },
+                    items: [
+                        {
+                            xtype: 'container',
+                            html: '<u><b>Active Controllers<b></u>',
+                            margin: '0 0 5 0'
+                        },
+                        {
+                            xtype: 'container',
+                            itemId: 'connectedControllers',
+                            html: 'No Controllers Detected'
+                        }
+                    ]
+                },
+                {
+                    xtype: 'panel',
+                    border: true,
+                    itemId: 'controllerEventsContainer',
+                    margin: '0 4 0 4',
+                    minHeight: 70,
+                    padding: 6,
+                    layout: {
+                        type: 'vbox',
+                        align: 'start'
+                    },
+                    items: [
+                        {
+                            xtype: 'container',
+                            html: '<u><b>Controller Events<b></u>',
+                            margin: '0 0 5 0'
+                        },
+                        {
+                            xtype: 'container',
+                            flex: 1,
+                            itemId: 'controllerEvents',
+                            html: '<b><font color=red>Press Buttons or Move Axes to see events</font></b>'
+                        }
+                    ]
                 },
                 {
                     xtype: 'container',
-                    itemId: 'connectedControllers',
-                    html: 'No Controllers Detected'
-                }
-            ]
-        },
-        {
-            xtype: 'panel',
-            border: true,
-            itemId: 'controllerEventsContainer',
-            margin: '0 4 0 4',
-            minHeight: 70,
-            padding: 6,
-            scrollable: true,
-            layout: {
-                type: 'vbox',
-                align: 'start'
-            },
-            items: [
-                {
-                    xtype: 'container',
-                    html: '<u><b>Controller Events<b></u>',
-                    margin: '0 0 5 0'
+                    html: 'Controller buttons can be mapped to buttons. Controller Axes can be mapped to sliders.',
+                    padding: 10
                 },
                 {
                     xtype: 'container',
-                    flex: 1,
-                    itemId: 'controllerEvents',
-                    html: '<b><font color=red>Press Buttons or Move Axes to see events</font></b>'
+                    itemId: 'noMappingMsg',
+                    userCls: 'text-prompt-container',
+                    html: 'No Controller Mapping Configured<BR><BR>Click <B><U>Add Controller Mapping</U></B>',
+                    padding: 40
+                },
+                {
+                    xtype: 'container',
+                    itemId: 'mappingsContainer',
+                    margin: '0 4 20 4'
                 }
             ]
-        },
-        {
-            xtype: 'container',
-            html: 'Controller buttons can be mapped to buttons. Controller Axes can be mapped to sliders.',
-            padding: 10
-        },
-        {
-            xtype: 'container',
-            itemId: 'mappingsContainer',
-            margin: '0 4 0 4'
-        },
-        {
-            xtype: 'container',
-            itemId: 'noMappingMsg',
-            userCls: 'text-prompt-container',
-            html: 'No Controller Mapping Configured<BR><BR>Click <B><U>Add Controller Mapping</U></B>',
-            padding: 40
         }
     ],
     listeners: {

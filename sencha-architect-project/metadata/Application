@@ -29,7 +29,8 @@
             "GamepadInfo",
             "GamepadMapping",
             "GamepadItemMap",
-            "liveController"
+            "liveController",
+            "liveControls"
         ]
     },
     "configAlternates": {

@@ -62,11 +62,13 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
             itemId: 'slider',
             margin: '0 20 0 20',
             label: 'Name',
+            value: [
+                0
+            ],
             liveUpdate: true,
             minValue: -100,
             readOnly: true,
             listeners: {
-                change: 'onSliderChange',
                 tap: {
                     fn: 'onSliderTap',
                     element: 'element'
@@ -76,10 +78,6 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
     ],
     listeners: {
         painted: 'onContainerPainted'
-    },
-
-    onSliderChange: function(me, newValue, oldValue, eOpts) {
-
     },
 
     onSliderTap: function(event) {
@@ -121,15 +119,16 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
 
     showMotorLabels: function() {
         this.queryById('motorFwdRevLabel').show();
-        this.setValue(500);
+        this.setValue(0);
     },
 
     setValue: function(value) {
         this.queryById('slider').setValue(value);
     },
 
-    liveSetValue: function(value) {
-        this.setValue(value);
+    setSlidervalue: function(value) {
+        this.queryById('slider').updateValue(value);
+
     }
 
 });

@@ -184,6 +184,7 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
         let values = this.getValues();
         values.type='stick';
 
+        values.controlId = this.controlId;
         values.label = this.queryById('stickPreview').getLabel();
 
         values.xhardwareId = this.queryById('xhardware').getHardwareId();

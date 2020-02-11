@@ -20,6 +20,7 @@ Ext.define('RobotDriver.view.MainPanel', {
     requires: [
         'RobotDriver.view.MainPanelViewModel',
         'RobotDriver.view.liveController',
+        'RobotDriver.view.liveControls',
         'RobotDriver.view.GamepadMapping',
         'Ext.Panel',
         'Ext.Button',
@@ -33,6 +34,10 @@ Ext.define('RobotDriver.view.MainPanel', {
         'Ext.Spacer',
         'Ext.field.TextArea'
     ],
+
+    config: {
+        deferredRender: false
+    },
 
     viewModel: {
         type: 'mainpanel'
@@ -61,11 +66,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                     }
                 },
                 {
-                    xtype: 'container',
-                    itemId: 'liveControlsButtons',
-                    layout: 'hbox'
-                },
-                {
                     xtype: 'livecontroller',
                     itemId: 'liveController',
                     listeners: {
@@ -73,8 +73,11 @@ Ext.define('RobotDriver.view.MainPanel', {
                     }
                 },
                 {
-                    xtype: 'container',
-                    itemId: 'liveControls'
+                    xtype: 'livecontrols',
+                    itemId: 'liveControls',
+                    listeners: {
+                        websocketSend: 'onContainerWebsocketSend'
+                    }
                 },
                 {
                     xtype: 'container',
@@ -943,19 +946,29 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     onContainerAction: function(mapping, value) {
-        //console.log('mapped button pressed',mapping, value);
+        console.log('controller action',mapping, value);
 
-        if(!this.liveControls || !this.liveControls[mapping.controlId]){
+        console.log(this.liveControls);
+        if(!this.liveControls || !this.liveControls.controlId || !this.liveControls.controlId[mapping.controlId]){
             console.error('Controller mapping to invalid controlId ', mapping.controlId);
             return;
         }
-        let control = this.liveControls[mapping.controlId];
+        let control = this.liveControls.controlId[mapping.controlId];
 
         switch(control.xtype){
             case 'controlbutton':
-                control.liveSetValue(value===true ? 'down' : 'up');
+                control.setValue(value===true ? 'down' : 'up');
+                break;
+            case 'basecontrolslider':
+                console.log(control);
+                control.setSlidervalue(value * 100);
                 break;
         }
+
+    },
+
+    onContainerWebsocketSend: function(msg) {
+        this.websocketSend(msg);
     },
 
     onTrexPanSliderChange: function(me, newValue, oldValue, eOpts) {
@@ -1383,153 +1396,14 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         if(config.controls){
             this.controlsLoadConfig(config.controls);
-            this.liveControlsLoadConfig(config.controls);
+            this.liveControls = this.queryById('liveControls').loadConfig(config.controls, this.hardware);
+            console.log(this.liveControls);
             controllerMapping.updateMappingStores(config.controls);
         }
         if(config.controllerMapping){
             controllerMapping.loadConfig(config.controllerMapping);
             this.queryById('liveController').loadConfig(config.controllerMapping);
         }
-    },
-
-    liveControlsLoadConfig: function(controls) {
-        this.queryById('liveControlsButtons').removeAll(true, true);
-        this.queryById('liveControls').removeAll(true, true);
-
-        this.liveControls = {};
-        this.liveControlsByHardware = {};
-
-        Ext.each(controls,function(controlItem){
-            this.liveControlAdd(controlItem.type, controlItem);
-        },this);
-    },
-
-    liveControlAdd: function(type, config) {
-        config = config || false;
-
-        if(!config || (!config.hardwareId && !config.xhardwareId && !config.yhardwareId)){
-            return;
-        }
-
-        let control;
-        let controlConfig = {};
-
-        config.hardware = this.hardware[config.hardwareId];
-
-        switch(type){
-            default:
-                return false;
-            case 'slider':
-
-                Ext.apply(controlConfig,{
-                    xtype: 'basecontrolslider',
-                    margin:5,
-                    label: config.label || false,
-                    hardwareId: config.hardwareId,
-                    hardware: this.hardware[config.hardwareId],
-                    listeners:{
-                        scope:this,
-                        change:function(field, value){
-                            if(value.constructor === Array){
-                                value = value[0];//live update sends arrays for some reason
-                            }
-                            this.websocketSend({
-                                action:'control',
-                                hardwareId:config.hardwareId,
-                                value:value
-                            });
-                        }
-                    }
-                });
-                break;
-            case 'stick':
-                console.log('add stick!');
-
-                Ext.apply(controlConfig,{
-                    xtype: 'basecontrolstick',
-                    label: config.label || false,
-                    listeners:{
-                        scope:this,
-                        change:function(x, y){
-                            this.websocketSend({
-                                action:'control',
-                                hardwareId:config.xhardwareId,
-                                value:x
-                            });
-                            this.websocketSend({
-                                action:'control',
-                                hardwareId:config.yhardwareId,
-                                value:y
-                            });
-                        }
-                    }
-                });
-                break;
-            case 'button':
-                console.log(config);
-                Ext.apply(controlConfig,{
-                    xtype: 'controlbutton',
-                    listeners:{
-                        scope:this,
-                        down:function(){
-                            let msg = {
-                                action:'control',
-                                hardwareId:config.hardwareId
-                            };
-
-                            if(config.actionType === 'setValue'){
-                                msg.valueMs = config.value;
-                                msg.value = msg.valueMs;
-                            }else{
-                                msg.actionType = config.actionType;
-                                msg.value = config.value;
-                            }
-                            this.websocketSend(msg);
-                        },
-                        up:function(){
-                            let msg = {
-                                action:'control',
-                                hardwareId:config.hardwareId
-                            };
-                            if(config.actionType === 'setValue'){
-                                msg.valueMs = this.hardware[config.hardwareId].startingPosition;
-                                msg.value = msg.valueMs;
-                            }else{
-                                msg.actionType = config.actionType;
-                                msg.value = config.value;
-                            }
-
-                            this.websocketSend(msg);
-                        }
-                    }
-                });
-
-                break;
-            //case 'motorslider':
-            //    panelConfig.xtype = 'controlmotorslider';
-            //    break;
-        }
-
-        control = Ext.create(controlConfig);
-
-        switch(type){
-            case 'stick':
-            case 'button':
-                this.queryById('liveControlsButtons').add(control);
-                break;
-            case 'motorslider':
-            case 'slider':
-                this.queryById('liveControls').add(control);
-                break;
-
-        }
-
-        if(config && control.setConfigValues){
-            control.setConfigValues(config);
-        }
-
-        this.liveControls[config.controlId] = control;
-        this.liveControlsByHardware[config.hardwareId] = control;
     },
 
     controlShowAdd: function() {
@@ -1678,6 +1552,7 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     hardwareLoadConfig: function(hardware, animate) {
+        console.log('hardwareLoadConfig');
         this.hardware = {};
         for(var i in hardware){
             let hi = hardware[i];
