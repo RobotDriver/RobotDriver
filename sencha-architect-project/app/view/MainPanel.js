@@ -1599,7 +1599,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         panel.show({type:'slide', direction:'right'});
 
         let hardware = panel.queryById('hardware');
-        if(hardware){
+        if(hardware && hardware.syncHardwareStore){
             hardware.syncHardwareStore(this.getViewModel().getStore('hardwareStore'));
         }
         if(type==='stick'){
@@ -1669,7 +1669,7 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         Ext.each(this.queryById('controlItems').items.items, function(item){
             let hardware = item.queryById('hardware');
-            if(hardware.syncHardwareStore){
+            if(hardware && hardware.syncHardwareStore){
                 hardware.syncHardwareStore(hardwareStore);
             }else{
                 console.log('missing syncHardwareStore func on component', item);

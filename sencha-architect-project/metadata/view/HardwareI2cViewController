@@ -6,13 +6,13 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "hardwaremotor",
-        "designer|userClassName": "HardwareServoViewController1"
+        "designer|userAlias": "hardwarei2c",
+        "designer|userClassName": "HardwareI2cViewController"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "HardwareServoViewController1",
-    "designerId": "92a55c70-5bd5-42d5-b3c7-457380cce474"
+    "name": "HardwareServoViewController2",
+    "designerId": "f1e38659-ce6c-48bf-b8d9-2495217add0f"
 }

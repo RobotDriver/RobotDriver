@@ -117,7 +117,8 @@
                 "itemId": "slider",
                 "label": "Name",
                 "liveUpdate": true,
-                "maxValue": 1000,
+                "margin": "0 20 0 20",
+                "minValue": -100,
                 "readOnly": true
             },
             "configAlternates": {
@@ -129,7 +130,8 @@
                 "readOnly": "boolean",
                 "bubbleEvents": "array",
                 "liveUpdate": "boolean",
-                "maxValue": "number"
+                "maxValue": "number",
+                "minValue": "number"
             },
             "name": "MySliderField2",
             "designerId": "2e6ed1c3-eb29-47c6-98ad-5e85b44bcac9",
@@ -163,6 +165,41 @@
                     },
                     "name": "onSliderChange",
                     "designerId": "937a05bc-db1d-4ee5-a6be-3cc6ae0fa41a"
+                },
+                {
+                    "type": "basiceventbinding",
+                    "reference": {
+                        "name": "listeners",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "designer|params": [
+                            "event"
+                        ],
+                        "element": "element",
+                        "fn": "onSliderTap",
+                        "implHandler": [
+                            "let slider = this.queryById('slider');",
+                            "let el = slider.el;",
+                            "let xy = el.getXY();",
+                            "let labelWidth = slider.labelElement.getWidth();",
+                            "let tapPosPct = (event.touch.pageX - xy[0] - labelWidth) / (el.getWidth() - labelWidth);",
+                            "let newVal = (tapPosPct*200)-100;",
+                            "newVal = Math.min(Math.max(newVal, -100), 100);",
+                            "slider.setValue(newVal);"
+                        ],
+                        "name": "tap"
+                    },
+                    "configAlternates": {
+                        "designer|params": "typedarray",
+                        "element": "string",
+                        "fn": "string",
+                        "implHandler": "code",
+                        "name": "string"
+                    },
+                    "name": "onSliderTap",
+                    "designerId": "5daa0908-85be-4ee2-a980-aa76d5a9f949"
                 }
             ]
         },

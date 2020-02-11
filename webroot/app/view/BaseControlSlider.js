@@ -60,12 +60,17 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
                 'change'
             ],
             itemId: 'slider',
+            margin: '0 20 0 20',
             label: 'Name',
             liveUpdate: true,
-            maxValue: 1000,
+            minValue: -100,
             readOnly: true,
             listeners: {
-                change: 'onSliderChange'
+                change: 'onSliderChange',
+                tap: {
+                    fn: 'onSliderTap',
+                    element: 'element'
+                }
             }
         }
     ],
@@ -75,6 +80,17 @@ Ext.define('RobotDriver.view.BaseControlSlider', {
 
     onSliderChange: function(me, newValue, oldValue, eOpts) {
 
+    },
+
+    onSliderTap: function(event) {
+        let slider = this.queryById('slider');
+        let el = slider.el;
+        let xy = el.getXY();
+        let labelWidth = slider.labelElement.getWidth();
+        let tapPosPct = (event.touch.pageX - xy[0] - labelWidth) / (el.getWidth() - labelWidth);
+        let newVal = (tapPosPct*200)-100;
+        newVal = Math.min(Math.max(newVal, -100), 100);
+        slider.setValue(newVal);
     },
 
     onContainerPainted: function(sender, element, eOpts) {

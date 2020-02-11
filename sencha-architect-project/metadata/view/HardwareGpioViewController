@@ -6,13 +6,13 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "controlbuttonconfig",
-        "designer|userClassName": "HardwareServoViewController4"
+        "designer|userAlias": "hardwaregpio",
+        "designer|userClassName": "HardwareGpioViewController"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "HardwareServoViewController4",
-    "designerId": "f6f04b3b-433f-4acf-93fd-d8437b810155"
+    "name": "HardwareServoViewController5",
+    "designerId": "b3b01d87-4c9b-471f-a6fb-949a461c8fdf"
 }

@@ -311,8 +311,15 @@ function controlHardware(message){
 				hw.newState = newVal;
 				return;
 			}
-			let ms = Math.trunc(hw.rangeMin + ((message.value * (hw.rangeMax - hw.rangeMin))/1000));
-			//console.log(`value = ${message.value}`);
+
+			if(message.value > 100 || message.value < -100){
+				console.error(`Control Error! Invalid servo value ${message.value}. Please contact support!`);
+				return;
+			}
+			//value range is -100 to 100, convert to %
+			let newVal = (message.value + 100) / 200;
+			//convert to ms
+			let ms = Math.trunc(hw.rangeMin + ( newVal * (hw.rangeMax - hw.rangeMin) ) );
 
 			hw.currentValue = ms;
 			hw.newState = ms;
@@ -335,8 +342,8 @@ function addServoToControlLoop(hardware){
 
 function addMotorToControlLoop(hardware){
 	activeMotors[hardware.hardwareId] = hardware;
-	hardware.currentState = 500;
-	hardware.newState = 500;
+	hardware.currentState = 0;
+	hardware.newState = 0;
 	hardware.stopped = false;
 	hardware.lastChange = 0;
 }
@@ -355,8 +362,8 @@ const hardwareControlLoop = setInterval(() => {
 	for(var m in activeMotors){
 		let hw = activeMotors[m];
 		if(!hw.stopped && (new Date() - hw.lastChange > 500)){
-			motorSetState(hw, 500);
-			hw.currentState = hw.newState = 500;
+			motorSetState(hw, 0);
+			hw.currentState = hw.newState = 0;
 			continue;
 		}
 		if(hw.currentState === hw.newState){
@@ -367,19 +374,6 @@ const hardwareControlLoop = setInterval(() => {
 		hw.lastChange = new Date();
 	}
 }, 50);
-
-// function motorMove(steeringValue, throttleValue){
-// 	newSteeringValue = steeringValue;
-// 	newThrottleValue = throttleValue;
-//
-// 	//if we dont get any movement messages for 500ms from the last message, stop movement
-// 	clearTimeout(movementKillTimer);
-// 	if(newSteeringValue!==500 && newThrottleValue!==500){
-// 		movementKillTimer = setTimeout(() => {
-// 			motorMove(500,500);
-// 		},500);
-// 	}
-// }
 
 function motorSetState(hardware, newState){
 	switch(hardware.motorDriverType){
@@ -394,6 +388,7 @@ function motorSetState(hardware, newState){
 
 function motorSetThrottleL298n(hardware, throttle){
 
+	console.log("motorSetThrottleL298n set throttle = ", throttle);
 	if (throttle > throttleMidpoint-throttleThreshold && throttle < throttleMidpoint+throttleThreshold) {
 		console.log('motors, stop');
 		motorSetDutyCycleGpio(hardware, 0, 0);
@@ -402,14 +397,14 @@ function motorSetThrottleL298n(hardware, throttle){
 	}
 	hardware.stopped = false;
 	let throttlePercent, dutyCycle;
-	if (throttle >= 500) {
-		throttlePercent = (throttle - 500) / 500;
+	if (throttle > 0) {
+		throttlePercent = throttle / 100;
 		console.log(`motors, forward ${Math.round(throttlePercent*100)}%`);
 
 		dutyCycle = Math.trunc(Math.min(255,throttlePercent*255));
 		motorSetDutyCycleGpio(hardware, 1, dutyCycle);
 	} else {
-		throttlePercent = (500 - throttle) / 500;
+		throttlePercent = Math.abs(throttle) / 100;
 		console.log(`motors, reverse ${Math.round(throttlePercent*100)}%`);
 
 		dutyCycle = Math.trunc(Math.min(255,throttlePercent*255));
@@ -694,8 +689,8 @@ var pwmTiltChannel = 14;
 
 var steeringValue = 500; // midpoint - straight foward
 
-var throttleThreshold = 60.0
-var throttleMidpoint = 500.0
+var throttleThreshold = 9.0
+var throttleMidpoint = 0.0
 
 var motorPercentMin = 0.2; // 20% pwm duty cycle for minimum motor movement
 //var motorPwmMax = 4095

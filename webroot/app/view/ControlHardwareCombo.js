@@ -64,6 +64,7 @@ Ext.define('RobotDriver.view.ControlHardwareCombo', {
     },
 
     syncHardwareStore: function(store) {
+        //console.log('sync hardware store', store);
         let hardwareStore = this.getViewModel().getStore('hardwareComboStore');
 
         hardwareStore.removeAll();

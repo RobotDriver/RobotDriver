@@ -6,13 +6,13 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "hardwarei2c",
-        "designer|userClassName": "HardwareServoViewController2"
+        "designer|userAlias": "addcontroltype",
+        "designer|userClassName": "AddControlTypeViewController"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "HardwareServoViewController2",
-    "designerId": "f1e38659-ce6c-48bf-b8d9-2495217add0f"
+    "name": "AddHardwareTypeViewController1",
+    "designerId": "08b8224f-4d85-44e7-ae1b-b5f7bddbb21a"
 }

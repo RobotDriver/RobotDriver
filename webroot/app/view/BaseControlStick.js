@@ -69,14 +69,12 @@ Ext.define('RobotDriver.view.BaseControlStick', {
 
         let stickRange = 50;
 
-        this.virtualControllerStickLeft = createStick(element.dom.getElementsByClassName('stick')[0], stickRange, 'left', function(pos){
-
-            var x = Math.round(((pos.x/stickRange) * 500) + 500);
-            var y = 1000 - Math.round(((pos.y/stickRange) * 500) + 500);
-
-            //console.log('stick move!', x, y);
+        this.virtualStick = createStick(element.dom.getElementsByClassName('stick')[0], stickRange, 'left', function(pos){
+            var x = Math.round((pos.x/stickRange) * 100);
+            var y = Math.round((pos.y/stickRange) * 100) * -1; //invert Y values
             this.fireEvent('change', x, y);
         }.bind(this));
+
     },
 
     setLabel: function(text) {
@@ -86,6 +84,10 @@ Ext.define('RobotDriver.view.BaseControlStick', {
 
     getLabel: function() {
         return this.label;
+    },
+
+    setRawValue: function(x,y) {
+        this.virtualStick.stick.style.transform = `translate3d(${x*50}px, ${y*50}px, 0px)`;
     }
 
 });

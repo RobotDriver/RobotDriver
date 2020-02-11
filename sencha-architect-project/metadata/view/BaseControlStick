@@ -106,14 +106,12 @@
                     "",
                     "let stickRange = 50;",
                     "",
-                    "this.virtualControllerStickLeft = createStick(element.dom.getElementsByClassName('stick')[0], stickRange, 'left', function(pos){",
-                    "",
-                    "    var x = Math.round(((pos.x/stickRange) * 500) + 500);",
-                    "    var y = 1000 - Math.round(((pos.y/stickRange) * 500) + 500);",
-                    "",
-                    "    //console.log('stick move!', x, y);",
+                    "this.virtualStick = createStick(element.dom.getElementsByClassName('stick')[0], stickRange, 'left', function(pos){",
+                    "    var x = Math.round((pos.x/stickRange) * 100);",
+                    "    var y = Math.round((pos.y/stickRange) * 100) * -1; //invert Y values",
                     "    this.fireEvent('change', x, y);",
-                    "}.bind(this));"
+                    "}.bind(this));",
+                    ""
                 ],
                 "name": "painted"
             },
@@ -169,6 +167,30 @@
             },
             "name": "getLabel",
             "designerId": "d0e4b30c-bf9d-46da-b20a-d4b3fb1b8b5d"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "x,y"
+                ],
+                "fn": "setRawValue",
+                "implHandler": [
+                    "this.virtualStick.stick.style.transform = `translate3d(${x*50}px, ${y*50}px, 0px)`;"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setRawValue",
+            "designerId": "8eebd79f-0e1a-455a-a963-87076945a812"
         }
     ]
 }

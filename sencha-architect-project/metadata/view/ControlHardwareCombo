@@ -141,6 +141,7 @@
                 ],
                 "fn": "syncHardwareStore",
                 "implHandler": [
+                    "//console.log('sync hardware store', store);",
                     "let hardwareStore = this.getViewModel().getStore('hardwareComboStore');",
                     "",
                     "hardwareStore.removeAll();",

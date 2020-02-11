@@ -6,13 +6,13 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "hardwaregpio",
-        "designer|userClassName": "HardwareServoViewController5"
+        "designer|userAlias": "hardwaremotor",
+        "designer|userClassName": "HardwareMotorViewController"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "HardwareServoViewController5",
-    "designerId": "b3b01d87-4c9b-471f-a6fb-949a461c8fdf"
+    "name": "HardwareServoViewController1",
+    "designerId": "92a55c70-5bd5-42d5-b3c7-457380cce474"
 }

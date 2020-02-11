@@ -6,13 +6,13 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "addcontroltype",
-        "designer|userClassName": "AddHardwareTypeViewController1"
+        "designer|userAlias": "controlsliderconfig",
+        "designer|userClassName": "ControlSliderConfigViewController"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "AddHardwareTypeViewController1",
-    "designerId": "08b8224f-4d85-44e7-ae1b-b5f7bddbb21a"
+    "name": "HardwareServoViewController3",
+    "designerId": "97593bc7-8f1b-4c55-adfe-49e0abd74a84"
 }
