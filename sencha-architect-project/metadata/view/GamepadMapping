@@ -104,7 +104,7 @@
                     "codeClass": null,
                     "userConfig": {
                         "iconCls": "x-fa fa-plus",
-                        "text": "Add Controller Mapping"
+                        "text": "Add Single Button/Axis Mapping"
                     },
                     "configAlternates": {
                         "iconCls": "string",
@@ -124,10 +124,11 @@
                                 "fn": "onMybutton5Tap11",
                                 "implHandler": [
                                     "if(this.activeMapping !== false){",
+                                    "    Ext.Msg.alert('','Please finish the current mapping before adding another');",
                                     "    return;",
                                     "}",
                                     "",
-                                    "this.activeMapping = this.addMapping();"
+                                    "this.activeMapping = this.addMapping('item');"
                                 ],
                                 "name": "tap"
                             },
@@ -138,6 +139,53 @@
                             },
                             "name": "onMybutton5Tap11",
                             "designerId": "94f113f7-f4fa-4530-a418-d221d6a5f13d"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-plus",
+                        "text": "Add Stick Mapping"
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "text": "string"
+                    },
+                    "name": "MyButton14",
+                    "designerId": "f45384c0-b2de-4349-a5dd-f608a1afa64e",
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMybutton5Tap111",
+                                "implHandler": [
+                                    "if(this.activeMapping !== false){",
+                                    "    Ext.Msg.alert('','Please finish the current mapping before adding another');",
+                                    "    return;",
+                                    "}",
+                                    "",
+                                    "this.activeMapping = this.addMapping('stick');"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMybutton5Tap111",
+                            "designerId": "0830cd44-0546-4ba2-8252-4de167489206"
                         }
                     ]
                 }
@@ -531,12 +579,25 @@
             "codeClass": null,
             "userConfig": {
                 "designer|params": [
+                    "type",
                     "config"
                 ],
                 "fn": "addMapping",
                 "implHandler": [
+                    "let xtype;",
+                    "switch(type){",
+                    "    default:",
+                    "        console.error('Invalid Controller Mapping Type. Contact Support');",
+                    "        return;",
+                    "    case 'item':",
+                    "        xtype='gamepaditemmap';",
+                    "        break;",
+                    "    case 'stick':",
+                    "        xtype='gamepadstickmap';",
+                    "        break;",
+                    "}",
                     "let newMapping = Ext.create({",
-                    "    xtype:'gamepaditemmap',",
+                    "    xtype:xtype,",
                     "    controlsDataStoreData: this.controlsDataStoreData,",
                     "    mapConfig:config,",
                     "    listeners:{",
@@ -545,6 +606,9 @@
                     "            this.activeMapping = newMapping;",
                     "        },",
                     "        mapDelete:function(panel){",
+                    "            if(this.activeMapping === panel){",
+                    "                this.activeMapping = false;",
+                    "            }",
                     "            this.mapDelete(panel);",
                     "        }",
                     "    }",
@@ -582,7 +646,7 @@
                     "this.queryById('mappingsContainer').removeAll(true, true);",
                     "",
                     "Ext.each(config,function(mapping){",
-                    "    this.addMapping(mapping);",
+                    "    this.addMapping(mapping.type, mapping);",
                     "},this);"
                 ]
             },
@@ -742,8 +806,19 @@
                     "        return false;",
                     "    }",
                     "",
-                    "    this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index);",
-                    "    this.activeMapping = false;",
+                    "    if(false === this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index)){",
+                    "        return;",
+                    "    }",
+                    "",
+                    "    //if this is a stick mapping we map X and Y so dont reset it",
+                    "    console.log('gamepadChange activeMapping=',this.activeMapping);",
+                    "    if(this.activeMapping.xtype === 'gamepadstickmap'){",
+                    "        if(this.activeMapping.bothAxesMapped === true){",
+                    "            this.activeMapping = false;",
+                    "        }",
+                    "    }else{",
+                    "        this.activeMapping = false;",
+                    "    }",
                     "}"
                 ]
             },

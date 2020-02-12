@@ -18,7 +18,7 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
     alias: 'widget.controlbuttonconfig',
 
     requires: [
-        'RobotDriver.view.HardwareServoViewModel4',
+        'RobotDriver.view.ControlButtonConfigViewModel',
         'RobotDriver.view.ControlHardwareCombo',
         'RobotDriver.view.ControlButton',
         'RobotDriver.view.ControlManagementButtons',

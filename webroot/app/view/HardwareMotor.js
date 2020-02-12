@@ -18,7 +18,7 @@ Ext.define('RobotDriver.view.HardwareMotor', {
     alias: 'widget.hardwaremotor',
 
     requires: [
-        'RobotDriver.view.HardwareServoViewModel1',
+        'RobotDriver.view.HardwareMotorViewModel',
         'Ext.field.ComboBox',
         'Ext.Spacer',
         'Ext.Button',

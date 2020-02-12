@@ -18,7 +18,7 @@ Ext.define('RobotDriver.view.AddControlType', {
     alias: 'widget.addcontroltype',
 
     requires: [
-        'RobotDriver.view.AddHardwareTypeViewModel1',
+        'RobotDriver.view.AddControlTypeViewModel',
         'Ext.field.ComboBox',
         'Ext.Container',
         'Ext.Button'

@@ -30,7 +30,8 @@
             "GamepadMapping",
             "GamepadItemMap",
             "liveController",
-            "liveControls"
+            "liveControls",
+            "GamepadStickMap"
         ]
     },
     "configAlternates": {

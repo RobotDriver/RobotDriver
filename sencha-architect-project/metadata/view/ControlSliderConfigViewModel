@@ -7,7 +7,7 @@
     "codeClass": null,
     "userConfig": {
         "designer|userAlias": "controlsliderconfig",
-        "designer|userClassName": "HardwareServoViewModel3"
+        "designer|userClassName": "ControlSliderConfigViewModel"
     },
     "configAlternates": {
         "designer|userAlias": "string",

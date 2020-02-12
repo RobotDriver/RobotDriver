@@ -76,7 +76,6 @@ Ext.define('RobotDriver.view.liveControls', {
 
         config.hardware = this.hardware[config.hardwareId];
 
-        console.log(config.controlId, config.hardwareId, config.type, config );
         switch(config.type){
             default:
                 return false;

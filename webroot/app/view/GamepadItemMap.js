@@ -153,6 +153,7 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
         }
 
         this.mapping = {
+            type:'item',
             gamepadId:gamepadId,
             gamepadIndex:gamepadIndex,
             mapType:mapType,
@@ -176,6 +177,8 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
 
     getMapping: function() {
         this.mapping.name = this.queryById('name').getValue();
+
+        this.mapping.type='item';
         this.mapping.controlId = this.queryById('control').getValue();
 
         return this.mapping;

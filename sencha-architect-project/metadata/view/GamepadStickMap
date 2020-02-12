@@ -1,0 +1,608 @@
+{
+    "type": "Ext.Panel",
+    "reference": {
+        "name": "items",
+        "type": "array"
+    },
+    "codeClass": null,
+    "userConfig": {
+        "border": true,
+        "designer|userAlias": "gamepadstickmap",
+        "designer|userClassName": "GamepadStickMap",
+        "layout": "vbox",
+        "margin": "6 0 0 0",
+        "padding": "0 0 6 10"
+    },
+    "configAlternates": {
+        "container|align": "string",
+        "designer|userAlias": "string",
+        "designer|userClassName": "string",
+        "layout": "string",
+        "padding": "auto",
+        "title": "string",
+        "border": "boolean",
+        "margin": "auto"
+    },
+    "name": "GamepadItemMap1",
+    "designerId": "40c765b9-d809-457c-b8bb-4dc61d54f57a",
+    "viewControllerInstanceId": "dcdde717-71e9-4f04-a9cf-a79e515993d1",
+    "viewModelInstanceId": "ae364151-6e7c-4bc8-b48b-95efaf27fe67",
+    "cn": [
+        {
+            "type": "Ext.Container",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "container|align": "start",
+                "layout": "hbox",
+                "margin": "10 0 0 0",
+                "userCls": [
+                    "mapped-to"
+                ]
+            },
+            "configAlternates": {
+                "layout": "string",
+                "margin": "auto",
+                "userCls": "typedarray",
+                "container|align": "string",
+                "height": "auto"
+            },
+            "name": "MyContainer74",
+            "designerId": "857c3152-a0ba-461b-98ea-4f06365eaee5",
+            "cn": [
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "container|align": "start",
+                        "layout": "vbox"
+                    },
+                    "configAlternates": {
+                        "container|align": "string",
+                        "layout": "string"
+                    },
+                    "name": "MyContainer54",
+                    "designerId": "e449c63f-c595-4c8c-827b-f70d13e2aa58",
+                    "cn": [
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "container|align": "start",
+                                "layout": "hbox"
+                            },
+                            "configAlternates": {
+                                "container|align": "string",
+                                "layout": "string"
+                            },
+                            "name": "MyContainer55",
+                            "designerId": "f6686164-8c41-4087-b1ac-09557237cdd0",
+                            "cn": [
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "html": "X Mapped To:",
+                                        "margin": "6 0 0 10",
+                                        "width": 115
+                                    },
+                                    "configAlternates": {
+                                        "height": "auto",
+                                        "html": "string",
+                                        "width": "auto",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer75",
+                                    "designerId": "ca48bce0-9cc3-407d-85f1-07809f328151"
+                                },
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "html": "<font color=\"red\">Press Button/Move Axis On Controller</font>",
+                                        "itemId": "mappedTox",
+                                        "margin": "6 0 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "itemId": "string",
+                                        "html": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer76",
+                                    "designerId": "5112f524-3edd-4b54-9c59-bdc600677b16"
+                                },
+                                {
+                                    "type": "Ext.Button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "hidden": true,
+                                        "iconCls": "x-fa fa-pencil-square-o",
+                                        "itemId": "remapx",
+                                        "margin": "0 0 0 10",
+                                        "text": "Remap"
+                                    },
+                                    "configAlternates": {
+                                        "hidden": "boolean",
+                                        "iconCls": "string",
+                                        "itemId": "string",
+                                        "margin": "auto",
+                                        "text": "string"
+                                    },
+                                    "name": "MyButton",
+                                    "designerId": "09bd5b8e-d1c1-499c-b12f-23ff48150ca5",
+                                    "cn": [
+                                        {
+                                            "type": "basiceventbinding",
+                                            "reference": {
+                                                "name": "listeners",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "fn": "onMybuttonTap",
+                                                "implHandler": [
+                                                    "this.fireEvent('remap', this);",
+                                                    "this.setMapping(false, 'x');"
+                                                ],
+                                                "name": "tap"
+                                            },
+                                            "configAlternates": {
+                                                "fn": "string",
+                                                "implHandler": "code",
+                                                "name": "string"
+                                            },
+                                            "name": "onMybuttonTap",
+                                            "designerId": "c27fc715-bb57-40b6-b361-153e73be99d0"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.Container",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "container|align": "start",
+                                "layout": "hbox",
+                                "margin": "6 0 0 0"
+                            },
+                            "configAlternates": {
+                                "container|align": "string",
+                                "layout": "string",
+                                "margin": "auto"
+                            },
+                            "name": "MyContainer80",
+                            "designerId": "4157e742-d502-4e62-af09-40940c85d8b9",
+                            "cn": [
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "html": "Y Mapped To:",
+                                        "margin": "6 0 0 10",
+                                        "width": 115
+                                    },
+                                    "configAlternates": {
+                                        "height": "auto",
+                                        "html": "string",
+                                        "width": "auto",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer75",
+                                    "designerId": "9ef554bd-d400-4bf6-8a56-ec42a0d4eb08"
+                                },
+                                {
+                                    "type": "Ext.Container",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "html": "",
+                                        "itemId": "mappedToy",
+                                        "margin": "6 0 0 0"
+                                    },
+                                    "configAlternates": {
+                                        "itemId": "string",
+                                        "html": "string",
+                                        "margin": "auto"
+                                    },
+                                    "name": "MyContainer76",
+                                    "designerId": "55de9f54-1b84-4e87-8c07-a89d2a249c7c"
+                                },
+                                {
+                                    "type": "Ext.Button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "hidden": true,
+                                        "iconCls": "x-fa fa-pencil-square-o",
+                                        "itemId": "remapy",
+                                        "margin": "0 0 0 10",
+                                        "text": "Remap"
+                                    },
+                                    "configAlternates": {
+                                        "hidden": "boolean",
+                                        "iconCls": "string",
+                                        "itemId": "string",
+                                        "margin": "auto",
+                                        "text": "string"
+                                    },
+                                    "name": "MyButton",
+                                    "designerId": "662de06e-6359-42af-a1af-d5768d029a0b",
+                                    "cn": [
+                                        {
+                                            "type": "basiceventbinding",
+                                            "reference": {
+                                                "name": "listeners",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "fn": "onMybuttonTap1",
+                                                "implHandler": [
+                                                    "this.fireEvent('remap', this);",
+                                                    "this.setMapping(false, 'y');"
+                                                ],
+                                                "name": "tap"
+                                            },
+                                            "configAlternates": {
+                                                "fn": "string",
+                                                "implHandler": "code",
+                                                "name": "string"
+                                            },
+                                            "name": "onMybuttonTap1",
+                                            "designerId": "5d9a5bca-2618-4b5d-af9e-0cdccfc7380e"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "layout|flex": 1
+                    },
+                    "configAlternates": {
+                        "layout|flex": "number"
+                    },
+                    "name": "MyContainer34",
+                    "designerId": "714d1a73-d085-4b1b-b978-d817bc6a1718"
+                },
+                {
+                    "type": "Ext.Button",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-trash",
+                        "itemId": "delete",
+                        "margin": "0 10 0 0",
+                        "text": "Delete"
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "text": "string",
+                        "margin": "auto",
+                        "bubbleEvents": "array",
+                        "itemId": "string"
+                    },
+                    "name": "MyButton14",
+                    "designerId": "3a2a87ca-66ac-4093-bfc1-21b90fc02af8",
+                    "customConfigs": [
+                        {
+                            "group": "(Custom Properties)",
+                            "name": "bubbleEvents",
+                            "type": "string"
+                        }
+                    ],
+                    "cn": [
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onDeleteTap1",
+                                "implHandler": [
+                                    "this.fireEvent('mapDelete', this);"
+                                ],
+                                "name": "tap"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onDeleteTap1",
+                            "designerId": "f6bcbcf3-55e7-46e2-af22-1186b6e22b2b"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Ext.field.ComboBox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "displayField": "display",
+                "forceSelection": true,
+                "itemId": "control",
+                "label": "Control",
+                "labelTextAlign": "right",
+                "labelWidth": 110,
+                "name": "control",
+                "queryCaching": false,
+                "queryMode": "local",
+                "store": [
+                    "{controlStore}"
+                ],
+                "valueField": "controlId",
+                "width": 367
+            },
+            "configAlternates": {
+                "store": "binding",
+                "disabled": "boolean",
+                "displayField": "datafield",
+                "itemId": "string",
+                "label": "string",
+                "labelTextAlign": "string",
+                "labelWidth": "auto",
+                "name": "string",
+                "queryCaching": "boolean",
+                "queryMode": "string",
+                "valueField": "datafield",
+                "width": "auto",
+                "forceSelection": "boolean"
+            },
+            "name": "MyComboBox2",
+            "designerId": "5db3509c-7a21-490c-bdb7-2e23d53476bb"
+        },
+        {
+            "type": "Ext.field.Text",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "clearable": false,
+                "itemId": "name",
+                "label": "Name (optional)",
+                "labelWidth": 110,
+                "name": "name",
+                "width": 300
+            },
+            "configAlternates": {
+                "label": "string",
+                "labelWidth": "auto",
+                "itemId": "string",
+                "name": "string",
+                "clearable": "boolean",
+                "width": "auto"
+            },
+            "name": "MyTextField9",
+            "designerId": "5e254519-9a43-4b50-8da3-e08cc74302b7"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "gamepadId",
+                    "gamepadIndex",
+                    "mapType",
+                    "mapIndex"
+                ],
+                "fn": "setMapping",
+                "implHandler": [
+                    "if(gamepadId === false){",
+                    "    //gamepadIndex is re-used to tell wich axis is unmapped",
+                    "",
+                    "    this.mapping[gamepadIndex] = null;",
+                    "",
+                    "    this.queryById('remap' + gamepadIndex).hide();",
+                    "    this.queryById('mappedTo' + gamepadIndex).setHtml('<font color=\"red\">Press Button/Move Axis On Controller</font>');",
+                    "",
+                    "    //this.queryById('control').setValue(null);",
+                    "    //this.queryById('control').disable();",
+                    "",
+                    "    this.bothAxesMapped = false;",
+                    "    return;",
+                    "}",
+                    "",
+                    "if(mapType === 'button'){",
+                    "    Ext.Msg.alert('Problem!','Wrong control type!<BR><BR>Please map to an axis, not a button!');",
+                    "    return false;",
+                    "}",
+                    "",
+                    "let axis = 'x';",
+                    "if(this.mapping[axis] !== null){",
+                    "    ",
+                    "    if(this.mapping[axis].gamepadId === gamepadId ",
+                    "       && this.mapping[axis].gamepadIndex === gamepadIndex ",
+                    "       && this.mapping[axis].mapType === mapType ",
+                    "       && this.mapping[axis].mapIndex === mapIndex",
+                    "      ){",
+                    "        Ext.Msg.alert('Problem!','You have the same index mapped for X<BR><BR>Please select another axis!');",
+                    "        return false;",
+                    "    }",
+                    "    ",
+                    "    axis = 'y';",
+                    "    this.bothAxesMapped = true;",
+                    "}",
+                    "this.mapping[axis] = {",
+                    "    type:'stick',",
+                    "    gamepadId:gamepadId,",
+                    "    gamepadIndex:gamepadIndex,",
+                    "    mapType:mapType,",
+                    "    mapIndex:mapIndex",
+                    "};",
+                    "",
+                    "this.queryById('mappedTo'+ axis).setHtml(gamepadId + \" \"+mapType+\" #\"+ (parseInt(mapIndex)+1) );",
+                    "this.queryById('remap'+ axis).show();",
+                    "if(axis === 'x'){",
+                    "    this.queryById('mappedToy').setHtml('<font color=\"red\">Press Button/Move Axis On Controller</font>');",
+                    "    this.queryById('remapy').hide();",
+                    "}",
+                    "",
+                    "return true;",
+                    "//this.queryById('control').enable();"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setMapping",
+            "designerId": "a5c721c7-85b8-4b05-9cd4-1e3a229b895c"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "getMapping",
+                "implHandler": [
+                    "this.mapping.name = this.queryById('name').getValue();",
+                    "this.mapping.controlId = this.queryById('control').getValue();",
+                    "this.mapping.type='stick';",
+                    "return this.mapping;"
+                ]
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "getMapping",
+            "designerId": "90a8d62c-07c5-4bdf-b1e3-fb741e8cce50"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "data"
+                ],
+                "fn": "setControlStoreData",
+                "implHandler": [
+                    "this.getViewModel().getStore('controlStore').loadData(data);"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setControlStoreData",
+            "designerId": "b18423dd-b03e-4a57-a044-1dc5e2f9bfdd"
+        },
+        {
+            "type": "basiceventbinding",
+            "reference": {
+                "name": "listeners",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "onPanelPainted",
+                "implHandler": [
+                    "if(this.init){",
+                    "    return;",
+                    "}else{",
+                    "    this.init = true;",
+                    "}",
+                    "",
+                    "this.bothAxesMapped = false;",
+                    "",
+                    "this.mapping = {",
+                    "    x:null,",
+                    "    y:null",
+                    "};",
+                    "",
+                    "this.setControlStoreData(element.component.config.controlsDataStoreData);",
+                    "",
+                    "if(element.component.config.mapConfig){",
+                    "    let config = element.component.config.mapConfig;",
+                    "",
+                    "    this.setMapping(config.x.gamepadId, config.x.gamepadIndex, config.x.mapType, config.x.mapIndex);",
+                    "    this.setMapping(config.y.gamepadId, config.y.gamepadIndex, config.y.mapType, config.y.mapIndex);",
+                    "",
+                    "    this.queryById('name').setValue(config.name);",
+                    "    this.queryById('control').setValue(config.controlId);",
+                    "}"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onPanelPainted",
+            "designerId": "d7580187-7319-4715-a4a2-da846c31d5e4"
+        }
+    ]
+}

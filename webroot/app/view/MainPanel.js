@@ -948,7 +948,6 @@ Ext.define('RobotDriver.view.MainPanel', {
     onContainerAction: function(mapping, value) {
         console.log('controller action',mapping, value);
 
-        console.log(this.liveControls);
         if(!this.liveControls || !this.liveControls.controlId || !this.liveControls.controlId[mapping.controlId]){
             console.error('Controller mapping to invalid controlId ', mapping.controlId);
             return;
@@ -960,8 +959,10 @@ Ext.define('RobotDriver.view.MainPanel', {
                 control.setValue(value===true ? 'down' : 'up');
                 break;
             case 'basecontrolslider':
-                console.log(control);
-                control.setSlidervalue(value * 100);
+                control.setSliderValue(value * 100);
+                break;
+            case 'basecontrolstick':
+                control.setRawValue(value[0], value[1]);
                 break;
         }
 
@@ -1397,7 +1398,6 @@ Ext.define('RobotDriver.view.MainPanel', {
         if(config.controls){
             this.controlsLoadConfig(config.controls);
             this.liveControls = this.queryById('liveControls').loadConfig(config.controls, this.hardware);
-            console.log(this.liveControls);
             controllerMapping.updateMappingStores(config.controls);
         }
         if(config.controllerMapping){
@@ -1501,7 +1501,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         });
 
         this.controlsLoadConfig(controlConfig);
-        this.liveControlsLoadConfig(controlConfig);
+        this.liveControls = this.queryById('liveControls').loadConfig(controlConfig, this.hardware);
 
         this.queryById('controllerMapping').updateMappingStores(controlConfig);
     },

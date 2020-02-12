@@ -47,9 +47,17 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 {
                     xtype: 'button',
                     iconCls: 'x-fa fa-plus',
-                    text: 'Add Controller Mapping',
+                    text: 'Add Single Button/Axis Mapping',
                     listeners: {
                         tap: 'onMybutton5Tap11'
+                    }
+                },
+                {
+                    xtype: 'button',
+                    iconCls: 'x-fa fa-plus',
+                    text: 'Add Stick Mapping',
+                    listeners: {
+                        tap: 'onMybutton5Tap111'
                     }
                 }
             ]
@@ -152,10 +160,20 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
     onMybutton5Tap11: function(button, e, eOpts) {
         if(this.activeMapping !== false){
+            Ext.Msg.alert('','Please finish the current mapping before adding another');
             return;
         }
 
-        this.activeMapping = this.addMapping();
+        this.activeMapping = this.addMapping('item');
+    },
+
+    onMybutton5Tap111: function(button, e, eOpts) {
+        if(this.activeMapping !== false){
+            Ext.Msg.alert('','Please finish the current mapping before adding another');
+            return;
+        }
+
+        this.activeMapping = this.addMapping('stick');
     },
 
     onContainerPainted: function(sender, element, eOpts) {
@@ -224,9 +242,21 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         this.appendControllerEvent("Disconnected! controller #"+(e.gamepad.index+1)+ " "+ e.gamepad.id + "<BR>\r\n");
     },
 
-    addMapping: function(config) {
+    addMapping: function(type, config) {
+        let xtype;
+        switch(type){
+            default:
+                console.error('Invalid Controller Mapping Type. Contact Support');
+                return;
+            case 'item':
+                xtype='gamepaditemmap';
+                break;
+            case 'stick':
+                xtype='gamepadstickmap';
+                break;
+        }
         let newMapping = Ext.create({
-            xtype:'gamepaditemmap',
+            xtype:xtype,
             controlsDataStoreData: this.controlsDataStoreData,
             mapConfig:config,
             listeners:{
@@ -235,6 +265,9 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                     this.activeMapping = newMapping;
                 },
                 mapDelete:function(panel){
+                    if(this.activeMapping === panel){
+                        this.activeMapping = false;
+                    }
                     this.mapDelete(panel);
                 }
             }
@@ -252,7 +285,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         this.queryById('mappingsContainer').removeAll(true, true);
 
         Ext.each(config,function(mapping){
-            this.addMapping(mapping);
+            this.addMapping(mapping.type, mapping);
         },this);
     },
 
@@ -331,8 +364,19 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 return false;
             }
 
-            this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index);
-            this.activeMapping = false;
+            if(false === this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index)){
+                return;
+            }
+
+            //if this is a stick mapping we map X and Y so dont reset it
+            console.log('gamepadChange activeMapping=',this.activeMapping);
+            if(this.activeMapping.xtype === 'gamepadstickmap'){
+                if(this.activeMapping.bothAxesMapped === true){
+                    this.activeMapping = false;
+                }
+            }else{
+                this.activeMapping = false;
+            }
         }
     },
 

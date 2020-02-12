@@ -43,7 +43,8 @@ Ext.application({
         'GamepadMapping',
         'GamepadItemMap',
         'liveController',
-        'liveControls'
+        'liveControls',
+        'GamepadStickMap'
     ],
     name: 'RobotDriver',
 

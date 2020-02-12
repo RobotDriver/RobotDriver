@@ -127,14 +127,78 @@ Ext.define('RobotDriver.view.liveController', {
 
     gamepadChange: function(gamepad, type, index, newValue, oldValue) {
         let foundMap = false;
+
         Ext.each(this.mappedGamepads, function(mapped){
-            if(mapped.gamepadId == gamepad.id && mapped.gamepadIndex == gamepad.index && mapped.mapType === type && mapped.mapIndex === index){
-                foundMap = mapped;
-                return false;
+
+            if(mapped.type==='stick'){
+                if(mapped.x.gamepadId == gamepad.id && mapped.x.gamepadIndex == gamepad.index && mapped.x.mapType === type && mapped.x.mapIndex === index){
+                    foundMap = mapped;
+                    newValue = [
+                        newValue,
+                        this.gamepadStates[mapped.y.gamepadIndex+mapped.y.gamepadId].axes[mapped.y.mapIndex]
+                    ];
+                    return false;
+                }
+                if(mapped.y.gamepadId == gamepad.id && mapped.y.gamepadIndex == gamepad.index && mapped.y.mapType === type && mapped.y.mapIndex === index){
+                    foundMap = mapped;
+                    newValue = [
+                        this.gamepadStates[mapped.x.gamepadIndex+mapped.x.gamepadId].axes[mapped.x.mapIndex],
+                        newValue
+                    ];
+                    return false;
+                }
+            }else{
+                if(mapped.gamepadId == gamepad.id && mapped.gamepadIndex == gamepad.index && mapped.mapType === type && mapped.mapIndex === index){
+                    foundMap = mapped;
+                    return false;
+                }
             }
-        });
+        }, this);
+
         if(foundMap!==false){
             this.fireEvent('action', foundMap, newValue);
+        }
+    },
+
+    gamepadAxisChange: function(axisChanges) {
+        let stickEvents = {};
+
+        console.log('axis changes');
+        console.log(axisChanges);
+
+        for(var a in axisChanges){
+            let ag = axisChanges[a];
+
+            Ext.each(this.mappedGamepads, function(mapped){
+
+                if(mapped.type==='stick'){
+                    if(mapped.x.gamepadId == ag.id && mapped.x.gamepadIndex == ag.index && mapped.x.mapType === 'axis' && mapped.x.mapIndex === ag.mapIndex){
+                        stickEvents[ag.id+ag.index+ag.mapIndex] = {
+                            mapped: mapped,
+                            newValue: [
+                                ag.newValue,
+                                this.gamepadStates[mapped.y.gamepadIndex+mapped.y.gamepadId].axes[mapped.y.mapIndex]
+                            ]
+                        };
+                    }
+                    if(mapped.y.gamepadId == ag.id && mapped.y.gamepadIndex == ag.index && mapped.y.mapType === 'axis' && mapped.y.mapIndex === ag.mapIndex){
+                        stickEvents[ag.id+ag.index+ag.mapIndex] = {
+                            mapped: mapped,
+                            newValue: [
+                                this.gamepadStates[mapped.x.gamepadIndex+mapped.x.gamepadId].axes[mapped.x.mapIndex],
+                                ag.newValue
+                            ]
+                        };
+                    }
+                }else{
+                    if(mapped.gamepadId == ag.id && mapped.gamepadIndex == ag.index && mapped.mapType === 'axis' && mapped.mapIndex === ag.mapIndex){
+                        this.fireEvent('action', mapped, newValue);
+                    }
+                }
+            }, this);
+        }
+        for(var e in stickEvents){
+            this.fireEvent('action', stickEvents[e].mapped, stickEvents[e].newValue);
         }
     },
 
@@ -149,12 +213,24 @@ Ext.define('RobotDriver.view.liveController', {
                this.gamepadChange(gamepad, 'button', b, newState.buttons[b], gs.buttons[b]);
             }
         }
+        let axisChanges = [];
         for(a in newState.axes){
             if(Math.abs(newState.axes[a] -gs.axes[a]) >= 0.005){ //for axes detect change more than 0.5%
-               this.gamepadChange(gamepad, 'axis', a, newState.axes[a], gs.axes[a]);
+               axisChanges.push({
+                   gamepad:gamepad,
+                   index: gamepad.index,
+                   id: gamepad.id,
+                   mapIndex:a,
+                   newValue: newState.axes[a],
+                   oldValue: gs.axes[a]
+               });
+
             }else{
                newState.axes[a] = gs.axes[a];
             }
+        }
+        if(axisChanges.length > 0){
+            this.gamepadAxisChange(axisChanges);
         }
         this.gamepadStates[gx] = newState;
     }

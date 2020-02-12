@@ -311,6 +311,7 @@
                     "}",
                     "",
                     "this.mapping = {",
+                    "    type:'item',",
                     "    gamepadId:gamepadId,",
                     "    gamepadIndex:gamepadIndex,",
                     "    mapType:mapType,",
@@ -351,6 +352,8 @@
                 "fn": "getMapping",
                 "implHandler": [
                     "this.mapping.name = this.queryById('name').getValue();",
+                    "",
+                    "this.mapping.type='item';",
                     "this.mapping.controlId = this.queryById('control').getValue();",
                     "",
                     "return this.mapping;"

@@ -18,7 +18,7 @@ Ext.define('RobotDriver.view.HardwareGpio', {
     alias: 'widget.hardwaregpio',
 
     requires: [
-        'RobotDriver.view.HardwareServoViewModel5',
+        'RobotDriver.view.HardwareGpioViewModel',
         'Ext.Container',
         'Ext.field.Display',
         'Ext.field.Number',

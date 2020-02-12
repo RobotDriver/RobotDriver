@@ -6,15 +6,15 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "addcontroltype",
-        "designer|userClassName": "AddHardwareTypeViewModel1"
+        "designer|userAlias": "hardwarei2c",
+        "designer|userClassName": "HardwareI2cViewModel"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "AddHardwareTypeViewModel1",
-    "designerId": "54ce83b2-fe9c-447a-ab9e-eb4cbfc6ba32",
+    "name": "HardwareServoViewModel2",
+    "designerId": "de6148d2-66ac-42e8-8d3f-18e56a2246a1",
     "cn": [
         {
             "type": "Ext.data.Store",
@@ -26,20 +26,19 @@
             "userConfig": {
                 "data": [
                     "[",
-                    "['slider','Slider'],",
-                    "['stick','Stick'],",
-                    "['button','Button']//,",
-                    "//['dpad','D-Pad']",
+                    "['ina219','INA219 Voltage/Current Sensor'],",
+                    "['bme280','BME280 Temp,Pres,Humidity'],",
+                    "['oled','OLED Display']",
                     "]"
                 ],
-                "name": "controlTypeStore"
+                "name": "i2cdevices"
             },
             "configAlternates": {
                 "data": "array",
                 "name": "string"
             },
-            "name": "MyStore2",
-            "designerId": "d889b9fc-16ce-4783-8c7c-005ccf7dfe89",
+            "name": "MyStore3",
+            "designerId": "328abf41-1f9c-49e6-b624-efdf83296892",
             "cn": [
                 {
                     "type": "Ext.data.field.Field",
@@ -55,7 +54,7 @@
                         "name": "string"
                     },
                     "name": "field3",
-                    "designerId": "e62538c3-212d-4763-a88b-91c7ebe78da0"
+                    "designerId": "697290c1-07a4-4ac6-8c7c-b9800fd0e95a"
                 },
                 {
                     "type": "Ext.data.field.Field",
@@ -71,7 +70,7 @@
                         "name": "string"
                     },
                     "name": "field4",
-                    "designerId": "bcf6ae63-7606-4987-8e8c-18cb044b3fe5"
+                    "designerId": "e3b978a1-5c46-4124-8c6a-46bb0ac84191"
                 }
             ]
         }

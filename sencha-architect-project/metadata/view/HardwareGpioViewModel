@@ -6,15 +6,15 @@
     },
     "codeClass": null,
     "userConfig": {
-        "designer|userAlias": "hardwarei2c",
-        "designer|userClassName": "HardwareServoViewModel2"
+        "designer|userAlias": "hardwaregpio",
+        "designer|userClassName": "HardwareGpioViewModel"
     },
     "configAlternates": {
         "designer|userAlias": "string",
         "designer|userClassName": "string"
     },
-    "name": "HardwareServoViewModel2",
-    "designerId": "de6148d2-66ac-42e8-8d3f-18e56a2246a1",
+    "name": "HardwareServoViewModel5",
+    "designerId": "c08a1aba-3e06-4966-bd93-f3e326063472",
     "cn": [
         {
             "type": "Ext.data.Store",
@@ -26,19 +26,18 @@
             "userConfig": {
                 "data": [
                     "[",
-                    "['ina219','INA219 Voltage/Current Sensor'],",
-                    "['bme280','BME280 Temp,Pres,Humidity'],",
-                    "['oled','OLED Display']",
+                    "['pca9685','PCA9685 i2c PWM Driver'],",
+                    "['l298n','L298N on GPIO']",
                     "]"
                 ],
-                "name": "i2cdevices"
+                "name": "configPwmTypeStore"
             },
             "configAlternates": {
                 "data": "array",
                 "name": "string"
             },
             "name": "MyStore3",
-            "designerId": "328abf41-1f9c-49e6-b624-efdf83296892",
+            "designerId": "c30a6268-de25-4026-af11-58c2c8d035d7",
             "cn": [
                 {
                     "type": "Ext.data.field.Field",
@@ -54,7 +53,7 @@
                         "name": "string"
                     },
                     "name": "field3",
-                    "designerId": "697290c1-07a4-4ac6-8c7c-b9800fd0e95a"
+                    "designerId": "9ed06ba0-9dcb-4fd0-8de6-f895ad9fcb1f"
                 },
                 {
                     "type": "Ext.data.field.Field",
@@ -70,7 +69,7 @@
                         "name": "string"
                     },
                     "name": "field4",
-                    "designerId": "e3b978a1-5c46-4124-8c6a-46bb0ac84191"
+                    "designerId": "22b2740c-362f-4338-9958-e4bea6b0e18a"
                 }
             ]
         }

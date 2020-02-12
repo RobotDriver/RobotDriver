@@ -18,7 +18,7 @@ Ext.define('RobotDriver.view.HardwareI2c', {
     alias: 'widget.hardwarei2c',
 
     requires: [
-        'RobotDriver.view.HardwareServoViewModel2',
+        'RobotDriver.view.HardwareI2cViewModel',
         'Ext.Container',
         'Ext.field.Display',
         'Ext.Spacer',

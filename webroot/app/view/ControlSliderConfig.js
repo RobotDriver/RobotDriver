@@ -18,7 +18,7 @@ Ext.define('RobotDriver.view.ControlSliderConfig', {
     alias: 'widget.controlsliderconfig',
 
     requires: [
-        'RobotDriver.view.HardwareServoViewModel3',
+        'RobotDriver.view.ControlSliderConfigViewModel',
         'RobotDriver.view.ControlHardwareCombo',
         'RobotDriver.view.ControlManagementButtons',
         'RobotDriver.view.BaseControlSlider',
