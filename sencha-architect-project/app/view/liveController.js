@@ -168,11 +168,15 @@ Ext.define('RobotDriver.view.liveController', {
 
         for(var a in axisChanges){
             let ag = axisChanges[a];
+            console.log('checking for axis mapping');
+            console.log(ag);
 
             Ext.each(this.mappedGamepads, function(mapped){
+                console.log(mapped);
 
                 if(mapped.type==='stick'){
-                    if(mapped.x.gamepadId == ag.id && mapped.x.gamepadIndex == ag.index && mapped.x.mapType === 'axis' && mapped.x.mapIndex === ag.mapIndex){
+                    if(mapped.x && mapped.x.gamepadId == ag.gamepadId && mapped.x.gamepadIndex == ag.gamepadIndex && mapped.x.mapType === 'axis' && mapped.x.mapIndex === ag.mapIndex){
+                        console.log('X mapped stick found!');
                         stickEvents[ag.id+ag.index+ag.mapIndex] = {
                             mapped: mapped,
                             newValue: [
@@ -181,7 +185,8 @@ Ext.define('RobotDriver.view.liveController', {
                             ]
                         };
                     }
-                    if(mapped.y.gamepadId == ag.id && mapped.y.gamepadIndex == ag.index && mapped.y.mapType === 'axis' && mapped.y.mapIndex === ag.mapIndex){
+                    if(mapped.y && mapped.y.gamepadId == ag.gamepadId && mapped.y.gamepadIndex == ag.gamepadIndex && mapped.y.mapType === 'axis' && mapped.y.mapIndex === ag.mapIndex){
+                        console.log('Y mapped stick found!');
                         stickEvents[ag.id+ag.index+ag.mapIndex] = {
                             mapped: mapped,
                             newValue: [
@@ -191,13 +196,16 @@ Ext.define('RobotDriver.view.liveController', {
                         };
                     }
                 }else{
-                    if(mapped.gamepadId == ag.id && mapped.gamepadIndex == ag.index && mapped.mapType === 'axis' && mapped.mapIndex === ag.mapIndex){
+                    if(mapped.gamepadId == ag.gamepadId && mapped.gamepadIndex == ag.gamepadIndex && mapped.mapType === 'axis' && mapped.mapIndex === ag.mapIndex){
+                        console.log('axis mapped to item found!');
                         this.fireEvent('action', mapped, newValue);
                     }
                 }
             }, this);
         }
         for(var e in stickEvents){
+            console.log('fire for stick map');
+            console.log(stickEvents[e].newValue[0], stickEvents[e].newValue[1], stickEvents[e].mapped);
             this.fireEvent('action', stickEvents[e].mapped, stickEvents[e].newValue);
         }
     },
@@ -218,8 +226,8 @@ Ext.define('RobotDriver.view.liveController', {
             if(Math.abs(newState.axes[a] -gs.axes[a]) >= 0.005){ //for axes detect change more than 0.5%
                axisChanges.push({
                    gamepad:gamepad,
-                   index: gamepad.index,
-                   id: gamepad.id,
+                   gamepadIndex: gamepad.index,
+                   gamepadId: gamepad.id,
                    mapIndex:a,
                    newValue: newState.axes[a],
                    oldValue: gs.axes[a]
