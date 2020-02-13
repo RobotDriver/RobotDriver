@@ -859,7 +859,8 @@ Ext.define('RobotDriver.view.MainPanel', {
                             title: 'Controller Mapping',
                             iconCls: 'x-fa fa-gamepad',
                             listeners: {
-                                websocketsend: 'onContainerWebsocketsend'
+                                websocketsend: 'onContainerWebsocketsend',
+                                mappingsUpdated: 'onContainerMappingsUpdated'
                             }
                         }
                     ],
@@ -946,24 +947,26 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     onContainerAction: function(mapping, value) {
-        console.log('controller action',mapping, value);
+        //console.log('controller action',mapping, value);
 
         if(!this.liveControls || !this.liveControls.controlId || !this.liveControls.controlId[mapping.controlId]){
             console.error('Controller mapping to invalid controlId ', mapping.controlId);
             return;
         }
         let control = this.liveControls.controlId[mapping.controlId];
+        console.log('live controller action');
+        console.log(mapping, value);
 
         switch(control.xtype){
             case 'controlbutton':
                 control.setValue(value===true ? 'down' : 'up');
                 break;
             case 'basecontrolslider':
-                control.setSliderValue(value * 100);
+                //control.setSliderValue(value * 100);
+                control.setValue(value * 100);
                 break;
             case 'basecontrolstick':
-                control.setRawValue(value[0], value[1]);
-                break;
+                control.setValue(value[0], value[1]);
         }
 
     },
@@ -1193,6 +1196,12 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.websocketSend(data);
     },
 
+    onContainerMappingsUpdated: function(newMappings) {
+        this.config.controllerMapping = newMappings;
+
+        this.configLoad(this.config);
+    },
+
     onMytabpanel1ActiveItemChange: function(sender, value, oldValue, eOpts) {
         let activeItemId = value.getItemId();
 
@@ -1243,17 +1252,14 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
 
         let liveController = this.queryById('liveController');
-        if(activeItemId === 'tabControls'){
-            liveController.startControllerLoop();
-        }else{
-            liveController.stopControllerLoop();
-        }
-
         let controllerMapping = this.queryById('controllerMapping');
+
         if(activeItemId === 'tabConfig'){
             controllerMapping.startControllerLoop();
+            liveController.stopControllerLoop();
         }else{
             controllerMapping.stopControllerLoop();
+            liveController.startControllerLoop();
         }
     },
 
@@ -1389,6 +1395,7 @@ Ext.define('RobotDriver.view.MainPanel', {
 
     configLoad: function(config) {
         this.showConfig(config);
+        this.config = config;
 
         if(config.hardware){
             this.hardwareLoadConfig(config.hardware, true);

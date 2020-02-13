@@ -74,18 +74,30 @@ Ext.define('RobotDriver.view.liveController', {
     },
 
     gamepadConnected: function(e) {
-        let gx = e.gamepad.index+e.gamepad.id;
+        let gamepad = e.gamepad;
 
-        this.activeGamepads[gx] = e.gamepad;
+        this.fireEvent('gamepadConnect', gamepad);
 
-        this.fireEvent('gamepadConnect', e.gamepad);
+        console.log('live gamepad connected');
 
-        this.gamepadStates[gx] = this.getGamepadState(e.gamepad);
+        let activeIndex = 0;
+        if(this.activeGamepads[gamepad.id]){
+            this.activeGamepads[gamepad.id].push(gamepad);
+            activeIndex = 1;
+        }else{
+            this.activeGamepads[gamepad.id] = [gamepad];
+        }
+
+        if(this.gamepadStates[gamepad.id]){
+            this.gamepadStates[gamepad.id].push(this.getGamepadState(gamepad));
+        }else{
+            this.gamepadStates[gamepad.id] = [ this.getGamepadState(gamepad) ];
+        }
     },
 
     gamepadDisconnected: function(e) {
         let gx = e.gamepad.index+e.gamepad.id;
-
+        //TODO
         delete this.activeGamepads[gx];
         delete this.gamepadStates[gx];
 
@@ -95,18 +107,80 @@ Ext.define('RobotDriver.view.liveController', {
     gamepadPoll: function() {
         var gamepadUpdate = navigator.getGamepads();
 
-        for(var gx in this.activeGamepads){
-            let ag = this.activeGamepads[gx];
+        let newGamepadStates = {};
+        for(let gamepadId in this.activeGamepads){
+            let gamepadIdList = this.activeGamepads[gamepadId];
 
-            if(gamepadUpdate[ag.index]){
-                ag = gamepadUpdate[ag.index];
-            }else{
-                this.gamepadDisconnected({gamepad:ag});
-                return;
+            for(let gamepadIdIndex=0; gamepadIdIndex<gamepadIdList.length; gamepadIdIndex++){
+
+                let gamepad = gamepadIdList[gamepadIdIndex];
+
+                //is this gamepad still connected?
+                if(!gamepadUpdate[gamepad.index]){
+                    this.gamepadDisconnected({gamepad:gamepad});
+                    return;
+                }
+                if(gamepadUpdate[gamepad.index].id !== gamepadId){
+                    console.error('gamepad index/id ordering has changed! Refresh your browser! If problem continues, contact support!');
+                    continue;
+                }
+
+                if(newGamepadStates[gamepadId]){
+                    newGamepadStates[gamepadId].push(this.getGamepadState(gamepadUpdate[gamepad.index]));
+                }else{
+                    newGamepadStates[gamepadId] = [ this.getGamepadState(gamepadUpdate[gamepad.index]) ];
+                }
             }
 
-            this.gamepadCheckState(ag);
         }
+
+        //detect changes!
+        let axisChanges = [];
+        for(let gamepadId in newGamepadStates){
+
+            let gamepadChangeList = newGamepadStates[gamepadId];
+            //console.log(gamepadIdList);
+
+            for(let gamepadIdIndex=0; gamepadIdIndex<gamepadChangeList.length; gamepadIdIndex++){
+
+                if(!this.gamepadStates[gamepadId][gamepadIdIndex]){
+                    console.error('corresponding state not found for '+gamepadId+' index '+gamepadIdIndex+'! Refresh your browser! If problem continues, contact support!');
+                    continue;
+                }
+                let newState = gamepadChangeList[gamepadIdIndex];
+                let oldState = this.gamepadStates[gamepadId][gamepadIdIndex];
+
+                //console.log(newState);
+
+                for(let b in newState.buttons){
+                    if(newState.buttons[b] != oldState.buttons[b]){
+                        this.findMappedButton(gamepadId, gamepadIdIndex, 'button', b, newState.buttons[b], oldState.buttons[b]);
+                    }
+                }
+
+                for(let a in newState.axes){
+                    if(Math.abs(newState.axes[a] - oldState.axes[a]) >= 0.005){ //for axes detect change more than 0.5%
+                       axisChanges.push({
+                           gamepadId: gamepadId,
+                           gamepadIdIndex: gamepadIdIndex,
+                           mapIndex:a,
+                           newValue: newState.axes[a],
+                           oldValue: oldState.axes[a]
+                       });
+
+                    }//else{
+                    //   newState.axes[a] = oldState.axes[a];
+                    //}
+                }
+            }
+        }
+
+        if(axisChanges.length > 0){
+            this.gamepadAxisChange(axisChanges);
+        }
+
+        this.gamepadStates = newGamepadStates;
+
     },
 
     getGamepadState: function(gamepad) {
@@ -125,122 +199,79 @@ Ext.define('RobotDriver.view.liveController', {
         return state;
     },
 
-    gamepadChange: function(gamepad, type, index, newValue, oldValue) {
+    findMappedButton: function(gamepadId, gamepadIdIndex, type, mapIndex, newValue, oldValue) {
+        let args = arguments;
         let foundMap = false;
 
-        Ext.each(this.mappedGamepads, function(mapped){
+        //console.log('find mapped button');
+        //console.log(gamepadId, gamepadIdIndex, type, mapIndex, newValue);
 
-            if(mapped.type==='stick'){
-                if(mapped.x.gamepadId == gamepad.id && mapped.x.gamepadIndex == gamepad.index && mapped.x.mapType === type && mapped.x.mapIndex === index){
-                    foundMap = mapped;
-                    newValue = [
-                        newValue,
-                        this.gamepadStates[mapped.y.gamepadIndex+mapped.y.gamepadId].axes[mapped.y.mapIndex]
-                    ];
-                    return false;
-                }
-                if(mapped.y.gamepadId == gamepad.id && mapped.y.gamepadIndex == gamepad.index && mapped.y.mapType === type && mapped.y.mapIndex === index){
-                    foundMap = mapped;
-                    newValue = [
-                        this.gamepadStates[mapped.x.gamepadIndex+mapped.x.gamepadId].axes[mapped.x.mapIndex],
-                        newValue
-                    ];
-                    return false;
-                }
-            }else{
-                if(mapped.gamepadId == gamepad.id && mapped.gamepadIndex == gamepad.index && mapped.mapType === type && mapped.mapIndex === index){
-                    foundMap = mapped;
-                    return false;
-                }
+        //find mapped control, stop at first one // TODO - dont stop at first one maybe?
+        Ext.each(this.mappedGamepads, function(mapped){
+            //console.log(mapped);
+            if(mapped.type==='item' && mapped.gamepadId == gamepadId && mapped.gamepadIdIndex == gamepadIdIndex && mapped.mapType === type && mapped.mapIndex === mapIndex){
+                foundMap = mapped;
+                return false;
             }
         }, this);
 
         if(foundMap!==false){
             this.fireEvent('action', foundMap, newValue);
         }
+
     },
 
     gamepadAxisChange: function(axisChanges) {
         let stickEvents = {};
 
-        console.log('axis changes');
-        console.log(axisChanges);
+        // axisChanges.push({
+        //     gamepadId: gamepadId,
+        //     gamepadIdIndex: gamepadIdIndex,
+        //     mapIndex:a,
+        //     newValue: newState.axes[a],
+        //     oldValue: oldState.axes[a]
+        // });
 
+
+        //axis changes can be mapped to sliders or sticks
         for(var a in axisChanges){
             let ag = axisChanges[a];
-            console.log('checking for axis mapping');
-            console.log(ag);
 
             Ext.each(this.mappedGamepads, function(mapped){
-                console.log(mapped);
 
                 if(mapped.type==='stick'){
-                    if(mapped.x && mapped.x.gamepadId == ag.gamepadId && mapped.x.gamepadIndex == ag.gamepadIndex && mapped.x.mapType === 'axis' && mapped.x.mapIndex === ag.mapIndex){
-                        console.log('X mapped stick found!');
-                        stickEvents[ag.id+ag.index+ag.mapIndex] = {
+                    if(mapped.x && mapped.x.gamepadId == ag.gamepadId && mapped.x.gamepadIdIndex == ag.gamepadIdIndex && mapped.x.mapType === 'axis' && mapped.x.mapIndex === ag.mapIndex){
+                        stickEvents[ag.gamepadId+ag.index+ag.mapIndex] = {
                             mapped: mapped,
                             newValue: [
                                 ag.newValue,
-                                this.gamepadStates[mapped.y.gamepadIndex+mapped.y.gamepadId].axes[mapped.y.mapIndex]
+                                this.gamepadStates[mapped.y.gamepadId][mapped.y.gamepadIdIndex].axes[mapped.y.mapIndex]
                             ]
                         };
                     }
-                    if(mapped.y && mapped.y.gamepadId == ag.gamepadId && mapped.y.gamepadIndex == ag.gamepadIndex && mapped.y.mapType === 'axis' && mapped.y.mapIndex === ag.mapIndex){
-                        console.log('Y mapped stick found!');
-                        stickEvents[ag.id+ag.index+ag.mapIndex] = {
+                    if(mapped.y && mapped.y.gamepadId == ag.gamepadId && mapped.y.gamepadIdIndex == ag.gamepadIdIndex && mapped.y.mapType === 'axis' && mapped.y.mapIndex === ag.mapIndex){
+                        stickEvents[ag.gamepadId+ag.index+ag.mapIndex] = {
                             mapped: mapped,
                             newValue: [
-                                this.gamepadStates[mapped.x.gamepadIndex+mapped.x.gamepadId].axes[mapped.x.mapIndex],
+                                this.gamepadStates[mapped.x.gamepadId][mapped.x.gamepadIdIndex].axes[mapped.x.mapIndex],
                                 ag.newValue
                             ]
                         };
                     }
                 }else{
-                    if(mapped.gamepadId == ag.gamepadId && mapped.gamepadIndex == ag.gamepadIndex && mapped.mapType === 'axis' && mapped.mapIndex === ag.mapIndex){
-                        console.log('axis mapped to item found!');
-                        this.fireEvent('action', mapped, newValue);
+                    //if not stick mapped.type will be 'item'
+                    if(mapped.gamepadId == ag.gamepadId && mapped.gamepadIdIndex == ag.gamepadIdIndex && mapped.mapType === 'axis' && mapped.mapIndex === ag.mapIndex){
+                        this.fireEvent('action', mapped, ag.newValue);
                     }
                 }
+
+
             }, this);
         }
         for(var e in stickEvents){
-            console.log('fire for stick map');
-            console.log(stickEvents[e].newValue[0], stickEvents[e].newValue[1], stickEvents[e].mapped);
             this.fireEvent('action', stickEvents[e].mapped, stickEvents[e].newValue);
         }
-    },
 
-    gamepadCheckState: function(gamepad) {
-        let gx = gamepad.index+gamepad.id;
-        let gs = this.gamepadStates[gx];
-
-        //detect changes!
-        let newState = this.getGamepadState(gamepad);
-        for(b in newState.buttons){
-            if(newState.buttons[b] != gs.buttons[b]){
-               this.gamepadChange(gamepad, 'button', b, newState.buttons[b], gs.buttons[b]);
-            }
-        }
-        let axisChanges = [];
-        for(a in newState.axes){
-            if(Math.abs(newState.axes[a] -gs.axes[a]) >= 0.005){ //for axes detect change more than 0.5%
-               axisChanges.push({
-                   gamepad:gamepad,
-                   gamepadIndex: gamepad.index,
-                   gamepadId: gamepad.id,
-                   mapIndex:a,
-                   newValue: newState.axes[a],
-                   oldValue: gs.axes[a]
-               });
-
-            }else{
-               newState.axes[a] = gs.axes[a];
-            }
-        }
-        if(axisChanges.length > 0){
-            this.gamepadAxisChange(axisChanges);
-        }
-        this.gamepadStates[gx] = newState;
     }
 
 });

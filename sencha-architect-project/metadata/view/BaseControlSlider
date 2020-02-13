@@ -325,10 +325,9 @@
                 "designer|params": [
                     "value"
                 ],
-                "fn": "setSliderValue",
+                "fn": "setRawValue",
                 "implHandler": [
-                    "this.queryById('slider').updateValue(value);",
-                    ""
+                    "this.queryById('slider').updateValue(value);"
                 ]
             },
             "configAlternates": {
@@ -336,7 +335,7 @@
                 "fn": "string",
                 "implHandler": "code"
             },
-            "name": "setSliderValue",
+            "name": "setRawValue",
             "designerId": "797ad2c6-3c40-4e32-8efc-db4e048a2c5c"
         }
     ]

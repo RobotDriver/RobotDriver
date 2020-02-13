@@ -21,6 +21,7 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
         'RobotDriver.view.GamepadItemMapViewModel',
         'Ext.Container',
         'Ext.Button',
+        'Ext.field.Checkbox',
         'Ext.field.ComboBox'
     ],
 
@@ -81,6 +82,17 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
             ]
         },
         {
+            xtype: 'checkbox',
+            disabled: true,
+            hidden: true,
+            itemId: 'axisInvert',
+            width: 120,
+            margin: '0 0 0 120',
+            label: 'Invert Axis',
+            labelAlign: 'right',
+            labelWidth: 100
+        },
+        {
             xtype: 'combobox',
             disabled: true,
             itemId: 'control',
@@ -134,13 +146,13 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
 
         if(element.component.config.mapConfig){
             let config = element.component.config.mapConfig;
-            this.setMapping(config.gamepadId, config.gamepadIndex, config.mapType, config.mapIndex);
+            this.setMapping(config.gamepadId, config.gamepadIdIndex, config.mapType, config.mapIndex);
             this.queryById('name').setValue(config.name);
             this.queryById('control').setValue(config.controlId);
         }
     },
 
-    setMapping: function(gamepadId, gamepadIndex, mapType, mapIndex) {
+    setMapping: function(gamepadId, gamepadIdIndex, mapType, mapIndex) {
         if(gamepadId === false){
             this.mapping = false;
             this.queryById('remap').hide();
@@ -155,7 +167,7 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
         this.mapping = {
             type:'item',
             gamepadId:gamepadId,
-            gamepadIndex:gamepadIndex,
+            gamepadIdIndex:gamepadIdIndex,
             mapType:mapType,
             mapIndex:mapIndex
         };
@@ -164,13 +176,15 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
         switch(mapType){
             case 'button':
                 this.getViewModel().getStore('controlStore').filter('type','button');
+                this.queryById('axisInvert').hide();
                 break;
             case 'axis':
                 this.getViewModel().getStore('controlStore').filter('type','slider');
+                this.queryById('axisInvert').show();
                 break;
         }
 
-        this.queryById('mappedTo').setHtml(gamepadId + " "+mapType+" #"+ (parseInt(mapIndex)+1) );
+        this.queryById('mappedTo').setHtml(gamepadId +" #"+ (parseInt(gamepadIdIndex)+1) +" "+mapType+" #"+ (parseInt(mapIndex)+1) );
         this.queryById('control').enable();
         this.queryById('remap').show();
     },

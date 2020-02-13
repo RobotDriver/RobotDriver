@@ -21,6 +21,7 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
         'RobotDriver.view.GamepadStickMapViewModel',
         'Ext.Container',
         'Ext.Button',
+        'Ext.field.Checkbox',
         'Ext.field.ComboBox'
     ],
 
@@ -83,6 +84,17 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
                             ]
                         },
                         {
+                            xtype: 'checkbox',
+                            disabled: true,
+                            hidden: false,
+                            itemId: 'axisInvertx',
+                            width: 120,
+                            margin: '0 0 0 120',
+                            label: 'Invert X Axis',
+                            labelAlign: 'right',
+                            labelWidth: 100
+                        },
+                        {
                             xtype: 'container',
                             margin: '6 0 0 0',
                             layout: {
@@ -114,6 +126,17 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
                                     }
                                 }
                             ]
+                        },
+                        {
+                            xtype: 'checkbox',
+                            disabled: true,
+                            hidden: false,
+                            itemId: 'axisInverty',
+                            width: 120,
+                            margin: '0 0 0 120',
+                            label: 'Invert Y Axis',
+                            labelAlign: 'right',
+                            labelWidth: 100
                         }
                     ]
                 },
@@ -197,15 +220,15 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
         if(element.component.config.mapConfig){
             let config = element.component.config.mapConfig;
 
-            this.setMapping(config.x.gamepadId, config.x.gamepadIndex, config.x.mapType, config.x.mapIndex);
-            this.setMapping(config.y.gamepadId, config.y.gamepadIndex, config.y.mapType, config.y.mapIndex);
+            this.setMapping(config.x.gamepadId, config.x.gamepadIdIndex, config.x.mapType, config.x.mapIndex);
+            this.setMapping(config.y.gamepadId, config.y.gamepadIdIndex, config.y.mapType, config.y.mapIndex);
 
             this.queryById('name').setValue(config.name);
             this.queryById('control').setValue(config.controlId);
         }
     },
 
-    setMapping: function(gamepadId, gamepadIndex, mapType, mapIndex) {
+    setMapping: function(gamepadId, gamepadIdIndex, mapType, mapIndex) {
         if(gamepadId === false){
             //gamepadIndex is re-used to tell wich axis is unmapped
 
@@ -230,7 +253,7 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
         if(this.mapping[axis] !== null){
 
             if(this.mapping[axis].gamepadId === gamepadId
-               && this.mapping[axis].gamepadIndex === gamepadIndex
+               && this.mapping[axis].gamepadIdIndex === gamepadIdIndex
                && this.mapping[axis].mapType === mapType
                && this.mapping[axis].mapIndex === mapIndex
               ){
@@ -244,7 +267,7 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
         this.mapping[axis] = {
             type:'stick',
             gamepadId:gamepadId,
-            gamepadIndex:gamepadIndex,
+            gamepadIdIndex:gamepadIdIndex,
             mapType:mapType,
             mapIndex:mapIndex
         };

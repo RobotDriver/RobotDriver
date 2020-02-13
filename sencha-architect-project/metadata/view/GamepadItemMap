@@ -216,6 +216,36 @@
             ]
         },
         {
+            "type": "Ext.field.Checkbox",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "disabled": true,
+                "hidden": true,
+                "itemId": "axisInvert",
+                "label": "Invert Axis",
+                "labelAlign": "right",
+                "labelWidth": 100,
+                "margin": "0 0 0 120",
+                "width": 120
+            },
+            "configAlternates": {
+                "disabled": "boolean",
+                "hidden": "boolean",
+                "itemId": "string",
+                "label": "string",
+                "labelAlign": "string",
+                "labelWidth": "auto",
+                "margin": "auto",
+                "width": "auto"
+            },
+            "name": "MyCheckbox6",
+            "designerId": "5ef67a3a-7e2b-4fa0-ae30-51487a2f698a"
+        },
+        {
             "type": "Ext.field.ComboBox",
             "reference": {
                 "name": "items",
@@ -293,7 +323,7 @@
             "userConfig": {
                 "designer|params": [
                     "gamepadId",
-                    "gamepadIndex",
+                    "gamepadIdIndex",
                     "mapType",
                     "mapIndex"
                 ],
@@ -313,7 +343,7 @@
                     "this.mapping = {",
                     "    type:'item',",
                     "    gamepadId:gamepadId,",
-                    "    gamepadIndex:gamepadIndex,",
+                    "    gamepadIdIndex:gamepadIdIndex,",
                     "    mapType:mapType,",
                     "    mapIndex:mapIndex",
                     "};",
@@ -322,13 +352,15 @@
                     "switch(mapType){",
                     "    case 'button':",
                     "        this.getViewModel().getStore('controlStore').filter('type','button');",
+                    "        this.queryById('axisInvert').hide();",
                     "        break;",
                     "    case 'axis':",
                     "        this.getViewModel().getStore('controlStore').filter('type','slider');",
+                    "        this.queryById('axisInvert').show();",
                     "        break;",
                     "}",
                     "",
-                    "this.queryById('mappedTo').setHtml(gamepadId + \" \"+mapType+\" #\"+ (parseInt(mapIndex)+1) );",
+                    "this.queryById('mappedTo').setHtml(gamepadId +\" #\"+ (parseInt(gamepadIdIndex)+1) +\" \"+mapType+\" #\"+ (parseInt(mapIndex)+1) );",
                     "this.queryById('control').enable();",
                     "this.queryById('remap').show();"
                 ]
@@ -412,7 +444,7 @@
                     "",
                     "if(element.component.config.mapConfig){",
                     "    let config = element.component.config.mapConfig;",
-                    "    this.setMapping(config.gamepadId, config.gamepadIndex, config.mapType, config.mapIndex);",
+                    "    this.setMapping(config.gamepadId, config.gamepadIdIndex, config.mapType, config.mapIndex);",
                     "    this.queryById('name').setValue(config.name);",
                     "    this.queryById('control').setValue(config.controlId);",
                     "}"

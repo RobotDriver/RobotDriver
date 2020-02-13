@@ -86,16 +86,19 @@ Ext.define('RobotDriver.view.BaseControlStick', {
         return this.label;
     },
 
-    setRawValue: function(x,y) {
-        this.fireEvent('change', x, y);
-
-        console.log(x,y, 'invert', x*-1, y*-1);
-
-        //TODO this is backwards. why?
-        //invert
-        x *= -1;
+    setValue: function(x, y) {
+        //console.log(x,y, 'invert', x*-1, y*-1);
+        //x *= -1;
         //y *= -1;
 
+        this.setRawValue(x,y);
+
+        x = Math.round(x * 100);
+        y = Math.round(y * 100);// * -1; //invert Y values
+        this.fireEvent('change', x, y);
+    },
+
+    setRawValue: function(x, y) {
         this.virtualStick.stick.style.transform = `translate3d(${x*50}px, ${y*50}px, 0px)`;
     }
 

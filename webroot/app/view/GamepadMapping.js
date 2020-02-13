@@ -93,9 +93,9 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 {
                     xtype: 'panel',
                     border: true,
+                    height: 131,
                     itemId: 'controllerEventsContainer',
                     margin: '0 4 0 4',
-                    minHeight: 70,
                     padding: 6,
                     layout: {
                         type: 'vbox',
@@ -140,21 +140,20 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     onMybutton1Tap11: function(button, e, eOpts) {
-        console.log('save mapping');
-
-        var allMappings = [];
+        var newMappings = [];
         Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
             let map = mapComp.getMapping();
 
             if(map === false){ return; };
 
-            allMappings.push(map);
+            newMappings.push(map);
         });
 
+        this.fireEvent('mappingsUpdated', newMappings);
         this.fireEvent('websocketSend',{
             action:'updateConfig',
             key:'controllerMapping',
-            config:allMappings
+            config:newMappings
         });
     },
 
@@ -207,14 +206,25 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     gamepadConnected: function(e) {
-        let gx = e.gamepad.index+e.gamepad.id;
+        let gamepad = e.gamepad;
 
-        this.activeGamepads[gx] = e.gamepad;
+        let activeIndex = 0;
+        if(this.activeGamepads[gamepad.id]){
+            this.activeGamepads[gamepad.id].push(gamepad);
+            activeIndex = 1;
+        }else{
+            this.activeGamepads[gamepad.id] = [gamepad];
+        }
+
+        if(this.gamepadStates[gamepad.id]){
+            this.gamepadStates[gamepad.id].push(this.getGamepadState(gamepad));
+        }else{
+            this.gamepadStates[gamepad.id] = [ this.getGamepadState(gamepad) ];
+        }
+
         this.updateConnectedControllers();
 
-        this.appendControllerEvent("Connected! controller #"+(e.gamepad.index+1)+ " "+ e.gamepad.id + "<BR>\r\n");
-
-        this.gamepadStates[gx] = this.getGamepadState(e.gamepad);
+        this.appendControllerEvent("Connected! controller "+ gamepad.id + " #"+(activeIndex+1)+ "<BR>\r\n");
     },
 
     stopControllerLoop: function() {
@@ -233,13 +243,15 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     gamepadDisconnected: function(e) {
-        let gx = e.gamepad.index+e.gamepad.id;
+        let gamepad =e.gamepad;
 
-        delete this.activeGamepads[gx];
-        delete this.gamepadStates[gx];
+        //TODO
+        delete this.activeGamepads[gamepad.id];
+        delete this.gamepadStates[gamepad.id];
+
         this.updateConnectedControllers();
 
-        this.appendControllerEvent("Disconnected! controller #"+(e.gamepad.index+1)+ " "+ e.gamepad.id + "<BR>\r\n");
+        this.appendControllerEvent("Disconnected! controller "+gamepad.id+ " #"+ (gamepad.index+1) + "<BR>\r\n");
     },
 
     addMapping: function(type, config) {
@@ -292,18 +304,63 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     gamepadPoll: function() {
         var gamepadUpdate = navigator.getGamepads();
 
-        for(var gx in this.activeGamepads){
-            let ag = this.activeGamepads[gx];
+        let newGamepadStates = {};
+        for(let gamepadId in this.activeGamepads){
+            let gamepadIdList = this.activeGamepads[gamepadId];
 
-            if(gamepadUpdate[ag.index]){
-                ag = gamepadUpdate[ag.index];
-            }else{
-                this.gamepadDisconnected({gamepad:ag});
-                return;
+            for(let gamepadIdIndex=0; gamepadIdIndex<gamepadIdList.length; gamepadIdIndex++){
+
+                gamepad = gamepadIdList[gamepadIdIndex];
+
+                //is this gamepad still connected?
+                if(!gamepadUpdate[gamepad.index]){
+                    this.gamepadDisconnected({gamepad:gamepad});
+                    return;
+                }
+                if(gamepadUpdate[gamepad.index].id !== gamepadId){
+                    console.error('gamepad index/id ordering has changed! Refresh your browser! If problem continues, contact support!');
+                    continue;
+                }
+
+                if(newGamepadStates[gamepadId]){
+                    newGamepadStates[gamepadId].push(this.getGamepadState(gamepadUpdate[gamepad.index]));
+                }else{
+                    newGamepadStates[gamepadId] = [ this.getGamepadState(gamepadUpdate[gamepad.index]) ];
+                }
             }
 
-            this.gamepadCheckState(ag);
         }
+
+        //detect changes!
+        for(let gamepadId in newGamepadStates){
+
+            let gamepadIdList = newGamepadStates[gamepadId];
+
+            for(let gamepadIdIndex=0; gamepadIdIndex<gamepadIdList.length; gamepadIdIndex++){
+
+                if(!this.gamepadStates[gamepadId][gamepadIdIndex]){
+                    console.error('corresponding state not found for '+gamepadId+' index '+gamepadIdIndex+'! Refresh your browser! If problem continues, contact support!');
+                    continue;
+                }
+                let newState = gamepadIdList[gamepadIdIndex];
+                let oldState = this.gamepadStates[gamepadId][gamepadIdIndex];
+
+                for(let b in newState.buttons){
+                    if(newState.buttons[b] != oldState.buttons[b]){
+                        this.gamepadChange(gamepadId, gamepadIdIndex, 'button', b, newState.buttons[b], oldState.buttons[b]);
+                    }
+                }
+                for(let a in newState.axes){
+                    if(Math.abs(newState.axes[a] -oldState.axes[a]) >= 0.05){ //for axes detect change more than 5%
+                        this.gamepadChange(gamepadId, gamepadIdIndex, 'axis', a, newState.axes[a], oldState.axes[a]);
+                    }else{
+                        newState.axes[a] = oldState.axes[a];//save the old value to accumulate larger changes for better detection
+                    }
+                }
+            }
+        }
+
+        this.gamepadStates = newGamepadStates;
     },
 
     mapDelete: function(panel) {
@@ -330,7 +387,8 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         return state;
     },
 
-    gamepadChange: function(gamepad, type, index, newValue, oldValue) {
+    gamepadChange: function(gamepadId, gamepadIdIndex, type, index, newValue, oldValue) {
+        //TODO left off here
         switch(type){
             case 'axis':
                 newValue = newValue.toFixed(2);
@@ -343,7 +401,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 break;
         }
 
-        this.appendControllerEvent("controller #"+(gamepad.index+1)+ " "+ gamepad.id + " &nbsp;&nbsp; " + type + " #" + (parseInt(index)+1) + " = " + newValue + "<BR>\r\n");
+        this.appendControllerEvent("controller "+ gamepadId + " #"+(gamepadIdIndex+1)+" &nbsp;&nbsp; " + type + " #" + (parseInt(index)+1) + " = " + newValue + "<BR>\r\n");
 
         let mapFound = false;
         if(this.activeMapping !== false){
@@ -353,7 +411,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
                 if(map === false){ return; };
 
-                if(map.gamepadId === gamepad.id && map.mapType === type && map.mapIndex===index ){
+                if(map.gamepadId === gamepadId && map.gamepadIdIndex === gamepad.gamepadIdIndex && map.mapType === type && map.mapIndex===index ){
                     mapFound = true;
                     return false;
                 }
@@ -364,7 +422,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 return false;
             }
 
-            if(false === this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index)){
+            if(false === this.activeMapping.setMapping(gamepadId, gamepadIdIndex, type, index)){
                 return;
             }
 
@@ -378,27 +436,6 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 this.activeMapping = false;
             }
         }
-    },
-
-    gamepadCheckState: function(gamepad) {
-        let gx = gamepad.index+gamepad.id;
-        let gs = this.gamepadStates[gx];
-
-        //detect changes!
-        let newState = this.getGamepadState(gamepad);
-        for(b in newState.buttons){
-            if(newState.buttons[b] != gs.buttons[b]){
-               this.gamepadChange(gamepad, 'button', b, newState.buttons[b], gs.buttons[b]);
-            }
-        }
-        for(a in newState.axes){
-            if(Math.abs(newState.axes[a] -gs.axes[a]) >= 0.05){ //for axes detect change more than 5%
-               this.gamepadChange(gamepad, 'axis', a, newState.axes[a], gs.axes[a]);
-            }else{
-               newState.axes[a] = gs.axes[a];
-            }
-        }
-        this.gamepadStates[gx] = newState;
     },
 
     appendControllerEvent: function(text) {
@@ -441,9 +478,13 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
         let active = 0;
         let logBuf = '';
-        for(var gx in this.activeGamepads){
-            let ag = this.activeGamepads[gx];
-            logBuf += '#'+(ag.index+1) + " " + ag.id + "<BR>\r\n";
+        for(let gamepadId in this.activeGamepads){
+            let gamepadIdList = this.activeGamepads[gamepadId];
+
+            for(let gamepadIdIndex=0; gamepadIdIndex<gamepadIdList.length; gamepadIdIndex++){
+                let gamepad = gamepadIdList[gamepadIdIndex];
+                logBuf += gamepad.id + ' #'+(gamepadIdIndex+1) + " " + "<BR>\r\n";
+            }
         }
         if(logBuf === ''){
             logBuf = 'No Controllers Detected';

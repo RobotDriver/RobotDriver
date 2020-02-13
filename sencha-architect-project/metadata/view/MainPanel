@@ -135,24 +135,26 @@
                                 ],
                                 "fn": "onContainerAction",
                                 "implHandler": [
-                                    "console.log('controller action',mapping, value);",
+                                    "//console.log('controller action',mapping, value);",
                                     "",
                                     "if(!this.liveControls || !this.liveControls.controlId || !this.liveControls.controlId[mapping.controlId]){",
                                     "    console.error('Controller mapping to invalid controlId ', mapping.controlId);",
                                     "    return;",
                                     "}",
                                     "let control = this.liveControls.controlId[mapping.controlId];",
+                                    "console.log('live controller action');",
+                                    "console.log(mapping, value);",
                                     "",
                                     "switch(control.xtype){",
                                     "    case 'controlbutton':",
                                     "        control.setValue(value===true ? 'down' : 'up');",
                                     "        break;",
                                     "    case 'basecontrolslider':",
-                                    "        control.setSliderValue(value * 100);",
+                                    "        //control.setSliderValue(value * 100);",
+                                    "        control.setValue(value * 100);",
                                     "        break;",
                                     "    case 'basecontrolstick':",
-                                    "        control.setRawValue(value[0], value[1]);",
-                                    "        break;",
+                                    "        control.setValue(value[0], value[1]);",
                                     "}",
                                     ""
                                 ],
@@ -3190,6 +3192,34 @@
                                     },
                                     "name": "onContainerWebsocketsend",
                                     "designerId": "742120ce-a43a-46b1-9e75-70be979fa18c"
+                                },
+                                {
+                                    "type": "basiceventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "designer|params": [
+                                            "newMappings"
+                                        ],
+                                        "fn": "onContainerMappingsUpdated",
+                                        "implHandler": [
+                                            "this.config.controllerMapping = newMappings;",
+                                            "",
+                                            "this.configLoad(this.config);"
+                                        ],
+                                        "name": "mappingsUpdated"
+                                    },
+                                    "configAlternates": {
+                                        "designer|params": "typedarray",
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string"
+                                    },
+                                    "name": "onContainerMappingsUpdated",
+                                    "designerId": "d0d7cb3f-5e55-4d6e-bac2-3ab85bb3628f"
                                 }
                             ]
                         },
@@ -3523,17 +3553,14 @@
                     "}",
                     "",
                     "let liveController = this.queryById('liveController');",
-                    "if(activeItemId === 'tabControls'){",
-                    "    liveController.startControllerLoop();",
-                    "}else{",
-                    "    liveController.stopControllerLoop();",
-                    "}",
-                    "",
                     "let controllerMapping = this.queryById('controllerMapping');",
+                    "",
                     "if(activeItemId === 'tabConfig'){",
                     "    controllerMapping.startControllerLoop();",
+                    "    liveController.stopControllerLoop();",
                     "}else{",
                     "    controllerMapping.stopControllerLoop();",
+                    "    liveController.startControllerLoop();",
                     "}"
                 ],
                 "name": "activeItemchange"
@@ -3823,6 +3850,7 @@
                 "fn": "configLoad",
                 "implHandler": [
                     "this.showConfig(config);",
+                    "this.config = config;",
                     "",
                     "if(config.hardware){",
                     "    this.hardwareLoadConfig(config.hardware, true);",

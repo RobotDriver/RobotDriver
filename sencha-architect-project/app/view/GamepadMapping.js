@@ -140,21 +140,20 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     onMybutton1Tap11: function(button, e, eOpts) {
-        console.log('save mapping');
-
-        var allMappings = [];
+        var newMappings = [];
         Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
             let map = mapComp.getMapping();
 
             if(map === false){ return; };
 
-            allMappings.push(map);
+            newMappings.push(map);
         });
 
+        this.fireEvent('mappingsUpdated', newMappings);
         this.fireEvent('websocketSend',{
             action:'updateConfig',
             key:'controllerMapping',
-            config:allMappings
+            config:newMappings
         });
     },
 
@@ -240,13 +239,13 @@ Ext.define('RobotDriver.view.GamepadMapping', {
         if(this.gamePadLoop !== false){
             return;
         }
-        this.gamePadLoop = setInterval(this.gamepadPoll.bind(this), 2000); //75
+        this.gamePadLoop = setInterval(this.gamepadPoll.bind(this), 75);
     },
 
     gamepadDisconnected: function(e) {
         let gamepad =e.gamepad;
 
-
+        //TODO
         delete this.activeGamepads[gamepad.id];
         delete this.gamepadStates[gamepad.id];
 
@@ -305,31 +304,19 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     gamepadPoll: function() {
         var gamepadUpdate = navigator.getGamepads();
 
-        console.log('gamepadPoll');
-
         let newGamepadStates = {};
         for(let gamepadId in this.activeGamepads){
             let gamepadIdList = this.activeGamepads[gamepadId];
 
-            console.log('activeGamepads ' + gamepadId);
-
             for(let gamepadIdIndex=0; gamepadIdIndex<gamepadIdList.length; gamepadIdIndex++){
-
-                console.log('activeGamepads ' + gamepadIdIndex);
-                console.log(gamepadIdList[gamepadIdIndex]);
 
                 gamepad = gamepadIdList[gamepadIdIndex];
 
                 //is this gamepad still connected?
                 if(!gamepadUpdate[gamepad.index]){
-                    console.log('disconnected!!!!!!!!');
                     this.gamepadDisconnected({gamepad:gamepad});
                     return;
                 }
-                console.log('gamepadUpdate', gamepadUpdate[gamepad.index]);
-                console.log('compare');
-                console.log(gamepadUpdate[gamepad.index].id);
-                console.log(gamepadId);
                 if(gamepadUpdate[gamepad.index].id !== gamepadId){
                     console.error('gamepad index/id ordering has changed! Refresh your browser! If problem continues, contact support!');
                     continue;
@@ -414,7 +401,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 break;
         }
 
-        this.appendControllerEvent("controller "+ gamepad.id + " #"+(gamepadIdIndex+1)+" &nbsp;&nbsp; " + type + " #" + (parseInt(index)+1) + " = " + newValue + "<BR>\r\n");
+        this.appendControllerEvent("controller "+ gamepadId + " #"+(gamepadIdIndex+1)+" &nbsp;&nbsp; " + type + " #" + (parseInt(index)+1) + " = " + newValue + "<BR>\r\n");
 
         let mapFound = false;
         if(this.activeMapping !== false){
@@ -424,7 +411,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
                 if(map === false){ return; };
 
-                if(map.gamepadId === gamepad.id && map.mapType === type && map.mapIndex===index ){
+                if(map.gamepadId === gamepadId && map.gamepadIdIndex === gamepad.gamepadIdIndex && map.mapType === type && map.mapIndex===index ){
                     mapFound = true;
                     return false;
                 }
@@ -435,7 +422,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                 return false;
             }
 
-            if(false === this.activeMapping.setMapping(gamepad.id, gamepad.index, type, index)){
+            if(false === this.activeMapping.setMapping(gamepadId, gamepadIdIndex, type, index)){
                 return;
             }
 
@@ -488,9 +475,6 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
     updateConnectedControllers: function(index, id) {
         let el = this.queryById('connectedControllers').el.dom;
-
-        console.log('updateConnectedControllers');
-        console.log(this.activeGamepads);
 
         let active = 0;
         let logBuf = '';

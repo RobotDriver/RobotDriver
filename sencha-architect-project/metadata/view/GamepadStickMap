@@ -182,6 +182,36 @@
                             ]
                         },
                         {
+                            "type": "Ext.field.Checkbox",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "disabled": true,
+                                "hidden": false,
+                                "itemId": "axisInvertx",
+                                "label": "Invert X Axis",
+                                "labelAlign": "right",
+                                "labelWidth": 100,
+                                "margin": "0 0 0 120",
+                                "width": 120
+                            },
+                            "configAlternates": {
+                                "disabled": "boolean",
+                                "hidden": "boolean",
+                                "itemId": "string",
+                                "label": "string",
+                                "labelAlign": "string",
+                                "labelWidth": "auto",
+                                "margin": "auto",
+                                "width": "auto"
+                            },
+                            "name": "MyCheckbox3",
+                            "designerId": "f2257d8d-727d-48f9-bf7d-3767e6ac20bf"
+                        },
+                        {
                             "type": "Ext.Container",
                             "reference": {
                                 "name": "items",
@@ -292,6 +322,36 @@
                                     ]
                                 }
                             ]
+                        },
+                        {
+                            "type": "Ext.field.Checkbox",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "disabled": true,
+                                "hidden": false,
+                                "itemId": "axisInverty",
+                                "label": "Invert Y Axis",
+                                "labelAlign": "right",
+                                "labelWidth": 100,
+                                "margin": "0 0 0 120",
+                                "width": 120
+                            },
+                            "configAlternates": {
+                                "disabled": "boolean",
+                                "hidden": "boolean",
+                                "itemId": "string",
+                                "label": "string",
+                                "labelAlign": "string",
+                                "labelWidth": "auto",
+                                "margin": "auto",
+                                "width": "auto"
+                            },
+                            "name": "MyCheckbox5",
+                            "designerId": "c28e5dd4-0f1c-45d2-b72d-110621e271c4"
                         }
                     ]
                 },
@@ -444,7 +504,7 @@
             "userConfig": {
                 "designer|params": [
                     "gamepadId",
-                    "gamepadIndex",
+                    "gamepadIdIndex",
                     "mapType",
                     "mapIndex"
                 ],
@@ -472,23 +532,23 @@
                     "",
                     "let axis = 'x';",
                     "if(this.mapping[axis] !== null){",
-                    "    ",
-                    "    if(this.mapping[axis].gamepadId === gamepadId ",
-                    "       && this.mapping[axis].gamepadIndex === gamepadIndex ",
-                    "       && this.mapping[axis].mapType === mapType ",
+                    "",
+                    "    if(this.mapping[axis].gamepadId === gamepadId",
+                    "       && this.mapping[axis].gamepadIdIndex === gamepadIdIndex",
+                    "       && this.mapping[axis].mapType === mapType",
                     "       && this.mapping[axis].mapIndex === mapIndex",
                     "      ){",
                     "        Ext.Msg.alert('Problem!','You have the same index mapped for X<BR><BR>Please select another axis!');",
                     "        return false;",
                     "    }",
-                    "    ",
+                    "",
                     "    axis = 'y';",
                     "    this.bothAxesMapped = true;",
                     "}",
                     "this.mapping[axis] = {",
                     "    type:'stick',",
                     "    gamepadId:gamepadId,",
-                    "    gamepadIndex:gamepadIndex,",
+                    "    gamepadIdIndex:gamepadIdIndex,",
                     "    mapType:mapType,",
                     "    mapIndex:mapIndex",
                     "};",
@@ -587,8 +647,8 @@
                     "if(element.component.config.mapConfig){",
                     "    let config = element.component.config.mapConfig;",
                     "",
-                    "    this.setMapping(config.x.gamepadId, config.x.gamepadIndex, config.x.mapType, config.x.mapIndex);",
-                    "    this.setMapping(config.y.gamepadId, config.y.gamepadIndex, config.y.mapType, config.y.mapIndex);",
+                    "    this.setMapping(config.x.gamepadId, config.x.gamepadIdIndex, config.x.mapType, config.x.mapIndex);",
+                    "    this.setMapping(config.y.gamepadId, config.y.gamepadIdIndex, config.y.mapType, config.y.mapIndex);",
                     "",
                     "    this.queryById('name').setValue(config.name);",
                     "    this.queryById('control').setValue(config.controlId);",
