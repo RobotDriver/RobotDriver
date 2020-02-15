@@ -230,12 +230,12 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
 
     setMapping: function(gamepadId, gamepadIdIndex, mapType, mapIndex) {
         if(gamepadId === false){
-            //gamepadIndex is re-used to tell wich axis is unmapped
+            //gamepadIdIndex is re-used to tell wich axis is unmapped
 
-            this.mapping[gamepadIndex] = null;
+            this.mapping[gamepadIdIndex] = null;
 
-            this.queryById('remap' + gamepadIndex).hide();
-            this.queryById('mappedTo' + gamepadIndex).setHtml('<font color="red">Press Button/Move Axis On Controller</font>');
+            this.queryById('remap' + gamepadIdIndex).hide();
+            this.queryById('mappedTo' + gamepadIdIndex).setHtml('<font color="red">Press Button/Move Axis On Controller</font>');
 
             //this.queryById('control').setValue(null);
             //this.queryById('control').disable();
@@ -272,7 +272,7 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
             mapIndex:mapIndex
         };
 
-        this.queryById('mappedTo'+ axis).setHtml(gamepadId + " "+mapType+" #"+ (parseInt(mapIndex)+1) );
+        this.queryById('mappedTo'+ axis).setHtml(gamepadId + " #"+  (parseInt(gamepadIdIndex)+1) + " "+mapType+" #"+ (parseInt(mapIndex)+1) );
         this.queryById('remap'+ axis).show();
         if(axis === 'x'){
             this.queryById('mappedToy').setHtml('<font color="red">Press Button/Move Axis On Controller</font>');

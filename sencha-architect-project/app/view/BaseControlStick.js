@@ -99,6 +99,9 @@ Ext.define('RobotDriver.view.BaseControlStick', {
     },
 
     setRawValue: function(x, y) {
+        if(!this.virtualStick){
+            return;
+        }
         this.virtualStick.stick.style.transform = `translate3d(${x*50}px, ${y*50}px, 0px)`;
     }
 

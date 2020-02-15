@@ -28,6 +28,28 @@
             "userConfig": {
                 "fn": "onContainerPainted",
                 "implHandler": [
+                    "this.initController();"
+                ],
+                "name": "painted"
+            },
+            "configAlternates": {
+                "fn": "string",
+                "implHandler": "code",
+                "name": "string"
+            },
+            "name": "onContainerPainted",
+            "designerId": "5fc83e7d-0551-4401-9cfe-f4235e578d85"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "fn": "initController",
+                "implHandler": [
                     "if(this.init){",
                     "    return;",
                     "}else{",
@@ -49,16 +71,14 @@
                     "",
                     "this.gamePadLoop = false;",
                     "this.startControllerLoop();"
-                ],
-                "name": "painted"
+                ]
             },
             "configAlternates": {
                 "fn": "string",
-                "implHandler": "code",
-                "name": "string"
+                "implHandler": "code"
             },
-            "name": "onContainerPainted",
-            "designerId": "5fc83e7d-0551-4401-9cfe-f4235e578d85"
+            "name": "initController",
+            "designerId": "93f40f3c-59b3-4d58-b1d1-17692a01116a"
         },
         {
             "type": "basicfunction",

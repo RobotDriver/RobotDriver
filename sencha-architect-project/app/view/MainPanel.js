@@ -57,7 +57,6 @@ Ext.define('RobotDriver.view.MainPanel', {
             items: [
                 {
                     xtype: 'button',
-                    itemId: 'mybutton8',
                     margin: '10 0 0 10',
                     iconCls: 'x-fa fa-gamepad',
                     text: 'Open Controller',
@@ -943,32 +942,78 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     onMybutton8Tap: function(button, e, eOpts) {
-        this.showVirtualController();
+        if(!this.controllerWindow){
+            this.controllerWindowControls = Ext.create({
+                xtype: 'livecontrols',
+                itemId: 'liveControls',
+                liveControlsConfig: this.liveControlsConfig,
+                listeners: {
+                    scope:this,
+                    websocketSend: function(msg){
+                        this.websocketSend(msg);
+                    }
+                }
+            });
+            this.controllerWindow = Ext.create({
+                xtype:'dialog',
+                title:'Controls',
+                //centered:true,
+                //x:100,
+                //y:100,
+                modal:false,
+                //floated:true,
+                closable:true,
+                closeAction:'hide',
+                resizable:{edges:['se','s','e']},
+                items:this.controllerWindowControls
+            });
+        }
+        this.controllerWindow.showAt(100,100);
+        if(this.liveControlsConfig){
+            this.liveControlsWindow = this.controllerWindowControls.loadConfig(this.liveControlsConfig, this.hardware);
+        }
+
     },
 
     onContainerAction: function(mapping, value) {
-        //console.log('controller action',mapping, value);
+        if(this.liveControls && this.liveControls.controlId && this.liveControls.controlId[mapping.controlId]){
 
-        if(!this.liveControls || !this.liveControls.controlId || !this.liveControls.controlId[mapping.controlId]){
+        let control = this.liveControls.controlId[mapping.controlId];
+
+            switch(control.xtype){
+                case 'controlbutton':
+                    control.setValue(value===true ? 'down' : 'up');
+                    break;
+                case 'basecontrolslider':
+                    //control.setSliderValue(value * 100);
+                    control.setValue(value * 100);
+                    break;
+                case 'basecontrolstick':
+                    control.setValue(value[0], value[1]);
+            }
+        }else{
             console.error('Controller mapping to invalid controlId ', mapping.controlId);
+        }
+
+
+        if(this.liveControlsWindow && this.liveControlsWindow.controlId && this.liveControlsWindow.controlId[mapping.controlId]){
+            let controlWin = this.liveControlsWindow.controlId[mapping.controlId];
+
+            switch(controlWin.xtype){
+                case 'controlbutton':
+                    controlWin.setRawValue(value===true ? 'down' : 'up');
+                    break;
+                case 'basecontrolslider':
+                    //control.setSliderValue(value * 100);
+                    controlWin.setRawValue(value * 100);
+                    break;
+                case 'basecontrolstick':
+                    controlWin.setRawValue(value[0], value[1]);
+            }
+        }else{
+            console.error('Controller Win mapping to invalid controlId ', mapping.controlId);
             return;
         }
-        let control = this.liveControls.controlId[mapping.controlId];
-        console.log('live controller action');
-        console.log(mapping, value);
-
-        switch(control.xtype){
-            case 'controlbutton':
-                control.setValue(value===true ? 'down' : 'up');
-                break;
-            case 'basecontrolslider':
-                //control.setSliderValue(value * 100);
-                control.setValue(value * 100);
-                break;
-            case 'basecontrolstick':
-                control.setValue(value[0], value[1]);
-        }
-
     },
 
     onContainerWebsocketSend: function(msg) {
@@ -1235,9 +1280,11 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.websocketInit();
 
         this.liveControls = {};
+        this.liveControlsConfig = false;
         this.websocketSendAction("configRead",true);
 
-        this.controllerInit();
+        //this.controllerInit();
+        this.queryById('liveController').initController();
 
         this.hardware = {};
         this.getViewModel().getStore('hardwareStore').on('datachanged',function(){
@@ -1405,7 +1452,11 @@ Ext.define('RobotDriver.view.MainPanel', {
         if(config.controls){
             this.controlsLoadConfig(config.controls);
             this.liveControls = this.queryById('liveControls').loadConfig(config.controls, this.hardware);
+            this.liveControlsConfig = config.controls;
             controllerMapping.updateMappingStores(config.controls);
+            if(this.controllerWindowControls){
+                this.liveControlsWindow = this.controllerWindowControls.loadConfig(config.controls, this.hardware);
+            }
         }
         if(config.controllerMapping){
             controllerMapping.loadConfig(config.controllerMapping);
@@ -1910,7 +1961,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.queryById('pidConstantD').setValue(jsonData.d);
     },
 
-    controllerInit: function() {
+    controllerInitDeleteMe: function() {
         this.controllerIgnore = false;
 
         this.lastSteeringChangeDefered = false;
@@ -2093,7 +2144,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
     },
 
-    showVirtualController: function() {
+    showVirtualControllerDeleteMe: function() {
         if(!this.virtualController){
             this.virtualController = Ext.create({
                 xtype:'panel',

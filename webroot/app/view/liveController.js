@@ -31,6 +31,10 @@ Ext.define('RobotDriver.view.liveController', {
     },
 
     onContainerPainted: function(sender, element, eOpts) {
+        this.initController();
+    },
+
+    initController: function() {
         if(this.init){
             return;
         }else{

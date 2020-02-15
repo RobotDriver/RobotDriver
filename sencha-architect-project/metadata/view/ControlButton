@@ -332,12 +332,9 @@
                 ],
                 "fn": "setValue",
                 "implHandler": [
-                    "if(value === 'down'){",
-                    "    this.button.classList.add(\"toggledown\");",
-                    "}else{",
-                    "    this.button.classList.remove(\"toggledown\");",
-                    "}",
-                    "this.fireEvent(value);"
+                    "this.fireEvent(value);",
+                    "",
+                    "this.setRawValue(value);"
                 ]
             },
             "configAlternates": {
@@ -347,6 +344,37 @@
             },
             "name": "setValue",
             "designerId": "54091b37-0c42-483e-b3b6-5aac3fd570cb"
+        },
+        {
+            "type": "basicfunction",
+            "reference": {
+                "name": "items",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "designer|params": [
+                    "value"
+                ],
+                "fn": "setRawValue",
+                "implHandler": [
+                    "if(!this.button){",
+                    "    return;",
+                    "}",
+                    "if(value === 'down'){",
+                    "    this.button.classList.add(\"toggledown\");",
+                    "}else{",
+                    "    this.button.classList.remove(\"toggledown\");",
+                    "}"
+                ]
+            },
+            "configAlternates": {
+                "designer|params": "typedarray",
+                "fn": "string",
+                "implHandler": "code"
+            },
+            "name": "setRawValue",
+            "designerId": "0a4783f4-5318-4cc2-9585-3b11690a1235"
         }
     ]
 }

@@ -168,12 +168,20 @@ Ext.define('RobotDriver.view.ControlButton', {
     },
 
     setValue: function(value) {
+        this.fireEvent(value);
+
+        this.setRawValue(value);
+    },
+
+    setRawValue: function(value) {
+        if(!this.button){
+            return;
+        }
         if(value === 'down'){
             this.button.classList.add("toggledown");
         }else{
             this.button.classList.remove("toggledown");
         }
-        this.fireEvent(value);
     }
 
 });
