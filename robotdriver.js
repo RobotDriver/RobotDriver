@@ -973,11 +973,17 @@ function handleIncomingControlMessage(wsp, message, source) {
 		case "updateConfig":
 			updateConfigFromClient(messageJson);
 			break;
-		case "stopVideo":
-			stopVideoProcess();
+		case "startAudio":
+			startAudioProcess();
+			break;
+		case "stopAudio":
+			stopAudioProcess();
 			break;
 		case "startVideo":
 			startVideoProcess();
+			break;
+		case "stopVideo":
+			stopVideoProcess();
 			break;
 		case "readVideoRunning":
 			if(ws !== false){
@@ -1118,12 +1124,14 @@ function broadcastAudioData(data) {
 	});
 }
 
+function stopAudioProcess(){
+	if(FfmpegAudioProcess !== null){
+		FfmpegAudioProcess.kill();
+	}
+}
 function stopVideoProcess(){
 	if(FfmpegVideoProcess !== null){
 		FfmpegVideoProcess.kill();
-	}
-	if(FfmpegAudioProcess !== null){
-		FfmpegAudioProcess.kill();
 	}
 }
 function startVideoProcess(){
@@ -1133,6 +1141,7 @@ function startVideoProcess(){
 	}
 	console.log('startVideo() - launching ffmpeg');
 
+	videoRunning = true;
 
 	// $ v4l2-ctl --list-devices
 	// bcm2835-codec (platform:bcm2835-codec):
@@ -1180,46 +1189,6 @@ function startVideoProcess(){
 		'-muxdelay','0.001',
 		'http://127.0.0.1:'+config.httpPort+'/sendVideo/'
 	]);
-
-	FfmpegAudioProcess = spawn('ffmpeg', [
-        '-hide_banner',
-        '-nostats',
-        '-loglevel','fatal',
-		//input video
-		'-vn', //no video
-		'-f','alsa', //alsa audio
-		'-i','hw:1', //audio device
-		'-ar','44100', //audio sample rate
-		'-c','2', //audio channels
-		//output
-		'-f','mpegts', //output codec format
-		'-codec:a', 'mp2',
-		'-b:a','96k',
-		'-bf','0',
-		'-muxdelay','0.001',
-		'http://127.0.0.1:'+config.httpPort+'/sendAudio/'
-	]);
-	//, {stdio: [process.stdin, process.stdout, process.stderr]}
-	audioRunning = true;
-	
-	FfmpegAudioProcess.on('exit', (code) => {
-		console.log('startVideo() - ffmpeg AUDIO process exited');
-		audioRunning = false;
-		FfmpegAudioProcess = null;
-	});
-
-	// FfmpegAudioProcess.stdout.on('data', (data) => {
-	//   console.log(data.toString());
-	// });
-	
-	// FfmpegAudioProcess.stderr.on('data', (data) => {
-	//   console.error(data.toString());
-	// });
-
-	 FfmpegAudioProcess.stdout.pipe(process.stdout);
-	FfmpegAudioProcess.stderr.pipe(process.stderr);
-
-	videoRunning = true;
 	
 	FfmpegVideoProcess.on('exit', (code) => {
 		console.log('startVideo() - ffmpeg VIDEO process exited');
@@ -1240,6 +1209,53 @@ function startVideoProcess(){
 	
 }
 
+function startAudioProcess(){
+	if(audioRunning === true){
+		console.log('startAudioProcess() - Audio already running - not starting');
+		return;
+	}
+	console.log('startAudioProcess() - launching ffmpeg');
+
+	audioRunning = true;
+
+	FfmpegAudioProcess = spawn('ffmpeg', [
+        '-hide_banner',
+        '-nostats',
+        '-loglevel','fatal',
+		//input video
+		'-vn', //no video
+		'-f','alsa', //alsa audio
+		'-i','hw:1', //audio device
+		'-ar','44100', //audio sample rate
+		'-c','2', //audio channels
+		//output
+		'-f','mpegts', //output codec format
+		'-codec:a', 'mp2',
+		'-b:a','96k',
+		'-bf','0',
+		'-muxdelay','0.001',
+		'http://127.0.0.1:'+config.httpPort+'/sendAudio/'
+	]);
+	//, {stdio: [process.stdin, process.stdout, process.stderr]}
+	
+	FfmpegAudioProcess.on('exit', (code) => {
+		console.log('startVideo() - ffmpeg AUDIO process exited');
+		audioRunning = false;
+		FfmpegAudioProcess = null;
+	});
+
+	// FfmpegAudioProcess.stdout.on('data', (data) => {
+	//   console.log(data.toString());
+	// });
+	
+	// FfmpegAudioProcess.stderr.on('data', (data) => {
+	//   console.error(data.toString());
+	// });
+
+	FfmpegAudioProcess.stdout.pipe(process.stdout);
+	FfmpegAudioProcess.stderr.pipe(process.stderr);
+	
+}
 // maps file extention to MIME types
 const mimeType = {
 	'.ico': 'image/x-icon',
@@ -1395,6 +1411,8 @@ process.on("SIGINT", function () {
 	console.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
 
 	shutdownHardware();
+	stopAudioProcess();
+	stopVideoProcess();
 
 	process.exit(-1);
 });
