@@ -15,7 +15,7 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 
 const httpVideoStreamKey = 'supersecret';
 var movementKillTimer = null;
@@ -594,6 +594,18 @@ function configRead(){
 	}
 	//});
 }
+
+function restartUsb(){
+	//kill usb
+	console.log("restarting USB... stopping USB");
+	exec("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind");
+	//wait 2 seconds and revive
+	console.log("restarting USB... waiting 2 seconds");
+	setTimeout(function(){
+	console.log("restarting USB... restarting USB");
+		exec("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind");
+	}, 2000);
+}
 // function updateConfigIndexExists(obj, level,  ...rest) {
 // 	//from https://stackoverflow.com/a/2631198
 // 	if (obj === undefined) return false
@@ -984,6 +996,9 @@ function handleIncomingControlMessage(wsp, message, source) {
 			break;
 		case "stopVideo":
 			stopVideoProcess();
+			break;
+		case "restartUsb":
+			restartUsb();
 			break;
 		case "readVideoRunning":
 			if(ws !== false){

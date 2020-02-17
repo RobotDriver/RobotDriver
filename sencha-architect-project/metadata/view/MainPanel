@@ -1545,6 +1545,74 @@
                     },
                     "codeClass": null,
                     "userConfig": {
+                        "iconCls": "x-fa fa-wrench",
+                        "title": "Tools"
+                    },
+                    "configAlternates": {
+                        "iconCls": "string",
+                        "title": "string"
+                    },
+                    "name": "MyContainer5",
+                    "designerId": "f14ab954-b822-4b72-a345-76ea8f0e7284",
+                    "cn": [
+                        {
+                            "type": "Ext.Button",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "iconCls": "x-fa fa-usb",
+                                "itemId": "mybutton2",
+                                "margin": 40,
+                                "text": "Restart USB"
+                            },
+                            "configAlternates": {
+                                "iconCls": "string",
+                                "itemId": "string",
+                                "margin": "auto",
+                                "text": "string"
+                            },
+                            "name": "MyButton2",
+                            "designerId": "24d21364-7379-4354-a000-7bc480429eba",
+                            "cn": [
+                                {
+                                    "type": "basiceventbinding",
+                                    "reference": {
+                                        "name": "listeners",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "fn": "onMybutton2Tap",
+                                        "implHandler": [
+                                            "this.websocketSend({",
+                                            "    action:'restartUsb'",
+                                            "});"
+                                        ],
+                                        "name": "tap"
+                                    },
+                                    "configAlternates": {
+                                        "fn": "string",
+                                        "implHandler": "code",
+                                        "name": "string"
+                                    },
+                                    "name": "onMybutton2Tap",
+                                    "designerId": "d77b5d21-7f18-428b-bbe5-5cfb3c5dbb28"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
                         "iconCls": "x-fa fa-exchange",
                         "layout": "fit",
                         "title": "Config Import/Export"

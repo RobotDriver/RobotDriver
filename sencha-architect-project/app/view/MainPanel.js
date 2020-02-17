@@ -423,6 +423,23 @@ Ext.define('RobotDriver.view.MainPanel', {
                 },
                 {
                     xtype: 'container',
+                    title: 'Tools',
+                    iconCls: 'x-fa fa-wrench',
+                    items: [
+                        {
+                            xtype: 'button',
+                            itemId: 'mybutton2',
+                            margin: 40,
+                            iconCls: 'x-fa fa-usb',
+                            text: 'Restart USB',
+                            listeners: {
+                                tap: 'onMybutton2Tap'
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container',
                     title: 'Config Import/Export',
                     iconCls: 'x-fa fa-exchange',
                     layout: 'fit',
@@ -640,6 +657,12 @@ Ext.define('RobotDriver.view.MainPanel', {
         }else{
             controllerMapping.stopControllerLoop();
         }
+    },
+
+    onMybutton2Tap: function(button, e, eOpts) {
+        this.websocketSend({
+            action:'restartUsb'
+        });
     },
 
     onMybutton13Tap: function(button, e, eOpts) {
