@@ -67,7 +67,7 @@
             "codeClass": null,
             "userConfig": {
                 "height": 35,
-                "itemId": "previewName",
+                "itemId": "previewLabel",
                 "margin": "0 0 0 10",
                 "maxWidth": 150,
                 "style": [
@@ -213,7 +213,7 @@
                 ],
                 "fn": "setLabel",
                 "implHandler": [
-                    "this.queryById('previewName').setHtml(label);"
+                    "this.queryById('previewLabel').setHtml(label);"
                 ]
             },
             "configAlternates": {

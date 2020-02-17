@@ -345,6 +345,7 @@
                 ],
                 "fn": "setConfigValues",
                 "implHandler": [
+                    "console.log('setConfigValues', config);",
                     "this.setValues(config);",
                     "",
                     "// if(config.hardware && config.hardware.type==='motor'){",
@@ -441,7 +442,16 @@
             "userConfig": {
                 "fn": "onFormpanelPainted",
                 "implHandler": [
-                    "this.controlId = element.component.config.controlId;"
+                    "if(this.init){",
+                    "   return;",
+                    "}else{",
+                    "   this.init = true;",
+                    "}",
+                    "",
+                    "this.controlId = element.component.config.controlId;",
+                    "if(element.component.config.label){",
+                    "    this.queryById('stickPreview').setLabel(element.component.config.label);",
+                    "}"
                 ],
                 "name": "painted"
             },

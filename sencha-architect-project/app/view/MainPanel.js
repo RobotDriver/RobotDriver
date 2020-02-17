@@ -912,7 +912,8 @@ Ext.define('RobotDriver.view.MainPanel', {
                     xtype:'control'+type+'config',
                     hidden:true,
                     margin:'3 0 0 0',
-                    label:config.name,
+                    controlConfig:config,
+                    label:config.label,
                     hardware: config.hardware,
                     controlId: config.controlId ? config.controlId : this.generateId(),
                     listeners:{

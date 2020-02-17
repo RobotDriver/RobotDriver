@@ -481,7 +481,6 @@
                                                     "userConfig": {
                                                         "fn": "onActionTypeSelect1",
                                                         "implHandler": [
-                                                            "console.log('button action type select', newValue.data.value, newValue);",
                                                             "if(newValue === null){",
                                                             "    return;",
                                                             "}",
