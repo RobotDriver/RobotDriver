@@ -30,20 +30,7 @@ var motorConfigBad = false;
 var config = {};
 const configFile = '/boot/robotdriverconfig.json';
 var defaultConfigs = {
-	httpPort:80, //https://stackoverflow.com/a/23281401
-	hardware:[{
-		motors:[{
-			type:'l298n',
-			pins:{
-				'aen':13,
-				'ain1':19,
-				'ain2':26,
-				'ben':16,
-				'bin3':20,
-				'bin4':21
-			}
-		}]
-	}]
+	httpPort:80 //https://stackoverflow.com/a/23281401
 };
 var hardware = {};
 /*{
@@ -66,6 +53,7 @@ var gpioPins = {};
 var pcapwm = {};
 
 function init(){
+	initgpio();
 	configRead();
 	initHttpServer();
 	initHardware();
@@ -162,7 +150,6 @@ function initHardware(){
 	if(!config.hardware || !config.hardware.length){
 		return;
 	}
-	initgpio();
 
 	let i = config.hardware.length;
 	while(i--){
@@ -556,8 +543,8 @@ function shutdownPwm(){
 }
 function configDefaults(){
 	config = defaultConfigs;
-	initHardware();
 	writeConfig();
+	initHardware();
 }
 
 function configRead(){
@@ -572,7 +559,6 @@ function configRead(){
 	}catch(e){
 		config=defaultConfigs;
 		log(`read configs from ${configFile} - Error! Unable to read file! Check permissions! Defaults loaded`);
-		//console.log(e);
 		return;
 	}
 	try{
@@ -590,9 +576,7 @@ function configRead(){
 		console.log(`--------\r\nBad Config:${configFileData}\r\n--------`);
 	}else{
 		log(`read configs from ${configFile}`);
-		//console.log(configFileData);
 	}
-	//});
 }
 
 function restartUsb(){
