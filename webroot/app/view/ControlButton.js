@@ -43,7 +43,7 @@ Ext.define('RobotDriver.view.ControlButton', {
         {
             xtype: 'container',
             height: 35,
-            itemId: 'previewName',
+            itemId: 'previewLabel',
             style: {
                 'text-align': 'center'
             },
@@ -152,7 +152,7 @@ Ext.define('RobotDriver.view.ControlButton', {
     },
 
     setLabel: function(label) {
-        this.queryById('previewName').setHtml(label);
+        this.queryById('previewLabel').setHtml(label);
     },
 
     setConfigValues: function(config) {

@@ -162,10 +162,20 @@ Ext.define('RobotDriver.view.ControlStickConfig', {
     },
 
     onFormpanelPainted: function(sender, element, eOpts) {
+        if(this.init){
+           return;
+        }else{
+           this.init = true;
+        }
+
         this.controlId = element.component.config.controlId;
+        if(element.component.config.label){
+            this.queryById('stickPreview').setLabel(element.component.config.label);
+        }
     },
 
     setConfigValues: function(config) {
+        console.log('setConfigValues', config);
         this.setValues(config);
 
         // if(config.hardware && config.hardware.type==='motor'){

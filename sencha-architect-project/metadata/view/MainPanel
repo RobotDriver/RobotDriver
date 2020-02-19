@@ -2185,25 +2185,19 @@
                 ],
                 "fn": "configLoad",
                 "implHandler": [
+                    "console.log('main configLoad');",
                     "this.showConfig(config);",
                     "this.config = config;",
                     "",
                     "if(config.hardware){",
                     "    this.hardwareLoadConfig(config.hardware, true);",
                     "}",
-                    "let controllerMapping = this.queryById('controllerMapping');",
                     "",
                     "if(config.controls){",
                     "    this.controlsLoadConfig(config.controls);",
-                    "    this.liveControls = this.queryById('liveControls').loadConfig(config.controls, this.hardware);",
-                    "    this.liveControlsConfig = config.controls;",
-                    "    controllerMapping.updateMappingStores(config.controls);",
-                    "    if(this.controllerWindowControls){",
-                    "        this.liveControlsWindow = this.controllerWindowControls.loadConfig(config.controls, this.hardware);",
-                    "    }",
                     "}",
                     "if(config.controllerMapping){",
-                    "    controllerMapping.loadConfig(config.controllerMapping);",
+                    "    this.queryById('controllerMapping').loadConfig(config.controllerMapping);",
                     "    this.queryById('liveController').loadConfig(config.controllerMapping);",
                     "}"
                 ]
@@ -2357,10 +2351,7 @@
                     "    config:controlConfig",
                     "});",
                     "",
-                    "this.controlsLoadConfig(controlConfig);",
-                    "this.liveControls = this.queryById('liveControls').loadConfig(controlConfig, this.hardware);",
-                    "",
-                    "this.queryById('controllerMapping').updateMappingStores(controlConfig);"
+                    "this.controlsLoadConfig(controlConfig);"
                 ]
             },
             "configAlternates": {
@@ -2379,13 +2370,26 @@
             "codeClass": null,
             "userConfig": {
                 "designer|params": [
-                    "controls"
+                    "controlConfig"
                 ],
                 "fn": "controlsLoadConfig",
                 "implHandler": [
+                    "this.liveControlsConfig = controlConfig;",
+                    "",
+                    "",
+                    "this.liveControls = this.queryById('liveControls').loadConfig(controlConfig, this.hardware);",
+                    "",
+                    "",
+                    "if(this.controllerWindowControls){",
+                    "    this.liveControlsWindow = this.controllerWindowControls.loadConfig(controlConfig, this.hardware);",
+                    "}",
+                    "this.queryById('controllerMapping').updateMappingStores(controlConfig);",
+                    "",
+                    "",
+                    "//add configs to editor",
                     "this.queryById('controlItems').removeAll();",
                     "",
-                    "Ext.each(controls,function(controlItem){",
+                    "Ext.each(controlConfig,function(controlItem){",
                     "    this.controlAdd(controlItem.type, controlItem);",
                     "},this);"
                 ]

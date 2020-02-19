@@ -40,6 +40,10 @@ Ext.define('RobotDriver.view.liveControls', {
     ],
 
     loadConfig: function(controlConfigs, hardware) {
+        console.log('loadConfig');
+        console.log(controlConfigs);
+        console.log(hardware);
+
         this.hardware = hardware;
 
         if(!this.buttonsContainer){

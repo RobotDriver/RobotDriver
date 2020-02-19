@@ -849,25 +849,19 @@ Ext.define('RobotDriver.view.MainPanel', {
     },
 
     configLoad: function(config) {
+        console.log('main configLoad');
         this.showConfig(config);
         this.config = config;
 
         if(config.hardware){
             this.hardwareLoadConfig(config.hardware, true);
         }
-        let controllerMapping = this.queryById('controllerMapping');
 
         if(config.controls){
             this.controlsLoadConfig(config.controls);
-            this.liveControls = this.queryById('liveControls').loadConfig(config.controls, this.hardware);
-            this.liveControlsConfig = config.controls;
-            controllerMapping.updateMappingStores(config.controls);
-            if(this.controllerWindowControls){
-                this.liveControlsWindow = this.controllerWindowControls.loadConfig(config.controls, this.hardware);
-            }
         }
         if(config.controllerMapping){
-            controllerMapping.loadConfig(config.controllerMapping);
+            this.queryById('controllerMapping').loadConfig(config.controllerMapping);
             this.queryById('liveController').loadConfig(config.controllerMapping);
         }
     },
@@ -968,15 +962,25 @@ Ext.define('RobotDriver.view.MainPanel', {
         });
 
         this.controlsLoadConfig(controlConfig);
-        this.liveControls = this.queryById('liveControls').loadConfig(controlConfig, this.hardware);
-
-        this.queryById('controllerMapping').updateMappingStores(controlConfig);
     },
 
-    controlsLoadConfig: function(controls) {
+    controlsLoadConfig: function(controlConfig) {
+        this.liveControlsConfig = controlConfig;
+
+
+        this.liveControls = this.queryById('liveControls').loadConfig(controlConfig, this.hardware);
+
+
+        if(this.controllerWindowControls){
+            this.liveControlsWindow = this.controllerWindowControls.loadConfig(controlConfig, this.hardware);
+        }
+        this.queryById('controllerMapping').updateMappingStores(controlConfig);
+
+
+        //add configs to editor
         this.queryById('controlItems').removeAll();
 
-        Ext.each(controls,function(controlItem){
+        Ext.each(controlConfig,function(controlItem){
             this.controlAdd(controlItem.type, controlItem);
         },this);
     },

@@ -259,7 +259,6 @@ Ext.define('RobotDriver.view.ControlButtonConfig', {
     },
 
     onActionTypeSelect1: function(combobox, newValue, oldValue, eOpts) {
-        console.log('button action type select', newValue.data.value, newValue);
         if(newValue === null){
             return;
         }

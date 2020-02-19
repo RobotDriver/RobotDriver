@@ -68,6 +68,10 @@
                 ],
                 "fn": "loadConfig",
                 "implHandler": [
+                    "console.log('loadConfig');",
+                    "console.log(controlConfigs);",
+                    "console.log(hardware);",
+                    "",
                     "this.hardware = hardware;",
                     "",
                     "if(!this.buttonsContainer){",
