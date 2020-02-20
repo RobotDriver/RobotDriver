@@ -42,6 +42,16 @@ Ext.define('RobotDriver.view.MainPanelViewModel', {
             sorters: {
                 property: 'display'
             }
+        },
+        cameraStore: {
+            fields: [
+                {
+                    name: 'name'
+                },
+                {
+                    name: 'device'
+                }
+            ]
         }
     }
 

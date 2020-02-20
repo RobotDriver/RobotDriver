@@ -15,7 +15,7 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
-const { spawn, exec } = require('child_process');
+const { spawn, exec, execSync } = require('child_process');
 
 const httpVideoStreamKey = 'supersecret';
 var movementKillTimer = null;
@@ -579,6 +579,46 @@ function configRead(){
 	}
 }
 
+function getCameras(){
+
+	let stdout;
+	let cameras = [];
+	try{
+		stdout = execSync('v4l2-ctl --list-devices --concise');
+	}catch(error){
+		console.log("getCameras error", error, stderr, stdout);
+		return null;
+	}
+	
+	let cameraLines = stdout.toString('utf8').split('\n');
+	let deviceFound = null;
+	for(let i=0, l=cameraLines.length; i<l; i++){
+		let cam = cameraLines[i];
+		let deviceLine = cam.charAt(0) !== '\t';
+
+		if(deviceLine){
+			if(deviceFound === null){
+				deviceFound = [cam.slice(0,-1), null];
+			}else{
+				cameras.push([deviceFound[0],deviceFound[1]]);
+				deviceFound = null;
+			}
+		}else{
+			if(deviceFound !== null){
+				if(deviceFound[1] === null){
+					deviceFound[1] = cam.trim();
+				}
+			}
+		}
+		
+	}
+
+	if(cameras.length > 0){
+		return cameras;
+	}
+	return null;
+}
+
 function restartUsb(){
 	//kill usb
 	console.log("restarting USB... stopping USB");
@@ -1048,6 +1088,14 @@ function handleIncomingControlMessage(wsp, message, source) {
 		// 	motorMove(messageJson.y, messageJson.x);
 		//
 		// 	break;
+		case "getCameras":
+			let cams = getCameras();
+
+			if(cams !== null && ws !== false){
+				let msg = JSON.stringify({"cmd":"cameraList","cameras":cams},null,2);
+				ws.send(msg);
+			}
+			break;
 		case "setTilt":
 			if(!messageJson.hasOwnProperty('value')){
 				console.log('control, setTilt, missing value');

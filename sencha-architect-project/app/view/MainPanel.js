@@ -30,6 +30,7 @@ Ext.define('RobotDriver.view.MainPanel', {
         'Ext.field.Toggle',
         'Ext.tab.Panel',
         'Ext.tab.Bar',
+        'Ext.field.ComboBox',
         'Ext.Spacer',
         'Ext.field.TextArea'
     ],
@@ -104,7 +105,7 @@ Ext.define('RobotDriver.view.MainPanel', {
             xtype: 'panel',
             itemId: 'tabVideo',
             layout: 'vbox',
-            iconCls: 'x-fa fa-camera',
+            iconCls: 'x-fa fa-camera-retro',
             title: 'Video',
             items: [
                 {
@@ -318,7 +319,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                     items: [
                         {
                             xtype: 'toolbar',
-                            itemId: 'mytoolbar1',
                             docked: 'top',
                             items: [
                                 {
@@ -357,7 +357,6 @@ Ext.define('RobotDriver.view.MainPanel', {
                     xtype: 'tabpanel',
                     title: 'Control',
                     iconCls: 'x-fa fa-gamepad',
-                    itemId: 'mytabpanel1',
                     items: [
                         {
                             xtype: 'container',
@@ -419,6 +418,45 @@ Ext.define('RobotDriver.view.MainPanel', {
                     },
                     listeners: {
                         activeItemchange: 'onMytabpanel1ActiveItemChange'
+                    }
+                },
+                {
+                    xtype: 'container',
+                    title: 'Video',
+                    iconCls: 'x-fa fa-camera-retro',
+                    padding: '0 0 0 10',
+                    scrollable: true,
+                    items: [
+                        {
+                            xtype: 'toolbar',
+                            docked: 'top',
+                            items: [
+                                {
+                                    xtype: 'button',
+                                    iconCls: 'x-fa fa-save',
+                                    text: 'Save Changes',
+                                    listeners: {
+                                        tap: 'onMybutton1Tap2'
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            xtype: 'combobox',
+                            itemId: 'cameras',
+                            width: 559,
+                            label: 'Camera',
+                            labelWidth: 60,
+                            displayField: 'name',
+                            valueField: 'device',
+                            queryMode: 'local',
+                            bind: {
+                                store: '{cameraStore}'
+                            }
+                        }
+                    ],
+                    listeners: {
+                        activate: 'onMycontainer8Activate'
                     }
                 },
                 {
@@ -659,6 +697,16 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
     },
 
+    onMybutton1Tap2: function(button, e, eOpts) {
+
+    },
+
+    onMycontainer8Activate: function(newActiveItem, container, oldActiveItem, eOpts) {
+        this.websocketSend({
+            action:'getCameras'
+        });
+    },
+
     onMybutton2Tap: function(button, e, eOpts) {
         this.websocketSend({
             action:'restartUsb'
@@ -694,9 +742,9 @@ Ext.define('RobotDriver.view.MainPanel', {
         this.queryById('liveController').initController();
 
         this.hardware = {};
-        this.getViewModel().getStore('hardwareStore').on('datachanged',function(){
-            this.controlSyncHardwareStores();
-        }, this);
+        // this.getViewModel().getStore('hardwareStore').on('datachanged',function(){
+        //     this.controlSyncHardwareStores();
+        // }, this);
     },
 
     onTabpanelActiveItemChange: function(sender, value, oldValue, eOpts) {
@@ -842,6 +890,13 @@ Ext.define('RobotDriver.view.MainPanel', {
                 break;
             case 'videoRunning':
                 this.checkVideoRunningResponse(jsonData);
+                break;
+            case 'cameraList':
+                console.log('cameraList');
+                console.log(jsonData.cameras);
+                let camStore = this.getViewModel().getStore('cameraStore');
+                camStore.loadData(jsonData.cameras);
+                console.log(camStore);
                 break;
         }
 
@@ -1012,14 +1067,36 @@ Ext.define('RobotDriver.view.MainPanel', {
     controlSyncHardwareStores: function() {
         let hardwareStore = this.getViewModel().getStore('hardwareStore');
 
+        let hardwareIdList = [];
+        hardwareStore.each(function(rec){
+            console.log(rec);
+            hardwareIdList.push(rec.data.hardwareId);
+        });
+
+        let controlsChanged = false;
         Ext.each(this.queryById('controlItems').items.items, function(item){
-            let hardware = item.queryById('hardware');
-            if(hardware && hardware.syncHardwareStore){
-                hardware.syncHardwareStore(hardwareStore);
-            }else{
-                console.log('missing syncHardwareStore func on component', item);
+            let hardware = item.query('controlhardwarecombo');
+            Ext.each(hardware, function(hw){
+                if(hw.syncHardwareStore){
+                    hw.syncHardwareStore(hardwareStore);
+                }//else{
+                //    console.log('missing syncHardwareStore func on component', item);
+                //}
+            });
+
+            let combo = item.queryById('hardwareCombo');
+            if(combo){
+                let curVal = combo.getValue();
+                console.log('check control hardwareCombo current val', curVal, hardwareIdList);
+                if(curVal !== null && !hardwareIdList.includes(curVal)){
+                    combo.setValue(null);
+                    controlsChanged = true;
+                }
             }
         });
+        if(controlsChanged){
+            this.controlSave();
+        }
     },
 
     hardwareLoadConfig: function(hardware, animate) {
@@ -1081,6 +1158,8 @@ Ext.define('RobotDriver.view.MainPanel', {
 
         hardwareStore.removeAll();
         hardwareStore.add(hardwareRecords);
+
+        this.controlSyncHardwareStores();
     },
 
     hardwareAdd: function(type, config, animate) {

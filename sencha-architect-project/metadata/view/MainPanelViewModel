@@ -116,6 +116,56 @@
                     "designerId": "7f37176b-6d06-46e6-98a4-0bf46ad1cba0"
                 }
             ]
+        },
+        {
+            "type": "Ext.data.Store",
+            "reference": {
+                "name": "stores",
+                "type": "array"
+            },
+            "codeClass": null,
+            "userConfig": {
+                "name": "cameraStore"
+            },
+            "configAlternates": {
+                "name": "string"
+            },
+            "name": "MyStore9",
+            "designerId": "11f02c81-72ad-4f98-b4f1-c54cbc8e57d1",
+            "cn": [
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "name"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field13",
+                    "designerId": "690b722a-6f5c-458f-9a41-a7b2fd2d1104"
+                },
+                {
+                    "type": "Ext.data.field.Field",
+                    "reference": {
+                        "name": "fields",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "name": "device"
+                    },
+                    "configAlternates": {
+                        "name": "string"
+                    },
+                    "name": "field14",
+                    "designerId": "7b8737cc-c948-4976-9b89-c13e7ad6887e"
+                }
+            ]
         }
     ]
 }

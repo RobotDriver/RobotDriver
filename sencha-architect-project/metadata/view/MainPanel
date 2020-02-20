@@ -337,7 +337,7 @@
             },
             "codeClass": null,
             "userConfig": {
-                "iconCls": "x-fa fa-camera",
+                "iconCls": "x-fa fa-camera-retro",
                 "itemId": "tabVideo",
                 "layout": "vbox",
                 "title": "Video"
@@ -1081,8 +1081,7 @@
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "docked": "top",
-                                "itemId": "mytoolbar1"
+                                "docked": "top"
                             },
                             "configAlternates": {
                                 "docked": "string",
@@ -1231,7 +1230,6 @@
                     "codeClass": null,
                     "userConfig": {
                         "iconCls": "x-fa fa-gamepad",
-                        "itemId": "mytabpanel1",
                         "title": "Control"
                     },
                     "configAlternates": {
@@ -1534,6 +1532,148 @@
                             },
                             "name": "onMytabpanel1ActiveItemChange",
                             "designerId": "3d767a0c-ba92-4ed1-9d9f-ce0737b9fcd8"
+                        }
+                    ]
+                },
+                {
+                    "type": "Ext.Container",
+                    "reference": {
+                        "name": "items",
+                        "type": "array"
+                    },
+                    "codeClass": null,
+                    "userConfig": {
+                        "iconCls": "x-fa fa-camera-retro",
+                        "padding": "0 0 0 10",
+                        "scrollable": true,
+                        "title": "Video"
+                    },
+                    "configAlternates": {
+                        "padding": "auto",
+                        "title": "string",
+                        "iconCls": "string",
+                        "itemId": "string",
+                        "scrollable": "auto"
+                    },
+                    "name": "MyContainer8",
+                    "designerId": "6f55a75a-df54-4efc-80a6-06ce137ba9fa",
+                    "cn": [
+                        {
+                            "type": "Ext.Toolbar",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "docked": "top"
+                            },
+                            "configAlternates": {
+                                "docked": "string",
+                                "itemId": "string"
+                            },
+                            "name": "MyToolbar1",
+                            "designerId": "e56d6803-76e2-4078-98f0-7b9cc5234355",
+                            "cn": [
+                                {
+                                    "type": "Ext.Button",
+                                    "reference": {
+                                        "name": "items",
+                                        "type": "array"
+                                    },
+                                    "codeClass": null,
+                                    "userConfig": {
+                                        "iconCls": "x-fa fa-save",
+                                        "text": "Save Changes"
+                                    },
+                                    "configAlternates": {
+                                        "text": "string",
+                                        "iconCls": "string"
+                                    },
+                                    "name": "MyButton1",
+                                    "designerId": "0433a125-ce89-48a3-8638-7aa6bd9efba1",
+                                    "cn": [
+                                        {
+                                            "type": "basiceventbinding",
+                                            "reference": {
+                                                "name": "listeners",
+                                                "type": "array"
+                                            },
+                                            "codeClass": null,
+                                            "userConfig": {
+                                                "fn": "onMybutton1Tap2",
+                                                "implHandler": [
+                                                    ""
+                                                ],
+                                                "name": "tap"
+                                            },
+                                            "configAlternates": {
+                                                "fn": "string",
+                                                "implHandler": "code",
+                                                "name": "string"
+                                            },
+                                            "name": "onMybutton1Tap2",
+                                            "designerId": "e355a23a-dbd4-41f3-b8a5-988a64d8cf2e"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Ext.field.ComboBox",
+                            "reference": {
+                                "name": "items",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "displayField": "name",
+                                "itemId": "cameras",
+                                "label": "Camera",
+                                "labelWidth": 60,
+                                "queryMode": "local",
+                                "store": [
+                                    "{cameraStore}"
+                                ],
+                                "valueField": "device",
+                                "width": 559
+                            },
+                            "configAlternates": {
+                                "store": "binding",
+                                "displayField": "datafield",
+                                "itemId": "string",
+                                "label": "string",
+                                "labelWidth": "auto",
+                                "queryMode": "string",
+                                "valueField": "datafield",
+                                "width": "auto"
+                            },
+                            "name": "MyComboBox4",
+                            "designerId": "bd7bcc1c-bfd5-4a30-a983-ca89be1930be"
+                        },
+                        {
+                            "type": "basiceventbinding",
+                            "reference": {
+                                "name": "listeners",
+                                "type": "array"
+                            },
+                            "codeClass": null,
+                            "userConfig": {
+                                "fn": "onMycontainer8Activate",
+                                "implHandler": [
+                                    "this.websocketSend({",
+                                    "    action:'getCameras'",
+                                    "});"
+                                ],
+                                "name": "activate"
+                            },
+                            "configAlternates": {
+                                "fn": "string",
+                                "implHandler": "code",
+                                "name": "string"
+                            },
+                            "name": "onMycontainer8Activate",
+                            "designerId": "72e72d4e-886d-47c7-9c6d-adf67f5760ca"
                         }
                     ]
                 },
@@ -1858,9 +1998,9 @@
                     "this.queryById('liveController').initController();",
                     "",
                     "this.hardware = {};",
-                    "this.getViewModel().getStore('hardwareStore').on('datachanged',function(){",
-                    "    this.controlSyncHardwareStores();",
-                    "}, this);"
+                    "// this.getViewModel().getStore('hardwareStore').on('datachanged',function(){",
+                    "//     this.controlSyncHardwareStores();",
+                    "// }, this);"
                 ],
                 "name": "painted"
             },
@@ -2158,6 +2298,13 @@
                     "        break;",
                     "    case 'videoRunning':",
                     "        this.checkVideoRunningResponse(jsonData);",
+                    "        break;",
+                    "    case 'cameraList':",
+                    "        console.log('cameraList');",
+                    "        console.log(jsonData.cameras);",
+                    "        let camStore = this.getViewModel().getStore('cameraStore');",
+                    "        camStore.loadData(jsonData.cameras);",
+                    "        console.log(camStore);",
                     "        break;",
                     "}",
                     "",
@@ -2479,14 +2626,36 @@
                 "implHandler": [
                     "let hardwareStore = this.getViewModel().getStore('hardwareStore');",
                     "",
+                    "let hardwareIdList = [];",
+                    "hardwareStore.each(function(rec){",
+                    "    console.log(rec);",
+                    "    hardwareIdList.push(rec.data.hardwareId);",
+                    "});",
+                    "",
+                    "let controlsChanged = false;",
                     "Ext.each(this.queryById('controlItems').items.items, function(item){",
-                    "    let hardware = item.queryById('hardware');",
-                    "    if(hardware && hardware.syncHardwareStore){",
-                    "        hardware.syncHardwareStore(hardwareStore);",
-                    "    }else{",
-                    "        console.log('missing syncHardwareStore func on component', item);",
+                    "    let hardware = item.query('controlhardwarecombo');",
+                    "    Ext.each(hardware, function(hw){",
+                    "        if(hw.syncHardwareStore){",
+                    "            hw.syncHardwareStore(hardwareStore);",
+                    "        }//else{",
+                    "        //    console.log('missing syncHardwareStore func on component', item);",
+                    "        //}",
+                    "    });",
+                    "",
+                    "    let combo = item.queryById('hardwareCombo');",
+                    "    if(combo){",
+                    "        let curVal = combo.getValue();",
+                    "        console.log('check control hardwareCombo current val', curVal, hardwareIdList);",
+                    "        if(curVal !== null && !hardwareIdList.includes(curVal)){",
+                    "            combo.setValue(null);",
+                    "            controlsChanged = true;",
+                    "        }",
                     "    }",
-                    "});"
+                    "});",
+                    "if(controlsChanged){",
+                    "    this.controlSave();",
+                    "}"
                 ]
             },
             "configAlternates": {
@@ -2567,7 +2736,9 @@
                     "},this);",
                     "",
                     "hardwareStore.removeAll();",
-                    "hardwareStore.add(hardwareRecords);"
+                    "hardwareStore.add(hardwareRecords);",
+                    "",
+                    "this.controlSyncHardwareStores();"
                 ]
             },
             "configAlternates": {
