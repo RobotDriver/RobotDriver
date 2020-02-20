@@ -267,6 +267,7 @@ function controlHardware(message){
 			return;
 		case 'motor':
 			hw.newState = message.value;
+			hw.lastChange = new Date();
 			break;
 		case 'servo':
 
@@ -349,6 +350,7 @@ const hardwareControlLoop = setInterval(() => {
 	for(var m in activeMotors){
 		let hw = activeMotors[m];
 		if(!hw.stopped && (new Date() - hw.lastChange > 500)){
+			console.log('motor safety kill! stopping!');
 			motorSetState(hw, 0);
 			hw.currentState = hw.newState = 0;
 			continue;
@@ -622,11 +624,11 @@ function getCameras(){
 function restartUsb(){
 	//kill usb
 	console.log("restarting USB... stopping USB");
-	exec("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind");
-	//wait 2 seconds and revive
+	execSync("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind");
+
 	console.log("restarting USB... waiting 2 seconds");
 	setTimeout(function(){
-	console.log("restarting USB... restarting USB");
+		console.log("restarting USB... restarting USB");
 		exec("echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind");
 	}, 2000);
 }

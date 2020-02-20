@@ -98,11 +98,23 @@ Ext.define('RobotDriver.view.liveControls', {
                                 value = value[0];//live update sends arrays for some reason
                             }
                             if(config.hardwareId !== null){
+                                clearInterval(field.repeatMoveTimer);
+
                                 this.fireEvent('websocketSend',{
                                     action:'control',
                                     hardwareId:config.hardwareId,
                                     value:value
                                 });
+
+                                if(value != 0 && this.hardware[config.hardwareId].type==='motor'){
+                                    field.repeatMoveTimer = setInterval(() => {
+                                        this.fireEvent('websocketSend',{
+                                            action:'control',
+                                            hardwareId:config.hardwareId,
+                                            value:value
+                                        });
+                                    },400);
+                                }
                             }
                         }
                     }
@@ -115,20 +127,44 @@ Ext.define('RobotDriver.view.liveControls', {
                     listeners:{
                         scope:this,
                         change:function(x, y){
+
+                            clearInterval(config.repeatMoveTimerX);
+                            clearInterval(config.repeatMoveTimerY);
+
                             if(config.xhardwareId !== null){
                                 this.fireEvent('websocketSend',{
                                     action:'control',
                                     hardwareId:config.xhardwareId,
                                     value:x
                                 });
+                                if(x!=0 && this.hardware[config.xhardwareId] && this.hardware[config.xhardwareId].type==='motor'){
+                                    config.repeatMoveTimerX = setInterval(() => {
+                                        this.fireEvent('websocketSend',{
+                                            action:'control',
+                                            hardwareId:config.xhardwareId,
+                                            value:x
+                                        });
+                                    },300);
+                                }
                             }
+
                             if(config.yhardwareId !== null){
                                 this.fireEvent('websocketSend',{
                                     action:'control',
                                     hardwareId:config.yhardwareId,
                                     value:y
                                 });
+                                if(y!=0 && this.hardware[config.yhardwareId] && this.hardware[config.yhardwareId].type==='motor'){
+                                    config.repeatMoveTimerY = setInterval(() => {
+                                        this.fireEvent('websocketSend',{
+                                            action:'control',
+                                            hardwareId:config.yhardwareId,
+                                            value:y
+                                        });
+                                    },300);
+                                }
                             }
+
                         }
                     }
                 });
