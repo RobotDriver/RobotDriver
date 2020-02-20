@@ -97,11 +97,13 @@ Ext.define('RobotDriver.view.liveControls', {
                             if(value.constructor === Array){
                                 value = value[0];//live update sends arrays for some reason
                             }
-                            this.fireEvent('websocketSend',{
-                                action:'control',
-                                hardwareId:config.hardwareId,
-                                value:value
-                            });
+                            if(config.hardwareId !== null){
+                                this.fireEvent('websocketSend',{
+                                    action:'control',
+                                    hardwareId:config.hardwareId,
+                                    value:value
+                                });
+                            }
                         }
                     }
                 });
@@ -113,16 +115,20 @@ Ext.define('RobotDriver.view.liveControls', {
                     listeners:{
                         scope:this,
                         change:function(x, y){
-                            this.fireEvent('websocketSend',{
-                                action:'control',
-                                hardwareId:config.xhardwareId,
-                                value:x
-                            });
-                            this.fireEvent('websocketSend',{
-                                action:'control',
-                                hardwareId:config.yhardwareId,
-                                value:y
-                            });
+                            if(config.xhardwareId !== null){
+                                this.fireEvent('websocketSend',{
+                                    action:'control',
+                                    hardwareId:config.xhardwareId,
+                                    value:x
+                                });
+                            }
+                            if(config.yhardwareId !== null){
+                                this.fireEvent('websocketSend',{
+                                    action:'control',
+                                    hardwareId:config.yhardwareId,
+                                    value:y
+                                });
+                            }
                         }
                     }
                 });
@@ -145,7 +151,9 @@ Ext.define('RobotDriver.view.liveControls', {
                                 msg.actionType = config.actionType;
                                 msg.value = config.value;
                             }
-                            this.fireEvent('websocketSend',msg);
+                            if(config.hardwareId !== null){
+                                this.fireEvent('websocketSend',msg);
+                            }
                         },
                         up:function(){
                             let msg = {
@@ -160,7 +168,9 @@ Ext.define('RobotDriver.view.liveControls', {
                                 msg.value = config.value;
                             }
 
-                            this.fireEvent('websocketSend',msg);
+                            if(config.hardwareId !== null){
+                                this.fireEvent('websocketSend',msg);
+                            }
                         }
                     }
                 });

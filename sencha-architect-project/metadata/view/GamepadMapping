@@ -729,7 +729,7 @@
                     "            }",
                     "        }",
                     "        for(let a in newState.axes){",
-                    "            if(Math.abs(newState.axes[a] -oldState.axes[a]) >= 0.05){ //for axes detect change more than 5%",
+                    "            if(Math.abs(newState.axes[a] -oldState.axes[a]) >= 0.09){ //for axes detect change more than 9%",
                     "                this.gamepadChange(gamepadId, gamepadIdIndex, 'axis', a, newState.axes[a], oldState.axes[a]);",
                     "            }else{",
                     "                newState.axes[a] = oldState.axes[a];//save the old value to accumulate larger changes for better detection",

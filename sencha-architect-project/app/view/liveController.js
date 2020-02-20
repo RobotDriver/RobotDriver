@@ -163,7 +163,7 @@ Ext.define('RobotDriver.view.liveController', {
                 }
 
                 for(let a in newState.axes){
-                    if(Math.abs(newState.axes[a] - oldState.axes[a]) >= 0.005){ //for axes detect change more than 0.5%
+                    if(Math.abs(newState.axes[a] - oldState.axes[a]) >= 0.01){ //for axes detect change more than 1%
                        axisChanges.push({
                            gamepadId: gamepadId,
                            gamepadIdIndex: gamepadIdIndex,
