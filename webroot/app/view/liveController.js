@@ -220,6 +220,9 @@ Ext.define('RobotDriver.view.liveController', {
         }, this);
 
         if(foundMap!==false){
+            if(foundMap.axisInvert===1){
+                newValue *= -1;
+            }
             this.fireEvent('action', foundMap, newValue);
         }
 
@@ -243,8 +246,14 @@ Ext.define('RobotDriver.view.liveController', {
 
             Ext.each(this.mappedGamepads, function(mapped){
 
+
                 if(mapped.type==='stick'){
                     if(mapped.x && mapped.x.gamepadId == ag.gamepadId && mapped.x.gamepadIdIndex == ag.gamepadIdIndex && mapped.x.mapType === 'axis' && mapped.x.mapIndex === ag.mapIndex){
+                        if(mapped.axisInvertX===1){
+                            console.log('x',ag.newValue, ag.newValue*-1);
+                            ag.newValue *= -1;
+
+                        }
                         stickEvents[ag.gamepadId+ag.index+ag.mapIndex] = {
                             mapped: mapped,
                             newValue: [
@@ -254,6 +263,10 @@ Ext.define('RobotDriver.view.liveController', {
                         };
                     }
                     if(mapped.y && mapped.y.gamepadId == ag.gamepadId && mapped.y.gamepadIdIndex == ag.gamepadIdIndex && mapped.y.mapType === 'axis' && mapped.y.mapIndex === ag.mapIndex){
+                        if(mapped.axisInvertY===1){
+                            console.log('y',ag.newValue, ag.newValue*-1);
+                            ag.newValue *= -1;
+                        }
                         stickEvents[ag.gamepadId+ag.index+ag.mapIndex] = {
                             mapped: mapped,
                             newValue: [
@@ -263,8 +276,12 @@ Ext.define('RobotDriver.view.liveController', {
                         };
                     }
                 }else{
+
                     //if not stick mapped.type will be 'item'
                     if(mapped.gamepadId == ag.gamepadId && mapped.gamepadIdIndex == ag.gamepadIdIndex && mapped.mapType === 'axis' && mapped.mapIndex === ag.mapIndex){
+                        if(mapped.axisInvert===1){
+                            ag.newValue *= -1;
+                        }
                         this.fireEvent('action', mapped, ag.newValue);
                     }
                 }

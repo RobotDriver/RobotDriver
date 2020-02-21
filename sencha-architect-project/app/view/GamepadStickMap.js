@@ -85,14 +85,15 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
                         },
                         {
                             xtype: 'checkbox',
-                            disabled: true,
                             hidden: false,
-                            itemId: 'axisInvertx',
+                            itemId: 'axisInvertX',
+                            name: 'axisInvertX',
                             width: 120,
                             margin: '0 0 0 120',
                             label: 'Invert X Axis',
                             labelAlign: 'right',
-                            labelWidth: 100
+                            labelWidth: 100,
+                            value: '1'
                         },
                         {
                             xtype: 'container',
@@ -129,14 +130,15 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
                         },
                         {
                             xtype: 'checkbox',
-                            disabled: true,
                             hidden: false,
-                            itemId: 'axisInverty',
+                            itemId: 'axisInvertY',
+                            name: 'axisInvertY',
                             width: 120,
                             margin: '0 0 0 120',
                             label: 'Invert Y Axis',
                             labelAlign: 'right',
-                            labelWidth: 100
+                            labelWidth: 100,
+                            value: '1'
                         }
                     ]
                 },
@@ -225,6 +227,8 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
 
             this.queryById('name').setValue(config.name);
             this.queryById('control').setValue(config.controlId);
+            this.queryById('axisInvertX').setChecked(config.axisInvertX ? true : false);
+            this.queryById('axisInvertY').setChecked(config.axisInvertY ? true : false);
         }
     },
 
@@ -286,7 +290,10 @@ Ext.define('RobotDriver.view.GamepadStickMap', {
     getMapping: function() {
         this.mapping.name = this.queryById('name').getValue();
         this.mapping.controlId = this.queryById('control').getValue();
+        this.mapping.axisInvertX = this.queryById('axisInvertX').getChecked() ? 1 : 0;
+        this.mapping.axisInvertY = this.queryById('axisInvertY').getChecked() ? 1 : 0;
         this.mapping.type='stick';
+        console.log(this.mapping);
         return this.mapping;
     },
 

@@ -83,14 +83,15 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
         },
         {
             xtype: 'checkbox',
-            disabled: true,
             hidden: true,
             itemId: 'axisInvert',
+            name: 'axisInvert',
             width: 120,
             margin: '0 0 0 120',
             label: 'Invert Axis',
             labelAlign: 'right',
-            labelWidth: 100
+            labelWidth: 100,
+            value: '1'
         },
         {
             xtype: 'combobox',
@@ -149,6 +150,7 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
             this.setMapping(config.gamepadId, config.gamepadIdIndex, config.mapType, config.mapIndex);
             this.queryById('name').setValue(config.name);
             this.queryById('control').setValue(config.controlId);
+            this.queryById('axisInvert').setChecked(config.axisInvert ? true : false);
         }
     },
 
@@ -194,6 +196,8 @@ Ext.define('RobotDriver.view.GamepadItemMap', {
 
         this.mapping.type='item';
         this.mapping.controlId = this.queryById('control').getValue();
+        this.mapping.axisInvert = this.queryById('axisInvert').getChecked() ? 1 : 0;
+        console.log(this.mapping);
 
         return this.mapping;
     },

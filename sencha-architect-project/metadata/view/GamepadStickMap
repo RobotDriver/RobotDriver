@@ -189,13 +189,14 @@
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "disabled": true,
                                 "hidden": false,
-                                "itemId": "axisInvertx",
+                                "itemId": "axisInvertX",
                                 "label": "Invert X Axis",
                                 "labelAlign": "right",
                                 "labelWidth": 100,
                                 "margin": "0 0 0 120",
+                                "name": "axisInvertX",
+                                "value": "1",
                                 "width": 120
                             },
                             "configAlternates": {
@@ -206,7 +207,9 @@
                                 "labelAlign": "string",
                                 "labelWidth": "auto",
                                 "margin": "auto",
-                                "width": "auto"
+                                "width": "auto",
+                                "name": "string",
+                                "value": "string"
                             },
                             "name": "MyCheckbox3",
                             "designerId": "f2257d8d-727d-48f9-bf7d-3767e6ac20bf"
@@ -331,13 +334,14 @@
                             },
                             "codeClass": null,
                             "userConfig": {
-                                "disabled": true,
                                 "hidden": false,
-                                "itemId": "axisInverty",
+                                "itemId": "axisInvertY",
                                 "label": "Invert Y Axis",
                                 "labelAlign": "right",
                                 "labelWidth": 100,
                                 "margin": "0 0 0 120",
+                                "name": "axisInvertY",
+                                "value": "1",
                                 "width": 120
                             },
                             "configAlternates": {
@@ -348,7 +352,9 @@
                                 "labelAlign": "string",
                                 "labelWidth": "auto",
                                 "margin": "auto",
-                                "width": "auto"
+                                "width": "auto",
+                                "name": "string",
+                                "value": "string"
                             },
                             "name": "MyCheckbox5",
                             "designerId": "c28e5dd4-0f1c-45d2-b72d-110621e271c4"
@@ -584,7 +590,10 @@
                 "implHandler": [
                     "this.mapping.name = this.queryById('name').getValue();",
                     "this.mapping.controlId = this.queryById('control').getValue();",
+                    "this.mapping.axisInvertX = this.queryById('axisInvertX').getChecked() ? 1 : 0;",
+                    "this.mapping.axisInvertY = this.queryById('axisInvertY').getChecked() ? 1 : 0;",
                     "this.mapping.type='stick';",
+                    "console.log(this.mapping);",
                     "return this.mapping;"
                 ]
             },
@@ -652,6 +661,8 @@
                     "",
                     "    this.queryById('name').setValue(config.name);",
                     "    this.queryById('control').setValue(config.controlId);",
+                    "    this.queryById('axisInvertX').setChecked(config.axisInvertX ? true : false);",
+                    "    this.queryById('axisInvertY').setChecked(config.axisInvertY ? true : false);",
                     "}"
                 ],
                 "name": "painted"

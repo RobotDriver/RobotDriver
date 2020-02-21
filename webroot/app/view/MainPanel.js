@@ -42,7 +42,6 @@ Ext.define('RobotDriver.view.MainPanel', {
     viewModel: {
         type: 'mainpanel'
     },
-    activeItem: 4,
     fullscreen: true,
     padding: '4 0 0 0',
     defaultListenerScope: true,
@@ -583,7 +582,7 @@ Ext.define('RobotDriver.view.MainPanel', {
     onContainerAction: function(mapping, value) {
         if(this.liveControls && this.liveControls.controlId && this.liveControls.controlId[mapping.controlId]){
 
-        let control = this.liveControls.controlId[mapping.controlId];
+            let control = this.liveControls.controlId[mapping.controlId];
 
             switch(control.xtype){
                 case 'controlbutton':
@@ -601,23 +600,25 @@ Ext.define('RobotDriver.view.MainPanel', {
         }
 
 
-        if(this.liveControlsWindow && this.liveControlsWindow.controlId && this.liveControlsWindow.controlId[mapping.controlId]){
-            let controlWin = this.liveControlsWindow.controlId[mapping.controlId];
+        if(this.liveControlsWindow){
+            if( this.liveControlsWindow.controlId && this.liveControlsWindow.controlId[mapping.controlId]){
+                let controlWin = this.liveControlsWindow.controlId[mapping.controlId];
 
-            switch(controlWin.xtype){
-                case 'controlbutton':
-                    controlWin.setRawValue(value===true ? 'down' : 'up');
-                    break;
-                case 'basecontrolslider':
-                    //control.setSliderValue(value * 100);
-                    controlWin.setRawValue(value * 100);
-                    break;
-                case 'basecontrolstick':
-                    controlWin.setRawValue(value[0], value[1]);
+                switch(controlWin.xtype){
+                    case 'controlbutton':
+                        controlWin.setRawValue(value===true ? 'down' : 'up');
+                        break;
+                    case 'basecontrolslider':
+                        //control.setSliderValue(value * 100);
+                        controlWin.setRawValue(value * 100);
+                        break;
+                    case 'basecontrolstick':
+                        controlWin.setRawValue(value[0], value[1]);
+                }
+            }else{
+                console.error('Controller Win mapping to invalid controlId ', mapping.controlId);
+                return;
             }
-        }else{
-            console.error('Controller Win mapping to invalid controlId ', mapping.controlId);
-            return;
         }
     },
 
@@ -758,9 +759,11 @@ Ext.define('RobotDriver.view.MainPanel', {
         let controllerMapping = this.queryById('controllerMapping');
 
         if(activeItemId === 'tabConfig'){
+            console.log('start controller mapping, stop live controls');
             controllerMapping.startControllerLoop();
             liveController.stopControllerLoop();
         }else{
+            console.log('stop controller mapping, start live controls');
             controllerMapping.stopControllerLoop();
             liveController.startControllerLoop();
         }

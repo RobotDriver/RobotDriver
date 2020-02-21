@@ -140,14 +140,27 @@ Ext.define('RobotDriver.view.GamepadMapping', {
     },
 
     onMybutton1Tap11: function(button, e, eOpts) {
-        var newMappings = [];
+        let newMappings = [];
+        let missingControls = false;
         Ext.each(this.queryById('mappingsContainer').items.items, function(mapComp){
             let map = mapComp.getMapping();
 
             if(map === false){ return; };
 
+        console.log(map.controlId);
+
+            if(!map.controlId){
+                missingControls = true;
+                mapComp.queryById('control').markInvalid();
+                return false;
+            }
+
             newMappings.push(map);
         });
+        if(missingControls){
+            Ext.Msg.alert('Missing Control Mapping!','Please select a control to map or delete this mapping!');
+            return false;
+        }
 
         this.fireEvent('mappingsUpdated', newMappings);
         this.fireEvent('websocketSend',{
@@ -159,7 +172,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
     onMybutton5Tap11: function(button, e, eOpts) {
         if(this.activeMapping !== false){
-            Ext.Msg.alert('','Please finish the current mapping before adding another');
+            Ext.Msg.alert('Error','Please finish the current mapping before adding another');
             return;
         }
 
@@ -168,7 +181,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
 
     onMybutton5Tap111: function(button, e, eOpts) {
         if(this.activeMapping !== false){
-            Ext.Msg.alert('','Please finish the current mapping before adding another');
+            Ext.Msg.alert('Error','Please finish the current mapping before adding another');
             return;
         }
 
