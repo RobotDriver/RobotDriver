@@ -351,7 +351,7 @@ Ext.define('RobotDriver.view.GamepadMapping', {
                     }
                 }
                 for(let a in newState.axes){
-                    if(Math.abs(newState.axes[a] -oldState.axes[a]) >= 0.09){ //for axes detect change more than 9%
+                    if(Math.abs(newState.axes[a] -oldState.axes[a]) >= 0.12){ //for axes detect change more than 12%
                         this.gamepadChange(gamepadId, gamepadIdIndex, 'axis', a, newState.axes[a], oldState.axes[a]);
                     }else{
                         newState.axes[a] = oldState.axes[a];//save the old value to accumulate larger changes for better detection
@@ -431,6 +431,12 @@ Ext.define('RobotDriver.view.GamepadMapping', {
             if(this.activeMapping.xtype === 'gamepadstickmap'){
                 if(this.activeMapping.bothAxesMapped === true){
                     this.activeMapping = false;
+                }else{
+                    var activeMappingDefer = this.activeMapping;
+                    this.activeMapping = false;
+                    Ext.defer(function(){
+                        this.activeMapping = activeMappingDefer;
+                    }, 750, this);
                 }
             }else{
                 this.activeMapping = false;
